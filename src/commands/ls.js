@@ -1,5 +1,20 @@
-console.log('✅ lsCommand loaded');
+/**
+ * env0.core Command Module
+ * -------------------------
+ * Command: ls
+ *
+ * 🧠 Type: Filesystem Interaction
+ * 🛠️ Depends on: stateManager.js, outputManager.js
+ *
+ * 🔒 Side Effects: No
+ * 🧪 Safe to test in isolation: Yes
+ *
+ * Description:
+ * Lists the contents of the current working directory.
+ * Resolves full virtual path via state.currentPath.
+ */
 
+console.log('✅ lsCommand loaded');
 
 import state from '../stateManager.js';
 import { termPrint } from '../outputManager.js';

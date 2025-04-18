@@ -1,3 +1,19 @@
+/**
+ * env0.core Command Module
+ * -------------------------
+ * Command: cd
+ *
+ * 🧠 Type: Filesystem Interaction
+ * 🛠️ Depends on: stateManager.js, outputManager.js
+ *
+ * 🔒 Side Effects: Yes (modifies currentPath)
+ * 🧪 Safe to test in isolation: Yes
+ *
+ * Description:
+ * Changes the current working directory, supporting absolute,
+ * relative, and parent (`..`) navigation within the virtual FS.
+ */
+
 import state from '../stateManager.js';
 import { termPrint } from '../outputManager.js';
 
@@ -12,7 +28,6 @@ export function cdCommand(args) {
   let newPath = inputPath.startsWith('/') ? [] : [...state.currentPath];
   let dir = state.machines[state.currentMachine]?.fs['/'];
 
-  // Traverse to starting point (based on newPath)
   for (const segment of newPath) {
     if (!dir?.contents?.[segment] || dir.contents[segment].type !== 'dir') {
       termPrint(`${segment} is not a directory or doesn't exist`);
@@ -21,11 +36,9 @@ export function cdCommand(args) {
     dir = dir.contents[segment];
   }
 
-  // Now traverse the new parts
   for (const part of parts) {
     if (part === '..') {
       newPath.pop();
-      // Reset dir and walk again
       dir = state.machines[state.currentMachine]?.fs['/'];
       for (const segment of newPath) {
         if (!dir?.contents?.[segment] || dir.contents[segment].type !== 'dir') {

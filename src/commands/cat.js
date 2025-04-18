@@ -1,3 +1,19 @@
+/**
+ * env0.core Command Module
+ * -------------------------
+ * Command: cat
+ *
+ * 🧠 Type: Filesystem Interaction
+ * 🛠️ Depends on: stateManager.js, outputManager.js
+ *
+ * 🔒 Side Effects: No
+ * 🧪 Safe to test in isolation: Yes
+ *
+ * Description:
+ * Outputs the contents of a specified file in the current directory.
+ * Does not support full path resolution (filename only).
+ */
+
 import state from '../stateManager.js';
 import { termPrint } from '../outputManager.js';
 

@@ -1,3 +1,18 @@
+/**
+ * env0.core Command Module
+ * -------------------------
+ * Command: help
+ *
+ * 🧠 Type: Pure Output
+ * 🛠️ Depends on: outputManager.js
+ *
+ * 🔒 Side Effects: No
+ * 🧪 Safe to test in isolation: Yes
+ *
+ * Description:
+ * Outputs a static list of available commands and their usage.
+ */
+
 import { termPrint } from '../outputManager.js';
 
 export function helpCommand() {
