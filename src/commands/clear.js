@@ -1,30 +1,20 @@
 /**
  * env0.core Command Module
  * -------------------------
- * Command: help
+ * Command: clear
  *
  * 🧠 Type: Pure Output
- * 🛠️ Depends on: outputManager.js
+ * 🛠️ Depends on: stateManager.js
  *
- * 🔒 Side Effects: No
+ * 🔒 Side Effects: No (visual only)
  * 🧪 Safe to test in isolation: Yes
  *
  * Description:
- * Outputs a static list of available commands and their usage.
+ * Clears the terminal display using the xterm.js API.
  */
 
-import { termPrint } from '../outputManager.js';
+import state from '../stateManager.js';
 
-export function helpCommand() {
-  const helpText = [
-    'Available Commands:',
-    '  ls           - List directory contents',
-    '  cd <dir>     - Change directory',
-    '  cat <file>   - View file contents',
-    '  clear        - Clear the screen',
-    '  help         - Show this help message',
-    // You can add future ones like ssh, nmap, ping here
-  ];
-
-  helpText.forEach(line => termPrint(line));
+export function clearCommand() {
+  state.terminal.clear();
 }

@@ -1,31 +1,41 @@
 // stateManager.js
 
-import defaultFS from './filesystem.js'; // Optional, in case localhost needs it too
+import defaultFS from './filesystem.js';
 
 const state = {
+  // Core session state
   currentUser: null,
   currentMachine: 'localhost',
   currentPath: [],
   commandBuffer: '',
   cursorPosition: 0,
   loginComplete: false,
-  terminal: null, // xterm.js instance (assigned at runtime)
+  terminal: null, // xterm.js instance (injected at runtime)
   commandHistory: [],
+  historyIndex: 0,
+
+  // Login state
   awaitingUsername: false,
   awaitingPassword: false,
 
+  // Machine runtime map
   machines: {
     localhost: {
       fs: defaultFS,
       users: {
-        admin: 'password123',
-        guest: 'guest'
+        root: 'toor'
       }
     }
-  }
+  },
+
+  // Network discovery
+  discoveredHosts: [] // Filled by commands like nmap/ping
 };
 
-// Helper to initialize session after successful login
+// --------------------
+// Session Management
+// --------------------
+
 export function resetSessionState(username, machineName) {
   state.currentUser = username;
   state.currentMachine = machineName;
@@ -37,7 +47,6 @@ export function resetSessionState(username, machineName) {
   state.awaitingPassword = false;
 }
 
-// Optional: helper to log out/reset session (not used yet)
 export function logoutSession() {
   state.currentUser = null;
   state.currentMachine = null;
@@ -47,6 +56,26 @@ export function logoutSession() {
   state.loginComplete = false;
   state.awaitingUsername = false;
   state.awaitingPassword = false;
+  state.discoveredHosts = [];
+}
+
+// --------------------
+// Network Discovery
+// --------------------
+
+export function discoverHost(ip, hostname) {
+  const exists = state.discoveredHosts.some(h => h.ip === ip);
+  if (!exists) {
+    state.discoveredHosts.push({ ip, hostname });
+  }
+}
+
+export function isHostDiscovered(ip) {
+  return state.discoveredHosts.some(h => h.ip === ip);
+}
+
+export function resetDiscoveredHosts() {
+  state.discoveredHosts = [];
 }
 
 export default state;

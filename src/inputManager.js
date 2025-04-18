@@ -10,6 +10,8 @@ import { cdCommand } from './commands/cd.js';
 import { catCommand } from './commands/cat.js';
 import { clearCommand } from './commands/clear.js';
 import { helpCommand } from './commands/help.js';
+import { pingCommand } from './commands/ping.js';
+import { ifconfigCommand } from './commands/ifconfig.js';
 
 // Handles all key events from terminal
 export function handleKeyInput(e) {
@@ -46,9 +48,16 @@ export function handleKeyInput(e) {
         case 'help':
           helpCommand();
           break;
+        case 'ping':
+          pingCommand(args);
+          break;
+        case 'ifconfig':
+          ifconfigCommand();
+          break;
         default:
           state.terminal.writeln(`Command not found: ${cmd}`);
       }
+      
 
       state.commandBuffer = '';
       state.cursorPosition = 0;
