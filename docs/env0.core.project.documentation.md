@@ -155,3 +155,14 @@ Note: **No write commands supported** (`mkdir`, `touch`, etc. intentionally omit
 
 > This doc reflects implemented behavior. For roadmap/ideas, see `tasklist.md` and `blackbox.md`.
 
+
+## ⚙️ Shell Engine Extraction
+
+- Extract boot manager, shell, prompt renderer into reusable "node.shell" module
+- Support for:
+  - Custom IP
+  - Login flow
+  - FS mounting per node
+- Nodes can simulate different OS versions, FS corruption, partial access
+
+---
