@@ -1,7 +1,7 @@
 // refreshPrompt.js
 
 import state from './stateManager.js';
-import { prompt } from './filesystemManager.js';
+import { prompt } from '../fs/filesystemManager.js';
 
 export function refreshPrompt(forcedUser = null) {
   if (forcedUser) {

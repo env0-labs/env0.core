@@ -14,8 +14,8 @@
  * Does not support full path resolution (filename only).
  */
 
-import state from '../stateManager.js';
-import { termPrint } from '../outputManager.js';
+import state from '../core/stateManager.js';
+import { termPrint } from '../core/outputManager.js';
 
 export function catCommand(args) {
   if (!args[1]) {

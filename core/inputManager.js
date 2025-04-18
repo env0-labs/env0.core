@@ -2,19 +2,18 @@
 
 import state from './stateManager.js';
 import { refreshLine } from './terminalHandler.js';
-import { handleLoginInput } from './loginManager.js';
+import { handleLoginInput } from '../startup/loginManager.js';
 
-// Modular command functions
-import { lsCommand } from './commands/ls.js';
-import { cdCommand } from './commands/cd.js';
-import { catCommand } from './commands/cat.js';
-import { clearCommand } from './commands/clear.js';
-import { helpCommand } from './commands/help.js';
-import { pingCommand } from './commands/ping.js';
-import { ifconfigCommand } from './commands/ifconfig.js';
-import { nmapCommand } from './commands/nmap.js';
+// Modular command functions (now from /cmds/)
+import { lsCommand } from '../cmds/ls.js';
+import { cdCommand } from '../cmds/cd.js';
+import { catCommand } from '../cmds/cat.js';
+import { clearCommand } from '../cmds/clear.js';
+import { helpCommand } from '../cmds/help.js';
+import { pingCommand } from '../cmds/ping.js';
+import { ifconfigCommand } from '../cmds/ifconfig.js';
+import { nmapCommand } from '../cmds/nmap.js';
 
-// Handles all key events from terminal
 export function handleKeyInput(e) {
   const { key, domEvent } = e;
   const printable = !domEvent.altKey && !domEvent.ctrlKey && !domEvent.metaKey;
@@ -61,7 +60,6 @@ export function handleKeyInput(e) {
         default:
           state.terminal.writeln(`Command not found: ${cmd}`);
       }
-      
 
       state.commandBuffer = '';
       state.cursorPosition = 0;

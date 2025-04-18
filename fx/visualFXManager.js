@@ -1,7 +1,7 @@
 
 // visualFXManager.js
 
-import settings from './settings.js';
+import settings from '../core/settings.js';
 
 console.log("settings import test:", settings);
 

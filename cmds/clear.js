@@ -13,7 +13,7 @@
  * Clears the terminal display using the xterm.js API.
  */
 
-import state from '../stateManager.js';
+import state from '../core/stateManager.js';
 
 export function clearCommand() {
   state.terminal.clear();

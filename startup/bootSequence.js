@@ -1,9 +1,9 @@
-import settings from './settings.js';
-import state from './stateManager.js';
-import { termClear, termPrint, termTypeLine } from './outputManager.js';
-import { initLogin, outputIntro } from './loginManager.js';
-import { refreshPrompt } from './refreshPrompt.js';
-import { refreshLine } from './terminalHandler.js';
+import settings from '../core/settings.js';
+import state from '../core/stateManager.js';
+import { termClear, termPrint, termTypeLine } from '../core/outputManager.js';
+import { initLogin, outputIntro } from '../startup/loginManager.js';
+import { refreshPrompt } from '../core/refreshPrompt.js';
+import { refreshLine } from '../core/terminalHandler.js';
 
 export async function startBootSequence() {
   console.log('🔥 Boot sequence started');

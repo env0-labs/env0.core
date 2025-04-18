@@ -1,11 +1,11 @@
 // loginManager.js
 
-import { getTypingDelay } from './terminalHandler.js';
-import systems from './systems.js';
-import state, { resetSessionState } from './stateManager.js';
-import fsTemplates from './fsTemplates.js';
-import settings from './settings.js';
-import { initVisualFX } from './visualFXManager.js';
+import { getTypingDelay } from '../core/terminalHandler.js';
+import systems from '../network/systems.js';
+import state, { resetSessionState } from '../core/stateManager.js';
+import fsTemplates from '../fs/fsTemplates.js';
+import settings from '../core/settings.js';
+import { initVisualFX } from '../fx/visualFXManager.js';
 initVisualFX();
 
 let refreshLineFunc = null;

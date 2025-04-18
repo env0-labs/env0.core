@@ -14,8 +14,8 @@
  * Always returns a loopback + fake network IP for localhost.
  */
 
-import state from '../stateManager.js';
-import { termPrint } from '../outputManager.js';
+import state from '../core/stateManager.js';
+import { termPrint } from '../core/outputManager.js';
 
 export function ifconfigCommand() {
   const hostname = state.currentMachine;

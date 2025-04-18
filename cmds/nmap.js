@@ -13,10 +13,10 @@
  * Simulates scanning a subnet (e.g. 10.10.10.0/24) and reveals reachable hosts.
  */
 
-import systems from '../systems.js';
-import { termPrint } from '../outputManager.js';
-import { isHostReachable } from '../networkManager.js';
-import { discoverHost } from '../stateManager.js';
+import systems from '../network/systems.js';
+import { termPrint } from '../core/outputManager.js';
+import { isHostReachable } from '../network/networkManager.js';
+import { discoverHost } from '../core/stateManager.js';
 
 export function nmapCommand(args) {
   const target = args[1];

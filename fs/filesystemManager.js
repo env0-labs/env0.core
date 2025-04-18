@@ -1,6 +1,6 @@
 // filesystemManager.js
 
-import state from './stateManager.js';
+import state from '../core/stateManager.js';
 
 // Still used if you dynamically assign file systems
 export function setFileSystem(fs) {

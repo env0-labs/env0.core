@@ -13,7 +13,7 @@
  * Outputs a static list of available commands and their usage.
  */
 
-import { termPrint } from '../outputManager.js';
+import { termPrint } from '../core/outputManager.js';
 
 export function helpCommand() {
   const helpText = [

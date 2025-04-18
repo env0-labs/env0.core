@@ -13,7 +13,9 @@
  * [Brief summary of what this command does — max 2 lines]
  */
 
-import state from '../stateManager.js';          // Optional: Remove if not needed
+
+
+import state from '../core/stateManager.js';          // Optional: Remove if not needed
 import { termPrint } from '../outputManager.js'; // Or whatever output helper you use
 
 export function [commandName]Command(args = []) {

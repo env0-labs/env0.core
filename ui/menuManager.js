@@ -1,8 +1,7 @@
-import { setTypingDelay } from './terminalHandler.js';
-import settings from './settings.js';
-import state from './stateManager.js';
-import { applyFlicker, applyTheme } from './visualFXManager.js';
-
+import { setTypingDelay } from '../core/terminalHandler.js';
+import settings from '../core/settings.js';
+import state from '../core/stateManager.js';
+import { applyFlicker, applyTheme } from '../fx/visualFXManager.js';
 
 
 export function initializeMenu() {

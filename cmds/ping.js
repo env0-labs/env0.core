@@ -14,8 +14,8 @@
  * Uses fake host reachability from networkManager.js.
  */
 
-import { termPrint } from '../outputManager.js';
-import { getHostByIP, isHostReachable } from '../networkManager.js';
+import { termPrint } from '../core/outputManager.js';
+import { getHostByIP, isHostReachable } from '../network/networkManager.js';
 
 export function pingCommand(args) {
   const targetIP = args[1];

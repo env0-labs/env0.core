@@ -14,8 +14,8 @@
  * relative, and parent (`..`) navigation within the virtual FS.
  */
 
-import state from '../stateManager.js';
-import { termPrint } from '../outputManager.js';
+import state from '../core/stateManager.js';
+import { termPrint } from '../core/outputManager.js';
 
 export function cdCommand(args) {
   if (!args[1]) {

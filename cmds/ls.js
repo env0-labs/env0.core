@@ -16,8 +16,8 @@
 
 console.log('✅ lsCommand loaded');
 
-import state from '../stateManager.js';
-import { termPrint } from '../outputManager.js';
+import state from '../core/stateManager.js';
+import { termPrint } from '../core/outputManager.js';
 
 export function lsCommand() {
   let dir = state.machines[state.currentMachine]?.fs['/'];

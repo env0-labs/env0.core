@@ -1,5 +1,5 @@
 // fsTemplates.js
-import filesystemTemplate from './filesystem.js';
+import filesystemTemplate from './filesystem.js'; // ⬅ this is already correct, because it's a sibling file
 
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));

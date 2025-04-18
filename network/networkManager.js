@@ -1,8 +1,8 @@
 // networkManager.js
 
-import state from './stateManager.js';
-import fsTemplates from './fsTemplates.js';
-import systems from './systems.js';
+import state from '../core/stateManager.js';
+import fsTemplates from '../fs/fsTemplates.js';
+import systems from './systems.js'; // optional but clean
 
 // Simulated host reachability map (manual for now, could randomize later)
 const hostStatus = {};
