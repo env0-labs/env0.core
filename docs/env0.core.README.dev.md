@@ -1,12 +1,12 @@
-# node.zero — Developer README
+# env0.core — Developer README
 
-Welcome to the dev side of `node.zero`: a modular, CRT-styled terminal simulation built in JavaScript using `xterm.js`. This isn't a toy — it's a fake system that acts like a real one. Modular commands, persistent settings, login flow, fake filesystem. No bullshit.
+Welcome to the dev side of `env0.core`: a modular terminal engine built in JavaScript using `xterm.js`. This isn't a toy — it's a fake system that acts like a real one. Modular commands, persistent settings, login flow, fake filesystem. 
 
 ---
 
 ## 🧠 Project Philosophy
 
-`node.zero` should feel alive, responsive, and internally consistent. It’s not a "simulator" — it’s a modular environment that mimics a real terminal. Everything is built for extensibility.
+`env0.core` should feel alive, modular, and internally consistent. It’s not a “simulator” — it’s an emulated environment that mimics real terminal behavior. Everything is built for extensibility and eventual game-layer integration.
 
 ---
 
@@ -16,86 +16,94 @@ Welcome to the dev side of `node.zero`: a modular, CRT-styled terminal simulatio
 
 **Core Modules:**
 - `stateManager.js` — global runtime state store
-- `settings.js` — persistent config (e.g., `instantText`, `typingDelay`)
+- `settings.js` — persistent config (`fontSize`, `instantText`, etc.)
 - `filesystem.js` — base filesystem structure
-- `fsTemplates.js` — cloned templates for per-machine FS
+- `fsTemplates.js` — cloned templates per machine
 - `filesystemManager.js` — runtime FS logic
-- `loginManager.js` — handles login sequence and credential routing
-- `menuManager.js` — UI overlay with speed and flicker controls (theming disabled)
-- `visualFXManager.js` — CRT visual logic (flicker, scanline, burst)
-- `inputManager.js` — terminal input parsing and command matching
-- `outputManager.js` — print functions: `termPrint()`, `termTypeLine()`, `termClear()`
+- `loginManager.js` — handles boot + login sequence
+- `menuManager.js` — UI overlay for speed, font, and boot toggles
+- `visualFXManager.js` — currently stubbed (visual logic disabled)
+- `inputManager.js` — command buffer and command router
+- `outputManager.js` — output helpers: `termPrint()`, `termTypeLine()`, `termClear()`
 
 ---
 
 ## 📂 Commands
 
-All commands are defined as separate files in `/commands/`.
-Each is a named export and handled manually in the switch logic of `inputManager.js`.
+All commands are defined in `/cmds/` as modular files.
 
 ### ✅ Implemented Commands
 - `ls`
-- `cd` — supports full path chaining (`cd etc/network`) and relative (`cd ..`)
-- `cat` — supports file vs directory detection
+- `cd` — supports chained and relative paths
+- `cat` — prints file contents or warns on directories
 - `clear`
 - `help`
-- `ssh` — fake network jump to secondary machine
-- `nmap` — fake subnet scanner
-- `ping` — fake success/fail ping
-- `ifconfig` — fake network device readout
+- `ssh` — fake login redirect
+- `nmap` — fake subnet scan
+- `ping` — fake up/down
+- `ifconfig` — fake network output
 
-### 🔒 Not Implemented (by design)
-- `mkdir`, `touch`, `echo`, etc. — read-only simulation
-- No dispatcher system like `runCommand()` — command routing is explicit
+### 🔒 Not Implemented (intentionally)
+- `mkdir`, `touch`, `echo` — read-only system
+- No dispatcher or registry — command routing is manual via `switch`
 
-All command output goes through `termPrint()` or `termTypeLine()`.
+All command output is routed through `termPrint()` or `termTypeLine()`.
 
 ---
 
 ## 🖥️ Menu / UI Features
 
-The menu overlay includes:
-- Text speed toggle: `slow`, `fast`, `instant`
-- CRT flicker intensity control: `Stable`, `Signal Interference`, `Broken Terminal`
-- Skip Boot Sequence toggle (persists via `localStorage`)
-- Audio tick toggle (placeholder only)
+The menu includes:
+- Text speed toggle (`slow`, `fast`, `instant`)
+- Font size (loaded via `settings.js`, not yet editable via UI)
+- Skip Boot Sequence toggle (persistent)
+- Audio toggle (placeholder only)
 
-All settings persist via `settings.js` and apply instantly.
-Terminal focus is restored after closing the menu.
+All changes persist via `localStorage`.
 
-> Theme selector has been **disabled** due to xterm.js DOM layering issues. Fallout button removed from UI, logic retained in code.
+> Theme and CRT flicker controls are disabled. Visual system is now minimal by design. `visualFXManager.js` is stubbed but present for future reactivation.
 
 ---
 
 ## 🧪 Boot & Login Flow
 
-- Full boot sequence triggered unless `skipIntro` is set
+- Boot sequence runs unless `skipIntro` is enabled
 - Boot includes:
-  - Faux Linux log output with `[ OK ]`, `[FAIL]`, `[SKIP]`
-  - Delays and randomness for realism
-  - `Press any key to continue...` gate
-- Final screen clear before login prompt
-- Login accepts `user@ip` format or defaults to `pendingLogin`
-- If credentials match, terminal session is launched
+  - Faux Linux log lines `[ OK ]`, `[FAIL ]`, `[ SKIP ]`
+  - Typing speed set by `instantText` or `typingDelay`
+  - Final screen clear before login prompt
+- Login accepts `user@ip` format or uses a predefined queue
+- Successful login launches shell environment with full command support
+
+---
+
+## ✨ Visual FX
+
+- Terminal glow is applied via CSS (`text-shadow`)
+- Pulse effect via `@keyframes softGlowPulse` (6s loop)
+- Inner shadow added to simulate text depth
+- No scanlines, flicker, or canvas overlays active
+- `canvasFXManager.js` scaffolded but unused
 
 ---
 
 ## 🧱 Style & Naming
 
-- Public name: `node.zero`
-- Safe folder name: `node_zero`
-- Prefer `snake_case` in filenames and variables
-- UI text styling is loose — lowercased or themed
+- Public name: `env0.core`
+- File-safe name: `env0_core`
+- Filenames use `snake_case`
+- Text is mostly lowercase / thematic
 
 ---
 
-## 🛠️ Development Tips
+## 🛠️ Development Notes
 
-- Use Git. Commit often. Feature branches preferred.
-- Clarity over cleverness — name things cleanly.
-- Every command must be testable in isolation.
-- Don’t use global dispatchers.
-- State always lives in `stateManager.js` — treat it as truth.
+- Feature branches preferred
+- Avoid cleverness — prioritize clarity
+- Commands must be testable in isolation
+- Avoid global dispatchers or centralized command runners
+- All persistent state flows through `stateManager.js`
+- Font size, boot skip, instant mode, and typing delay now persist
 
 ---
 
@@ -104,9 +112,6 @@ Terminal focus is restored after closing the menu.
 ```bash
 # No build tools required
 # Just open index.html in a browser
-```
-
----
-
-This project is held together with care, spite, and caffeine.
-Use the menu. Break the terminal. Stay weird.
+# This engine breathes.
+# Use the menu. Break the shell.
+# Build what lives on top.

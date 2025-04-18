@@ -35,6 +35,11 @@ These are system ideas that belong to node.zero, but haven’t earned their plac
 - Simulated "screen warmup" effect during boot
 - Broken cursor blink (irregular intervals or flicker)
 - Screen geometry warp (curved edges or subtle CRT bend distortion)
+- **[✓]** Breathing text glow with optional inner shadow (April 2025)
+- [ ] Output-triggered glow flash (e.g. nmap, login, ping)
+- [ ] Error redshift via dynamic class swap
+- [ ] Flicker injection for haunted or corrupted systems
+- [ ] Optional: canvas FX manager to handle distortion layer (low-priority)
 
 ---
 
@@ -60,7 +65,6 @@ These are system ideas that belong to node.zero, but haven’t earned their plac
   - `trackscan` → generates log of anomalies
 - Later: allow export of fake `.mod`-style files as log text
 
-
 ---
 
 ## 🌀 Wreckage Mode: Generative System Fusion
@@ -70,13 +74,18 @@ These are system ideas that belong to node.zero, but haven’t earned their plac
 - [ ] Let discovered nodes introduce new audio layers or modulations
 - [ ] Use Tone.js Transport and sequencing to build evolving, non-looping sonic behavior
 - [ ] Simulate system 'personality drift' through slow modulation of all audiovisual layers
-- [ ] Final state may be irreversible system collapse — musical, visual, and mechanical---
+- [ ] Final state may be irreversible system collapse — musical, visual, and mechanical
+
+---
 
 ## 🎨 Style/Art Intentions
 - [ ] Introduce scanline curvature simulation (mild barrel distortion via CSS or SVG mask)
 - [ ] Consider ghost trails (RGB shadow splitting on fast flickers)
 - [ ] Explore per-character delay on narrative output (already modular)
 - [ ] Add option to toggle alternate typefaces (e.g. CRT monospace vs modern)
+- **[✓]** Visual hierarchy now split: text FX (CSS) and overlay FX (canvas)
+- **[✓]** Default glow = white phosphor w/ soft inner shadow + breathing pulse
+- [ ] (Future) canvasFXManager.js to handle overlays without interfering with input
 
 ---
 
@@ -85,15 +94,6 @@ These are system ideas that belong to node.zero, but haven’t earned their plac
 - [ ] Narrative triggers bound to FS traversal (e.g., reading certain files triggers messages)
 - [ ] Optional: reveal parts of the network map via file discovery
 
----
-
-
-
-
-
-
-
-**Note:** Parked here to avoid distraction. DO NOT start until node.zero is complete and sealed.
 
 ---
 
