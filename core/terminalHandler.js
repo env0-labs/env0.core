@@ -3,6 +3,7 @@
 import { Terminal } from 'https://cdn.jsdelivr.net/npm/xterm@5.3.0/+esm';
 import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+esm';
 import state from './stateManager.js';
+import settings from './settings.js';
 
 let _typingDelay = 20;
 
@@ -20,17 +21,20 @@ let keyInputHandler = null;
 export function setupTerminal() {
   const term = new Terminal({
     theme: {
-      background: '#000000', // black
-      foreground: '#ffffff', // white
+      background: '#000000',
+      foreground: '#ffffff',
       cursor: '#ffffff',
     },
     fontFamily: 'Courier New, monospace',
-    fontSize: 14,
+    fontSize: settings.fontSize, // ✅ now dynamic and persistent
     scrollback: 1000,
     convertEol: true,
     cursorBlink: true,
     disableStdin: true
   });
+
+
+  
 
   fitAddon = new FitAddon();
   term.loadAddon(fitAddon);
