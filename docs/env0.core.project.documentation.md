@@ -4,6 +4,80 @@ This file serves as a stable implementation reference. Unlike `README.dev.md`, t
 
 ---
 
+## Visual FX System (env0.core)
+
+### Overview
+
+The visual system in `env0.core` is split into two clean layers:
+
+1. **Text-Level FX** (CSS applied directly to `.xterm` content)
+   - Responsible for passive character-level styling (glow, bold, flicker)
+   - Managed via `styles.css`
+   - No runtime JS required unless reactive
+   - Lives beneath any canvas overlays
+
+2. **Overlay FX** (canvas-based, layered above terminal)
+   - Will be managed via `canvasFXManager.js`
+   - Handles noise, scanlines, boot burst, flicker, phosphor trails
+   - Reactive to system state, command events, and narrative triggers
+   - Not yet implemented (stub exists)
+
+---
+
+### Current Implementation (April 2025)
+
+- **Glow**: Enabled
+  - Pure white phosphor effect
+  - Applied via `text-shadow` on `.xterm .xterm-rows`
+- **Breathing Pulse**: Enabled
+  - Subtle `@keyframes softGlowPulse` animation
+  - Simulates a thinking or waiting machine
+- **Inner Shadow**: Enabled
+  - Adds depth under characters using `0 1px 0 #000000`
+- **CRT/Scanline FX**: Disabled
+- **Canvas overlays**: Not active yet
+- **Theme switching**: Disabled
+- **VisualFXManager.js**:
+  - All exports stubbed
+  - Logs activity, no effects currently applied
+
+---
+
+### Principles
+
+- **Text-level FX are passive**: set once via CSS and left alone
+- **Canvas FX will never touch xterm**: visual-only, pointer-events: none
+- **Terminal should remain functional even with all visuals disabled**
+- All glow/visuals are opt-out, not opt-in
+
+---
+
+### Future Additions
+
+Text FX candidates (CSS only):
+- Command-triggered glow pulse
+- Error redshift (via class)
+- Login boot flicker (keyframe staggered)
+- Flicker burst on nmap or discovery
+
+Overlay FX candidates (canvasFXManager.js):
+- Soft CRT flicker layers
+- Boot burst whiteout
+- Scanline sweep
+- Phosphor burn
+- Screen jitter
+
+---
+
+### Last Verified State
+
+- `styles.css`: glow + pulse active
+- `visualFXManager.js`: disabled, safe
+- `canvasFXManager.js`: present, unmounted
+- No broken imports, no legacy CRT classes in use
+
+---
+
 ## 🎛️ Visual Effects Matrix
 
 | Effect | Status | Notes |

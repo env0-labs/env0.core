@@ -5,6 +5,8 @@ import { handleKeyInput } from './core/inputManager.js';
 import fs from './fs/filesystem.js';
 import { setFileSystem } from './fs/filesystemManager.js';
 import { initializeMenu } from './ui/menuManager.js';
+import * as canvasFX from './fx/canvasFXManager.js';
+// canvasFX.initCanvasFX();  ← commented out until needed
 
 initializeMenu();
 

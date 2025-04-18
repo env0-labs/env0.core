@@ -20,9 +20,9 @@ let keyInputHandler = null;
 export function setupTerminal() {
   const term = new Terminal({
     theme: {
-      background: '#001100',
-      foreground: '#00FF00',
-      cursor: '#00FF00'
+      background: '#000000', // black
+      foreground: '#ffffff', // white
+      cursor: '#ffffff',
     },
     fontFamily: 'Courier New, monospace',
     fontSize: 14,
