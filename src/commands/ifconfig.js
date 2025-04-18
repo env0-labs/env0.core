@@ -17,9 +17,6 @@
 import state from '../stateManager.js';
 import { termPrint } from '../outputManager.js';
 
-import state from '../stateManager.js';
-import { termPrint } from '../outputManager.js';
-
 export function ifconfigCommand() {
   const hostname = state.currentMachine;
   const ip = hostname === 'localhost' ? '10.10.10.99' : '10.10.10.100';

@@ -18,12 +18,14 @@ import { termPrint } from '../outputManager.js';
 export function helpCommand() {
   const helpText = [
     'Available Commands:',
-    '  ls           - List directory contents',
-    '  cd <dir>     - Change directory',
-    '  cat <file>   - View file contents',
-    '  clear        - Clear the screen',
-    '  help         - Show this help message',
-    // You can add future ones like ssh, nmap, ping here
+    '  ls             - List directory contents',
+    '  cd <dir>       - Change directory',
+    '  cat <file>     - View file contents',
+    '  clear          - Clear the screen',
+    '  help           - Show this help message',
+    '  ifconfig       - Show IP configuration for current machine',
+    '  ping <ip>      - Ping a host to check reachability',
+    '  nmap <subnet>  - Simulate network scan (e.g. 10.10.10.0/24)'
   ];
 
   helpText.forEach(line => termPrint(line));

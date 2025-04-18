@@ -12,6 +12,7 @@ import { clearCommand } from './commands/clear.js';
 import { helpCommand } from './commands/help.js';
 import { pingCommand } from './commands/ping.js';
 import { ifconfigCommand } from './commands/ifconfig.js';
+import { nmapCommand } from './commands/nmap.js';
 
 // Handles all key events from terminal
 export function handleKeyInput(e) {
@@ -53,6 +54,9 @@ export function handleKeyInput(e) {
           break;
         case 'ifconfig':
           ifconfigCommand();
+          break;
+        case 'nmap':
+          nmapCommand(args);
           break;
         default:
           state.terminal.writeln(`Command not found: ${cmd}`);
