@@ -1,5 +1,5 @@
 /* ==================================================
-   env0.core CRT Terminal Stylesheet (cleaned + commented)
+   env0.core Terminal Stylesheet (cleaned + stable)
    ================================================== */
 
 /* --- Base Layout --- */
@@ -19,17 +19,54 @@ html, body {
   height: 100%;
 }
 
-#terminal .xterm-screen {
-  text-shadow: none !important;
-}
-
+/* --- Terminal Appearance --- */
 .xterm {
   background-color: #000 !important;
   color: #fff !important;
 }
 
+#terminal .xterm-screen {
+  text-shadow: none !important; /* fallback for older xterm content */
+}
 
-/* --- Flicker Keyframes --- */
+.xterm .xterm-rows {
+  color: #ffffff !important;
+  background-color: #000000 !important;
+  font-size: 18px !important;
+  font-weight: bold;
+  line-height: 1.4;
+  animation: softGlowPulse 6s ease-in-out infinite;
+}
+
+/* --- Terminal Glow Pulse --- */
+@keyframes softGlowPulse {
+  0% {
+    text-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #ffffff,
+      0 0 10px #f0f0f0,
+      0 0 20px #e0e0e0,
+      0 1px 0 #000000;
+  }
+  50% {
+    text-shadow:
+      0 0 1px #cccccc,
+      0 0 3px #dddddd,
+      0 0 6px #e0e0e0,
+      0 0 12px #f0f0f0,
+      0 1px 0 #000000;
+  }
+  100% {
+    text-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #ffffff,
+      0 0 10px #f0f0f0,
+      0 0 20px #e0e0e0,
+      0 1px 0 #000000;
+  }
+}
+
+/* --- Flicker Keyframes (for future use) --- */
 @keyframes flickerLow {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.9; }
@@ -48,7 +85,6 @@ html, body {
 }
 
 /* --- Boot Flash --- */
-
 @keyframes bootFlash {
   0% {
     opacity: 1;
@@ -68,7 +104,6 @@ html, body {
   animation: bootFlash 0.4s ease-out;
 }
 
-
 /* --- Scrollbar Suppression for xterm.js --- */
 #terminal .xterm-viewport {
   scrollbar-width: none;
@@ -85,8 +120,8 @@ html, body {
   top: 10px;
   right: 10px;
   background: transparent;
-  color: #FFFF;
-  border: 1px solid #FFFF;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
   padding: 10px 20px;
   font-family: 'Courier New', monospace;
   font-size: 16px;
@@ -99,7 +134,7 @@ html, body {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.9);
-  color: #FFFF;
+  color: #FFFFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   z-index: 199;
@@ -112,13 +147,12 @@ html, body {
   top: 12px;
   right: 12px;
   background: transparent;
-  color: #FFFF;
-  border: 1px solid #FFFF;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
   font-size: 20px;
   cursor: pointer;
   z-index: 300;
 }
-
 
 .menuSetting {
   margin-top: 30px;
@@ -126,14 +160,15 @@ html, body {
 
 #menuOverlay button:hover,
 #menuButton:hover {
-  background-color: #FFFF;
+  background-color: #FFFFFF;
   color: #001100;
-  box-shadow: 0 0 8px #FFFF;
+  box-shadow: 0 0 8px #FFFFFF;
 }
+
 #menuOverlay button {
   background: transparent;
-  color: #FFFF;
-  border: 2px solid #FFFF;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   padding: 6px 12px;
@@ -146,7 +181,7 @@ html, body {
 #menuOverlay input[type="checkbox"] {
   appearance: none;
   background-color: transparent;
-  border: 2px solid #FFFF;
+  border: 2px solid #FFFFFF;
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -155,7 +190,7 @@ html, body {
 }
 
 #menuOverlay input[type="checkbox"]:checked {
-  background-color: #FFFF;
+  background-color: #FFFFFF;
 }
 
 /* --- Select Dropdown Styling --- */
@@ -164,13 +199,13 @@ html, body {
 #menuOverlay select:focus,
 #menuOverlay select:active {
   background: transparent;
-  color: #FFFF;
-  border: 2px solid #FFFF;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   padding: 5px;
   cursor: pointer;
-  box-shadow: 0 0 8px #FFFF;
+  box-shadow: 0 0 8px #FFFFFF;
   outline: none;
   appearance: none;
 }
@@ -183,9 +218,8 @@ html, body {
 #fastNarrativeSpeed.selected,
 #instantNarrativeSpeed.selected,
 #themeGreen.selected {
-  background-color: #FFFF;
+  background-color: #FFFFFF;
   color: black;
   font-weight: bold;
-  border-color: #FFFF;
+  border-color: #FFFFFF;
 }
-
