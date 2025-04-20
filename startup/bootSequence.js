@@ -118,7 +118,7 @@ function triggerBootBurst() {
   overlay.style.left = '0';
   overlay.style.width = '100%';
   overlay.style.height = '100%';
-  overlay.style.background = 'rgba(0, 255, 0, 0.25)';
+  overlay.style.background = 'rgba(255, 255, 255, 0.25)';
   overlay.style.pointerEvents = 'none';
   overlay.style.zIndex = '9999';
   overlay.style.animation = 'bootFlash 0.4s ease-out';

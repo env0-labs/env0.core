@@ -1,5 +1,5 @@
 /* ==================================================
-   node.zero CRT Terminal Stylesheet (cleaned + commented)
+   env0.core CRT Terminal Stylesheet (cleaned + commented)
    ================================================== */
 
 /* --- Base Layout --- */
@@ -8,7 +8,7 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  background: #001100; /* Default CRT green */
+  background: #000000; /* Default black */
   overflow: hidden;
 }
 
@@ -20,8 +20,14 @@ html, body {
 }
 
 #terminal .xterm-screen {
-  text-shadow: 0 0 2px #00FF00, 0 0 6px #00FF00; /* CRT glow */
+  text-shadow: none !important;
 }
+
+.xterm {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
 
 /* --- Flicker Keyframes --- */
 @keyframes flickerLow {
@@ -62,53 +68,6 @@ html, body {
   animation: bootFlash 0.4s ease-out;
 }
 
-/* --- Scanline --- */
-#scanline {
-  position: absolute;
-  top: -10%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: rgba(0, 255, 0, 0.08);
-  box-shadow: 0 0 25px 10px rgba(0, 255, 0, 0.15);
-  backdrop-filter: blur(1px);
-  opacity: 0;
-  z-index: 10;
-  pointer-events: none;
-  animation: scanline-move 8s linear infinite;
-}
-
-@keyframes scanline-move {
-  0% { top: -10%; opacity: 0; }
-  10% { opacity: 1; }
-  50% { top: 50%; opacity: 0.8; }
-  90% { opacity: 1; }
-  100% { top: 110%; opacity: 0; }
-}
-
-/* --- Noise Layers --- */
-#noise, #noise2 {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: url('https://www.transparenttextures.com/patterns/noisy.png');
-  pointer-events: none;
-  z-index: 15;
-}
-
-#noise {
-  opacity: 0.3;
-}
-
-#noise2 {
-  opacity: 0.05;
-  z-index: 16;
-  animation: noiseMove 5s infinite linear;
-}
-
-@keyframes noiseMove {
-  0% { background-position: 0 0; }
-  100% { background-position: 10px 10px; }
-}
 
 /* --- Scrollbar Suppression for xterm.js --- */
 #terminal .xterm-viewport {
@@ -126,8 +85,8 @@ html, body {
   top: 10px;
   right: 10px;
   background: transparent;
-  color: #00FF00;
-  border: 1px solid #00FF00;
+  color: #FFFF;
+  border: 1px solid #FFFF;
   padding: 10px 20px;
   font-family: 'Courier New', monospace;
   font-size: 16px;
@@ -140,7 +99,7 @@ html, body {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.9);
-  color: #00FF00;
+  color: #FFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   z-index: 199;
@@ -153,8 +112,8 @@ html, body {
   top: 12px;
   right: 12px;
   background: transparent;
-  color: #00FF00;
-  border: 1px solid #00FF00;
+  color: #FFFF;
+  border: 1px solid #FFFF;
   font-size: 20px;
   cursor: pointer;
   z-index: 300;
@@ -167,14 +126,14 @@ html, body {
 
 #menuOverlay button:hover,
 #menuButton:hover {
-  background-color: #00FF00;
+  background-color: #FFFF;
   color: #001100;
-  box-shadow: 0 0 8px #00FF00;
+  box-shadow: 0 0 8px #FFFF;
 }
 #menuOverlay button {
   background: transparent;
-  color: #00FF00;
-  border: 2px solid #00FF00;
+  color: #FFFF;
+  border: 2px solid #FFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   padding: 6px 12px;
@@ -187,7 +146,7 @@ html, body {
 #menuOverlay input[type="checkbox"] {
   appearance: none;
   background-color: transparent;
-  border: 2px solid #00FF00;
+  border: 2px solid #FFFF;
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -196,7 +155,7 @@ html, body {
 }
 
 #menuOverlay input[type="checkbox"]:checked {
-  background-color: #00FF00;
+  background-color: #FFFF;
 }
 
 /* --- Select Dropdown Styling --- */
@@ -205,13 +164,13 @@ html, body {
 #menuOverlay select:focus,
 #menuOverlay select:active {
   background: transparent;
-  color: #00FF00;
-  border: 2px solid #00FF00;
+  color: #FFFF;
+  border: 2px solid #FFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   padding: 5px;
   cursor: pointer;
-  box-shadow: 0 0 8px #00FF00;
+  box-shadow: 0 0 8px #FFFF;
   outline: none;
   appearance: none;
 }
@@ -224,15 +183,9 @@ html, body {
 #fastNarrativeSpeed.selected,
 #instantNarrativeSpeed.selected,
 #themeGreen.selected {
-  background-color: #00ff00;
+  background-color: #FFFF;
   color: black;
   font-weight: bold;
-  border-color: #00ff00;
+  border-color: #FFFF;
 }
 
-#themeYellow.selected {
-  background-color: #FFD900;
-  color: black;
-  font-weight: bold;
-  border-color: #FFD900;
-}

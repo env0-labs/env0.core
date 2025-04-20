@@ -62,7 +62,7 @@ export function applyTheme(theme) {
     switch (theme) {
       case 'green':
         terminal.style.backgroundColor = '#001100';
-        terminal.style.color = '#00FF00';
+        terminal.style.color = '#FFFFFF';
         break;
       case 'yellow':
         terminal.style.backgroundColor = '#1A1500';

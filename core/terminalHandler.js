@@ -21,8 +21,8 @@ export function setupTerminal() {
   const term = new Terminal({
     theme: {
       background: '#001100',
-      foreground: '#00FF00',
-      cursor: '#00FF00'
+      foreground: '#FFFFFF',
+      cursor: '#FFFFFF'
     },
     fontFamily: 'Courier New, monospace',
     fontSize: 14,
