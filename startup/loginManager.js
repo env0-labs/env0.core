@@ -56,13 +56,31 @@ export function handleLoginInput() {
   }
 
   else if (state.awaitingPassword) {
-    const target = systems.find(sys => sys.ip === state.pendingLogin);
-
-    if (target && state.pendingUsername === target.username && input === target.password) {
-      state.terminal.writeln('\r\nWelcome to ' + target.hostname + '!');
+    let target = null;
+  
+    // Remote login
+    if (state.pendingLogin) {
+      target = systems.find(sys => sys.ip === state.pendingLogin);
+    }
+  
+    // Fallback to localhost if no pendingLogin IP
+    if (!target && state.pendingLogin === null) {
+      const localPass = state.machines.localhost?.users?.[state.pendingUsername];
+      if (localPass && input === localPass) {
+        target = {
+          hostname: 'localhost',
+          username: state.pendingUsername,
+          password: input
+        };
+      }
+    }
+  
+    // Success
+    if (target && input === target.password) {
+      state.terminal.writeln(`\r\nWelcome to ${target.hostname}!`);
       const machineName = target.hostname.replace('.local', '');
       resetSessionState(state.pendingUsername, machineName);
-
+  
       if (!state.machines[machineName]) {
         state.machines[machineName] = {
           fs: fsTemplates.default(),
@@ -77,13 +95,13 @@ export function handleLoginInput() {
       state.awaitingUsername = true;
       state.terminal.writeln('\r\nReturning to login...');
     }
-
-    // Now clear, after everything
+  
+    // Clean up
     state.pendingUsername = '';
     state.pendingLogin = null;
     state.commandBuffer = '';
     state.cursorPosition = 0;
-
+  
     const promptMode = state.awaitingUsername ? 'username' : 'shell';
     refreshPrompt(promptMode);
   }
