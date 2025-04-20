@@ -1,60 +1,53 @@
-# TODO.md — node.zero Active Work
+# tasklist.md — env0.core Stable Base
 
-This file tracks actual, in-progress development. Use it to coordinate short-term tasks and validate implemented behavior.
+This file tracks tasks moving forward from the clean `stable_login` branch checkpoint. All prior visual and terminal instability has been resolved.
 
 ---
 
-## ✅ Completed This Session
-- [x] Final boot sequence polish (randomized pacing, fail/warn logic, press-any-key block)
+## ✅ Locked and Stable
+- [x] Boot sequence polish (randomized pacing, fail/warn logic, press-any-key block)
 - [x] Clear screen after boot before login prompt
-- [x] Ensure `skipIntro` logic works cleanly and avoids dupe output
-- [x] Add CRT boot burst (flash effect)
-- [x] Fix terminal visibility after blackout (removed opacity traps)
-- [x] Confirm terminal output via `termTypeLine()` is live
-- [x] Clean `bootSequence.js` — self-contained, stable
-- [x] Spinner glyph loop support in boot output
+- [x] Persistent skipIntro logic verified
+- [x] Terminal now white-on-black, glow pulse restored
+- [x] Font size increased to 18px (hardcoded)
+- [x] Login flow fully validated (username + password gate)
+- [x] Input echo, prompt stability, and shell launch confirmed
+- [x] Canvas overlay system scaffolded (`canvasFXManager.js`)
+- [x] visualFXManager safely stubbed (no active visuals)
+- [x] Menu renders and functions cleanly
+- [x] Known shell commands confirmed operational: `ls`, `cd`, `cat`, `clear`, `help`, `ifconfig`, `ping`, `nmap`
 
 ---
 
-## 🔧 Immediate Tasks
-- [ ] Implement commands for working at the network layer (e.g. `traceroute`, `whois`, `netstat`)
-- [ ] Begin building the initial mission logic
+## 🔧 Immediate Tasks (Next Pass)
+- [ ] Evaluate if font size should be user-adjustable via menu (non-critical)
+- [ ] Build `env0.terminal.js` wrapper (optional, for future modularity)
+- [ ] Lock and document shell prompt renderer (echo, input, and cursor handling)
+- [ ] Clean any remaining dead logic from `settings.js`, `visualFXManager.js`, and `outputIntro()`
+- [ ] Confirm menu reflects persisted `skipIntro` and `instantText` states at load
 
 ---
 
 ## 🧪 Test & Confirm
-- [ ] Login prompt is always reached after skip OR full boot
-- [ ] Menu toggle for boot skip reflects persistent state
-- [ ] `refreshPrompt()` doesn't silently fail — safe fallback logic works
+- [ ] Typing speed settings (slow/fast/instant) still functional
+- [ ] All visual changes remain inert unless explicitly enabled
+- [ ] `refreshPrompt()` fallback logic works across login, shell, and error states
 
 ---
 
-## 🧼 Cleanup / Refactors
-- [ ] Remove all `narrative.js` calls except placeholder import
-- [ ] Strip legacy intro line from `outputIntro()`
-- [ ] Drop `typeNarrativeLine()` unless reused
-- [ ] Archive or comment-out unused narrative stubs
-- [ ] Sanity-check `settings.js` default loading logic
+## 🧼 Cleanup / Refactor Targets
+- [ ] Remove or quarantine legacy `narrative.js` hooks (keep stub if needed)
+- [ ] Confirm all command output routes through `termPrint()` or `termTypeLine()`
+- [ ] Strip any residual ANSI behavior or cursor jumps left from earlier versions
 
 ---
 
-## 🪟 Visual / UX Enhancements (on hold)
-- [ ] Shake effect or vibration pulse on system wake
-- [ ] Future: cursor blink toggle or pacing adjustment
-- [ ] Migrate scanline, flicker, and boot burst effects to `fx-layer` canvas for cleaner CRT simulation
-  - `fx-layer` is visual-only and stacked above `#terminal`
-  - Intended for refraction, distortion, glow, and polished glass effects
-  - Will replace DOM-based scanlines and flicker overlays
-
+## 🧭 Mid-Term Feature Candidates
+- [ ] Add read-only responses for `mkdir`, `touch`, `echo` ("Filesystem is locked.")
+- [ ] Future boot flags: `--safe`, `--verbose` (passed via state injection)
+- [ ] Canvas FX activation triggers (e.g. `ping` burst, `nmap` distortion)
+- [ ] `narrativeManager.js` for system-bound storytelling
 
 ---
 
-## 🧭 Future Candidates (short-term)
-- [ ] `narrativeManager` stub (file-bound message triggers)
-- [ ] Soft-disable commands like `mkdir`, `touch`, `echo` (return "read-only FS")
-- [ ] Alternate boot flags (`--safe`, `--verbose`) passed via state injection
-
----
-
-> Visual work is paused — focus is now on network systems and mission framework.
-
+> This tasklist is built on top of a known-stable system. The goal is clarity, modularity, and preserving behavioral trust.

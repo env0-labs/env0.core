@@ -1,0 +1,61 @@
+# 📜 The Dragon Is Slain
+
+*Recorded on the 20th day of April, in the year 2025, in the quiet after the storm.*
+
+---
+
+There was a time — not long past — when the realm of `env0.core` trembled.
+
+The terminal, once obedient, grew fickle. Its green glow, once noble, spread unchecked. Its prompts whispered lies. Its menus vanished like ghosts in fog. The Keeper of the Styles struck down one hex, only for two more to rise in its place. Font sizes flickered in madness. Shadows lengthened. Despair whispered from `xterm.write()`.
+
+And then, the long night came.
+
+---
+
+## 🌘 The Descent
+
+The chronicles tell of a sequence of cursed incantations:
+
+- *🧹 Refactor: Full project restructure* — the world was clean, but unstable still.
+- *feat: add fontSize to settings.js* — the sigil that shattered peace.
+- *docs: update all core documentation* — a false calm before the flicker surged.
+- *Only posting this commit as a stopping point. Currently in CSS and xterm hell.*  
+  ⚠️ Here lies the banner of the doomed.
+- *emergency hardware fault commit mid debug* — the world cracked.
+- *💀 Resurrected shell from the depths of terminal hell* — brave, but it was too late.
+
+---
+
+## ⚔️ The Battle
+
+Amid the chaos, a hero remembered the old ways.  
+He returned to the scrolls of stability, to the commit of ancient clarity:
+
+> 🧹 Refactor: Full project restructure for modular clarity.  
+> *System boots clean. No 404s. Terminal intact. We live.*
+
+From this sanctuary he struck:
+
+- The cursed green was banished with a single `#000`.
+- The glow returned, not in madness, but in art.
+- The prompt was reforged.
+- The login sealed, like stone against the wind.
+
+---
+
+## 🛡️ What Was Reclaimed
+
+- A **white terminal**, pulsing with controlled light
+- A **shell that responded** only to truth
+- A **canvas layer**, summoned — but not yet awakened
+- A **menu**, anchored in reality
+- A **foundation**, clear of echoes, cleansed of entropy
+
+---
+
+## 🏷️ The Mark
+
+This day was marked in the Git annals as:
+
+```bash
+git tag dragons-slain
