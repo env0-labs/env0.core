@@ -13,6 +13,8 @@ import { helpCommand } from '../cmds/help.js';
 import { pingCommand } from '../cmds/ping.js';
 import { ifconfigCommand } from '../cmds/ifconfig.js';
 import { nmapCommand } from '../cmds/nmap.js';
+import { read } from '../cmds/read.js';
+
 
 export function handleKeyInput(e) {
   const { key, domEvent } = e;
@@ -56,6 +58,9 @@ export function handleKeyInput(e) {
           break;
         case 'nmap':
           nmapCommand(args);
+          break;
+        case 'read':
+          read(args.slice(1));
           break;
         default:
           state.terminal.writeln(`Command not found: ${cmd}`);
