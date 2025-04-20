@@ -1,38 +1,47 @@
-# node.zero - Changelog
-
-## [Unreleased] 
-
-### Added
-- Full CRT flicker overhaul with low/medium/high intensity tiers
-- Scanline opacity and movement scaled to flicker intensity
-- Menu overlay fully wired to all controls with `.selected` state logic
-- Audio and skip boot checkboxes wired to persistent settings
-- Text speed control synced to typing engine with instant mode
-- `visualFXManager.js` created to centralize all CRT visual logic
-- `outputManager.js`, `filesystemManager.js`, and `inputManager.js` reviewed and confirmed stable
-- Menu `X` close button repositioned for better UX targeting
-- README.dev.md and project documentation updated with new architecture and visuals
-- Defensive state loading in `settings.js` for localStorage persistence 
-
-### Changed
-- `styles.css` cleaned and restructured with clear sections and comments
-- Menu button visuals normalized with fallback styles for unselected state
-- Theme selector removed from menu UI; logic preserved for future use
-- Fallout theme officially disabled (xterm color override not cooperating)
-- Confirmed continued use of switch-based command routing (no dispatcher)
-
-### Fixed
-- Bug where menu buttons appeared visually broken without `.selected`
-- Terminal background color not applying due to xterm DOM separation
+# env0.core — Changelog (Post-Reset)
+Starting from stable refactor and the defeat of terminal corruption.
 
 ---
 
-## [Previous Commits]
+## 2025-04-20 — Post-Dragon Rebuild
 
-### 0.1.0 - Initial working build
-- Login screen with username/password entry
-- Commands implemented: ls, cd, cat, help, clear
-- Basic fake SSH system with network node switch
-- Intro narrative wired in (early stage)
-- Initial menu overlay added with working open/close
-- Early CRT visuals (static flicker, basic glow)
+### 🧼 Stability Restored
+- Rebased `main` onto `stable_login` checkpoint
+- Removed broken VFX, layout, and terminal behaviors
+- Cleaned all legacy CSS flicker, ghost menus, and rogue font controls
+
+### 🎨 Terminal Visuals
+- White-on-black glow effect restored via CSS pulse
+- Font size increased to 18px
+- Terminal readability improved with spacing above narrative output
+
+### 🧑‍💻 Shell Commands
+- `read` command added for immersive text reading
+  - Clears screen
+  - Respects `instantText`
+  - Exits on keypress
+- `read` now complements `cat`, intended for longer narrative delivery
+
+### 🔐 Login Fixes
+- Fixed edge case where invalid credentials prevented future valid login
+- Local login fallback now behaves as expected after initial failure
+
+### 📁 Filesystem and Reader
+- Added `resolveFile()` to `filesystemManager.js`
+- Updated input parsing to correctly slice command from args
+- `readerManager.js` created to encapsulate terminal reader mode
+
+### 📚 Documentation
+- Verified and reintroduced:
+  - `projectdocumentation.md`
+  - `README.dev.md`
+  - `tasklist.md`
+  - `blackbox.md`
+  - `the_dragon_is_slain`
+- Marked `mental.gaps.md` as do-not-read by design
+
+---
+
+## Tags
+- `dragons-slain`: checkpoint tag post-reset
+- `reader-mode-init`: tag candidate for new read flow

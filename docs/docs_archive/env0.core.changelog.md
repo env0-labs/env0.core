@@ -1,30 +1,29 @@
 # node.zero - Changelog
 
-## [Unreleased]
+## [Unreleased] 
 
 ### Added
-- Modular folder structure implemented (`core/`, `fs/`, `cmds/`, `network/`, `startup/`, `ui/`)
-- All import paths updated with explicit `.js` extensions
-- `canvasFXManager.js` scaffolded with no-op functions for future use
-- White phosphor glow added via CSS with breathing pulse animation
-- Subtle inner shadow added to terminal text for depth
-- Text-level FX hierarchy established (vs overlay FX)
-- Font size setting added to `settings.js` with persistence via `localStorage`
-- `fontSize` now applied during terminal initialization via `terminalHandler.js`
-- Visual FX system documented in `projectdocumentation.md`
+- Full CRT flicker overhaul with low/medium/high intensity tiers
+- Scanline opacity and movement scaled to flicker intensity
+- Menu overlay fully wired to all controls with `.selected` state logic
+- Audio and skip boot checkboxes wired to persistent settings
+- Text speed control synced to typing engine with instant mode
+- `visualFXManager.js` created to centralize all CRT visual logic
+- `outputManager.js`, `filesystemManager.js`, and `inputManager.js` reviewed and confirmed stable
+- Menu `X` close button repositioned for better UX targeting
+- README.dev.md and project documentation updated with new architecture and visuals
+- Defensive state loading in `settings.js` for localStorage persistence 
 
 ### Changed
-- `styles.css` restructured for minimal mode; all CRT/scanline effects removed
-- `visualFXManager.js` stubbed: all exports replaced with inert loggers
-- Default terminal theme explicitly set to white-on-black using `xterm.setOption('theme', {...})`
-- Project now boots with zero 404s, ghost imports, or visual noise by default
+- `styles.css` cleaned and restructured with clear sections and comments
+- Menu button visuals normalized with fallback styles for unselected state
+- Theme selector removed from menu UI; logic preserved for future use
+- Fallout theme officially disabled (xterm color override not cooperating)
+- Confirmed continued use of switch-based command routing (no dispatcher)
 
 ### Fixed
-- Phantom path errors due to incorrect import nesting (`/core/core/stateManager.js`)
-- `visualFXManager` import conflicts due to removed exports
-- xterm default green color overriding CSS styles
-- Breathing text glow syntax error from misplaced semicolon in `text-shadow`
-- Persistent glow issues caused by missing `.js` extensions and misaligned import resolution
+- Bug where menu buttons appeared visually broken without `.selected`
+- Terminal background color not applying due to xterm DOM separation
 
 ---
 
