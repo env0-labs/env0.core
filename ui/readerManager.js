@@ -43,12 +43,19 @@ function printLines(text) {
 }
 
 function waitForKey() {
-  const listener = () => {
+  const listener = (e) => {
     if (!active) return;
+
+    e.preventDefault();       // Stop arrow keys, etc.
+    e.stopPropagation();      // Block bubbling into shell
+
     active = false;
     document.removeEventListener('keydown', listener);
+
     clearTerminal();
     refreshLine('shell', state.commandBuffer, state.currentUser, state.currentMachine, state.currentPath);
   };
+
   document.addEventListener('keydown', listener);
 }
+
