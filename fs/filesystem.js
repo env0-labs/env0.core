@@ -4,6 +4,25 @@ const filesystemTemplate = {
   "/": {
     type: "dir",
     contents: {
+      "tutorial.txt": {
+        type: "file",
+        content: `
+Welcome to env0.core.
+
+This is a simulated terminal environment.
+
+Try the following commands:
+
+- \`ls\` to list files
+- \`cd\` to move around directories
+- \`read\` to read files
+- \`cat\` is also available, but does not pause or format
+
+Type \`read tutorial.txt\` to revisit this guide at any time.
+
+Explore. Observe. Learn by doing.
+`.trim()
+      },
       home: {
         type: "dir",
         contents: {
@@ -13,6 +32,18 @@ const filesystemTemplate = {
               "welcome.txt": {
                 type: "file",
                 content: "Welcome to SBC_1! This is your home directory."
+              },
+              "ramblings.txt": {
+                type: "file",
+                content: `
+Don't trust the glow.
+
+You think the flicker is cosmetic, but it’s not.
+
+We had a helper once — same as you. They patched the bootloader, rewired the login screen. Then they blinked too long, and the screen started writing back.
+
+If you see double text, STOP TYPING.
+`.trim()
               }
             }
           }
@@ -21,7 +52,7 @@ const filesystemTemplate = {
       etc: {
         type: "dir",
         contents: {
-          hostname: {
+          "hostname.txt": {
             type: "file",
             content: "SBC_1"
           }
@@ -30,22 +61,58 @@ const filesystemTemplate = {
       var: {
         type: "dir",
         contents: {
-          log: {
+          "log.txt": {
             type: "file",
             content: "System boot successful.\nNo errors reported."
           }
         }
       },
-      network: {
+      notes: {
         type: "dir",
         contents: {
-          "10.10.10.2": { type: "file", content: "Remote system placeholder" },
-          "10.10.10.3": { type: "file", content: "Remote system placeholder" },
-          "10.10.10.4": { type: "file", content: "Remote system placeholder" },
-          "10.10.10.99": { type: "file", content: "Remote system placeholder" },
-          "10.10.20.11": { type: "file", content: "Remote system placeholder" },
-          "10.10.20.12": { type: "file", content: "Remote system placeholder" },
-          "10.10.20.13": { type: "file", content: "Remote system placeholder" }
+          "observations.txt": {
+            type: "file",
+            content: `
+Boot sequence seems to respond to external time distortion.
+
+Observed behaviour:
+
+- Login prompt returns faster if ChatGPT is open.
+- Flicker intensity scales with number of browser tabs.
+
+Correlation is not causation, but this feels... recursive.
+`.trim()
+          },
+          "readme.txt": {
+            type: "file",
+            content: "Nothing to see here. Really. Try /data instead."
+          }
+        }
+      },
+      data: {
+        type: "dir",
+        contents: {
+          logs: {
+            type: "dir",
+            contents: {
+              "mission2.txt": {
+                type: "file",
+                content: `
+This file shouldn't be here.
+
+Someone ran \`nmap\` and found an open port with a heartbeat signature. We traced it to /mnt/echo_state.
+
+We didn't open it.
+
+You're not us.
+`.trim()
+              }
+            }
+          },
+          "temp.bin": {
+            type: "file",
+            content: "[BINARY CONTENT TRUNCATED]"
+          }
         }
       }
     }

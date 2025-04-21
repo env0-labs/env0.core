@@ -25,6 +25,10 @@ export async function outputIntro(targetIP = null) {
   } else {
     state.pendingLogin = null;
     println(`\r\nWelcome to SBC_1`);
+    println(`\r\nLogin hint: username 'root' / password 'toor'`);
+    println('');
+
+
   }
 
   state.awaitingUsername = true;
@@ -80,6 +84,8 @@ export function handleLoginInput() {
     // Success
     if (target && input === target.password) {
       println(`\r\nWelcome to ${target.hostname}!`);
+      println(`\r\nType 'read tutorial.txt' to begin.`);
+      println('');
       const machineName = target.hostname.replace('.local', '');
       resetSessionState(state.pendingUsername, machineName);
   

@@ -27,7 +27,7 @@ export async function startBootSequence() {
     state.commandBuffer = '';
     state.cursorPosition = 0;
   
-    await outputIntro('10.10.10.99');
+    await outputIntro(); // ← no IP = local = tutorial + hint
   
     return;
   }
