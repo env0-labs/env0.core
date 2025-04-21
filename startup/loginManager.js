@@ -6,6 +6,8 @@ import state, { resetSessionState } from '../core/stateManager.js';
 import fsTemplates from '../fs/fsTemplates.js';
 import settings from '../core/settings.js';
 import { initVisualFX } from '../fx/visualFXManager.js';
+import { print, println } from '../core/xtermWrapper.js';
+
 initVisualFX();
 
 let refreshLineFunc = null;
@@ -19,10 +21,10 @@ export async function outputIntro(targetIP = null) {
   // If provided, simulate network login
   if (targetIP) {
     state.pendingLogin = targetIP;
-    state.terminal.writeln(`\r\nConnecting to ${targetIP}...`);
+    println(`\r\nConnecting to ${targetIP}...`);
   } else {
     state.pendingLogin = null;
-    state.terminal.writeln(`\r\nWelcome to SBC_1`);
+    println(`\r\nWelcome to SBC_1`);
   }
 
   state.awaitingUsername = true;
@@ -30,7 +32,7 @@ export async function outputIntro(targetIP = null) {
   state.cursorPosition = 0;
 
   // 🔥 Manually write prompt instead of using refreshPrompt()
-  state.terminal.write('\r\nUsername: ');
+  print('\r\nUsername: ');
 }
 
 
@@ -41,7 +43,7 @@ export function handleLoginInput() {
 
   if (state.awaitingUsername) {
     if (!input) {
-      state.terminal.writeln('Login error: username required.');
+      println('Login error: username required.');
       refreshPrompt('username');
       return;
     }
@@ -77,7 +79,7 @@ export function handleLoginInput() {
   
     // Success
     if (target && input === target.password) {
-      state.terminal.writeln(`\r\nWelcome to ${target.hostname}!`);
+      println(`\r\nWelcome to ${target.hostname}!`);
       const machineName = target.hostname.replace('.local', '');
       resetSessionState(state.pendingUsername, machineName);
   
@@ -90,10 +92,10 @@ export function handleLoginInput() {
         };
       }
     } else {
-      state.terminal.writeln('\r\nAccess Denied.');
+      println('\r\nAccess Denied.');
       state.awaitingPassword = false;
       state.awaitingUsername = true;
-      state.terminal.writeln('\r\nReturning to login...');
+      println('\r\nReturning to login...');
     }
   
     // Clean up

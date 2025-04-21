@@ -1,6 +1,8 @@
 // filesystemManager.js
 
 import state from '../core/stateManager.js';
+import { print } from '../core/xtermWrapper.js';
+
 
 // Still used if you dynamically assign file systems
 function setFileSystem(fs) {
@@ -58,7 +60,7 @@ function prompt() {
   }
 
   const pathStr = state.currentPath.join('/');
-  state.terminal.write(`\r\n${state.currentUser || 'user'}@${state.currentMachine || 'localhost'}:/${pathStr}$ `);
+  print(`\r\n${state.currentUser || 'user'}@${state.currentMachine || 'localhost'}:/${pathStr}$ `);
 }
 
 export { setFileSystem, getCurrentDir, prompt, resolveFile };

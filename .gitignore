@@ -14,3 +14,9 @@ Thumbs.db
 # Ignore other temporary files (IDE files, etc.)
 .vscode/
 .idea/
+
+# Temp Chrome profile from dev .bat
+chrome_temp_profile/
+
+# Utility launchers (optional)
+launch_chrome_*.bat

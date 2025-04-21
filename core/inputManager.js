@@ -14,6 +14,8 @@ import { pingCommand } from '../cmds/ping.js';
 import { ifconfigCommand } from '../cmds/ifconfig.js';
 import { nmapCommand } from '../cmds/nmap.js';
 import { read } from '../cmds/read.js';
+import { println } from './xtermWrapper.js';
+
 
 
 export function handleKeyInput(e) {
@@ -23,7 +25,7 @@ export function handleKeyInput(e) {
   domEvent.preventDefault();
 
   if (domEvent.key === 'Enter') {
-    state.terminal.write('\r\n');
+    println();
 
     if (state.loginComplete) {
       if (state.commandBuffer.trim() !== '') {
@@ -63,7 +65,7 @@ export function handleKeyInput(e) {
           read(args.slice(1));
           break;
         default:
-          state.terminal.writeln(`Command not found: ${cmd}`);
+          println(`Command not found: ${cmd}`);
       }
 
       state.commandBuffer = '';

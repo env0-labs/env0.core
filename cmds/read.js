@@ -3,10 +3,11 @@
 import { enterReaderMode } from '../ui/readerManager.js';
 import state from '../core/stateManager.js';
 import { resolveFile } from '../fs/filesystemManager.js';
+import { println } from '../core/xtermWrapper.js';
 
 export function read(args) {
   if (!args || args.length === 0) {
-    state.terminal.writeln("Usage: read <filename>");
+    println("Usage: read <filename>");
     return;
   }
 
@@ -14,7 +15,7 @@ export function read(args) {
   const file = resolveFile(path);
 
   if (!file || file.type !== 'file') {
-    state.terminal.writeln(`read: no such file: ${args[0]}`);
+    println(`read: no such file: ${args[0]}`);
     return;
   }
 

@@ -2,6 +2,7 @@ import { setTypingDelay } from '../core/terminalHandler.js';
 import settings from '../core/settings.js';
 import state from '../core/stateManager.js';
 import { applyFlicker, applyTheme } from '../fx/visualFXManager.js';
+import { focusTerminal } from '../core/xtermWrapper.js';
 
 
 export function initializeMenu() {
@@ -21,7 +22,7 @@ export function initializeMenu() {
 
       setTimeout(() => {
         if (state.terminal) {
-          state.terminal.focus();
+          focusTerminal();
         } else {
           console.warn('Terminal not ready.');
         }

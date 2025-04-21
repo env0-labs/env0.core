@@ -1,5 +1,7 @@
 import state from '../core/stateManager.js';
 import { refreshLine } from '../core/terminalHandler.js';
+import { print, println, clearTerminal } from '../core/xtermWrapper.js';
+
 
 let active = false;
 
@@ -7,11 +9,11 @@ export function enterReaderMode(content) {
     active = true;
   
     // Fully clear terminal including prompt artifacts
-    state.terminal.clear();
+    clearTerminal();
   
     // Add a tiny delay to ensure clear completes before writing
     setTimeout(() => {
-      state.terminal.write('\r\n\r\n');
+      print('\r\n\r\n');
       printLines(content);
     }, 10); // 10ms is usually enough
   }
@@ -28,11 +30,11 @@ function printLines(text) {
   let index = 0;
   const printNext = () => {
     if (index < lines.length) {
-      state.terminal.writeln(lines[index]);
+      println(lines[index]);
       index++;
       setTimeout(printNext, delay);
     } else {
-      state.terminal.write('\r\n[Press any key to return to shell]');
+      print('\r\n[Press any key to return to shell]');
       waitForKey();
     }
   };
@@ -45,7 +47,7 @@ function waitForKey() {
     if (!active) return;
     active = false;
     document.removeEventListener('keydown', listener);
-    state.terminal.clear();
+    clearTerminal();
     refreshLine('shell', state.commandBuffer, state.currentUser, state.currentMachine, state.currentPath);
   };
   document.addEventListener('keydown', listener);

@@ -14,7 +14,8 @@
  */
 
 import state from '../core/stateManager.js';
+import { clearTerminal } from '../core/xtermWrapper.js';
 
 export function clearCommand() {
-  state.terminal.clear();
+  clearTerminal();
 }
