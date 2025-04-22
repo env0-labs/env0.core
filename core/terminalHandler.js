@@ -4,6 +4,17 @@ import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+es
 import { scrollToBottom, print } from './xtermWrapper.js';
 import state from './stateManager.js';
 
+// One declaration only
+const fitAddon = new FitAddon();
+
+// Load onto the terminal after it's initialized (assumes `state.terminal` exists)
+setTimeout(() => {
+  if (window.location.hostname.includes('github.io') && state.terminal) {
+    state.terminal.loadAddon(fitAddon);
+    fitAddon.fit();
+  }
+}, 100);
+
 let _typingDelay = 20;
 
 export function setTypingDelay(value) {
@@ -14,10 +25,7 @@ export function getTypingDelay() {
   return _typingDelay;
 }
 
-let fitAddon;
 let keyInputHandler = null;
-
-// We no longer setup the terminal here — that's now in xtermWrapper.js
 
 export function attachTerminalInput(handler) {
   keyInputHandler = handler;
@@ -46,7 +54,6 @@ export function refreshLine(mode, buffer, username, hostname, pathArray) {
   scrollToBottom();
 }
 
-// 👇 Helper: strip illegal control characters
 function sanitize(str) {
   return str.replace(/[\x00-\x1F\x7F]/g, '');
 }
