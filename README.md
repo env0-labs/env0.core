@@ -2,7 +2,7 @@
 
 The engine at the heart of everything in [env0.labs](https://github.com/env0-labs).
 
-This is a CRT-style terminal simulation layer built with `xterm.js`. It handles command input, state management, visual effects, and modular expansion — enabling both learning environments and narrative systems to run on top of it.
+This is a CRT-style terminal simulation engine built around a custom canvas-based renderer. `xterm.js` has been fully replaced as of [April 2025] with a bespoke system designed for precision control, glitch fidelity, and narrative adaptability enabling both learning environments and narrative systems to run on top of it.
 
 ## 🔧 Features
 - Modular command registration
