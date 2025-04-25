@@ -76,15 +76,24 @@ function clampScrollback() {
 }
 
 export function overwriteLastLine(text) {
-  if (buffer.length === 0) {
-    buffer.push(text);
-    currentLine = 0;
-  } else {
-    buffer[buffer.length - 1] = text;
-    currentLine = buffer.length - 1;
+  const cols = getTerminalCols();
+  const wrapped = [];
+
+  while (text.length > cols) {
+    wrapped.push(text.slice(0, cols));
+    text = text.slice(cols);
+  }
+  wrapped.push(text);
+
+  for (let i = 0; i < wrapped.length; i++) {
+    const lineIndex = buffer.length - wrapped.length + i;
+    buffer[lineIndex] = wrapped[i];
   }
 
-  setCursorPosition(Math.max(text.length - 1, 0), buffer.length - 1);
+  currentLine = buffer.length - 1;
   showCursor();
+
+  return wrapped.length; // 👈 this is new
 }
+
 

@@ -2,7 +2,7 @@
 
 import { scrollToBottom, print, println, clearTerminal, redraw } from './xtermWrapper.js';
 import state from './stateManager.js';
-import { canvas } from './terminal/canvasTerminal.js';
+import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
 import { overwriteLastLine, getVisibleBuffer } from './terminal/terminalBuffer.js';
 import {
   showCursor,
@@ -44,15 +44,23 @@ export function refreshLine(mode, buffer, username, hostname, pathArray) {
     cursorOffset = 'Password: '.length + buffer.length;
   } else {
     const prompt = `${username}@${hostname}:/${pathArray.join('/')}$ `;
-    line = prompt + sanitize(buffer);
-    cursorOffset = prompt.length + buffer.length;
+    const fullLine = prompt + sanitize(buffer);
+    line = fullLine;
+    cursorOffset = Math.max(fullLine.length - 0.5, 0); // use your subpixel offset here
+
+
   }
   
-  overwriteLastLine(line);
-  const row = Math.max(getVisibleBuffer().length - 1, 0);
-  setCursorPosition(cursorOffset, row);
-    redraw();
-}
+  const rowsWritten = overwriteLastLine(line);
+  const lastRow = getVisibleBuffer().length - 1;
+  
+  const cols = getTerminalCols();
+  const visualX = Math.floor(cursorOffset % cols);
+  const visualY = lastRow - (rowsWritten - 1) + Math.floor(cursorOffset / cols);
+  
+  setCursorPosition(visualX, visualY);
+  redraw();
+  
 
 
 
@@ -62,4 +70,5 @@ export function refreshLine(mode, buffer, username, hostname, pathArray) {
 // 👇 Helper: strip illegal control characters
 function sanitize(str) {
   return str.replace(/[\x00-\x1F\x7F]/g, '');
+}
 }

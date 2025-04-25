@@ -20,24 +20,20 @@ export async function initLogin(termInstance, refreshLineInstance) {
 
 export async function outputIntro(targetIP = null) {
   // If provided, simulate network login
-  if (targetIP) {
-    state.pendingLogin = targetIP;
-    println(`\r\nConnecting to ${targetIP}...`);
-  } else {
+  if (!targetIP) {
     state.pendingLogin = null;
-    println(`\r\nWelcome to SBC_1`);
-    println(`\r\nLogin hint: username 'root' / password 'toor'`);
+    println(`Welcome to SBC_1`);
+    println(`Login hint: username 'root' / password 'toor'`);
     println('');
-
-
   }
-
+  
   state.awaitingUsername = true;
   state.commandBuffer = '';
   state.cursorPosition = 0;
-
-  // 🔥 Manually write prompt instead of using refreshPrompt()
-  overwriteLastLine('Username: ');
+  
+  // Properly render first prompt and cursor position
+  refreshPrompt('username');
+  
 }
 
 
@@ -84,8 +80,8 @@ export function handleLoginInput() {
   
     // Success
     if (target && input === target.password) {
-      println(`\r\nWelcome to ${target.hostname}!`);
-      println(`\r\nType 'read tutorial.txt' to begin.`);
+      println(`Welcome to ${target.hostname}!`);
+      println(`Type 'read tutorial.txt' to begin.`);
       println('');
       const machineName = target.hostname.replace('.local', '');
       resetSessionState(state.pendingUsername, machineName);
@@ -99,10 +95,10 @@ export function handleLoginInput() {
         };
       }
     } else {
-      println('\r\nAccess Denied.');
+      println('Access Denied.');
       state.awaitingPassword = false;
       state.awaitingUsername = true;
-      println('\r\nReturning to login...');
+      println('Returning to login...');
     }
   
     // Clean up
