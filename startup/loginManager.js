@@ -7,6 +7,7 @@ import fsTemplates from '../fs/fsTemplates.js';
 import settings from '../core/settings.js';
 import { initVisualFX } from '../fx/visualFXManager.js';
 import { print, println } from '../core/xtermWrapper.js';
+import { overwriteLastLine } from '../core/terminal/terminalBuffer.js';
 
 initVisualFX();
 
@@ -36,7 +37,7 @@ export async function outputIntro(targetIP = null) {
   state.cursorPosition = 0;
 
   // 🔥 Manually write prompt instead of using refreshPrompt()
-  print('\r\nUsername: ');
+  overwriteLastLine('Username: ');
 }
 
 

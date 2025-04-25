@@ -59,4 +59,12 @@ export function startBlink(rate = 500) {
       redraw(); // redraw clears canvas, redraws text + cursor
     }, rate);
   }
+  export function getCursorPosition() {
+    return { x: cursorX, y: cursorY };
+  }
+  
+  export function setCursorPosition(x, y) {
+    cursorX = x;
+    cursorY = y;
+  }
   

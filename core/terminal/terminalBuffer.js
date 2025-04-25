@@ -2,7 +2,8 @@ import {
   advanceCursor,
   newlineCursor,
   resetCursor,
-  showCursor
+  showCursor,
+  setCursorPosition
 } from './terminalCursor.js';
 
 import { getTerminalCols } from './canvasTerminal.js';
@@ -83,5 +84,7 @@ export function overwriteLastLine(text) {
     currentLine = buffer.length - 1;
   }
 
-  showCursor(); // ← keeps blink/positioning active
+  setCursorPosition(Math.max(text.length - 1, 0), buffer.length - 1);
+  showCursor();
 }
+
