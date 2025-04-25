@@ -1,6 +1,6 @@
 import settings from '../core/settings.js';
 import state from '../core/stateManager.js';
-import { termClear, termPrint, termTypeLine } from '../core/outputManager.js';
+import { termClear, termPrint } from '../core/outputManager.js'; // ⬅️ updated
 import { initLogin, outputIntro } from '../startup/loginManager.js';
 import { refreshPrompt } from '../core/refreshPrompt.js';
 import { refreshLine } from '../core/terminalHandler.js';
@@ -11,14 +11,12 @@ export async function startBootSequence() {
   await initLogin(state.terminal);
   console.log('✅ initLogin complete');
 
-  await sleep(50); // Let xterm fully render
-
   if (settings.skipIntro) {
     termClear();
     termPrint('[Boot Skipped]');
-  
+
     await initLogin(state.terminal, refreshLine);
-  
+
     state.currentUser = null;
     state.loginComplete = false;
     state.awaitingUsername = true;
@@ -26,15 +24,12 @@ export async function startBootSequence() {
     state.pendingLogin = null;
     state.commandBuffer = '';
     state.cursorPosition = 0;
-  
+
     await outputIntro(); // ← no IP = local = tutorial + hint
-  
     return;
   }
-  
-  
 
-  // Phase 0 — Blackout + Boot Burst
+  // Phase 0 — Blackout + Boot Burst - this whole thing needs ripped out post renderer - TODO later
   const blackout = document.getElementById('boot-blackout-layer');
   if (blackout) blackout.remove();
 
@@ -88,9 +83,10 @@ export async function startBootSequence() {
   ];
 
   for (let line of bootLines) {
-    await termTypeLine(line, 12);
+    termPrint(line);
     const delay = getLineDelay(line);
     if (delay > 150) await showSpinner(delay);
+    else await sleep(delay);
   }
 
   // Phase 2 — Press any key prompt
@@ -148,11 +144,10 @@ async function showSpinner(duration) {
   const endTime = Date.now() + duration;
 
   while (Date.now() < endTime) {
-    state.terminal.write('\b' + spinnerFrames[frameIndex]);
+    // Optional: use println/spinner logic if needed
     frameIndex = (frameIndex + 1) % spinnerFrames.length;
     await sleep(interval);
   }
-  state.terminal.write('\b');
 }
 
 function waitForKeypress() {

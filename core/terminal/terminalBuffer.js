@@ -73,3 +73,15 @@ function clampScrollback() {
     if (currentLine < 0) currentLine = 0;
   }
 }
+
+export function overwriteLastLine(text) {
+  if (buffer.length === 0) {
+    buffer.push(text);
+    currentLine = 0;
+  } else {
+    buffer[buffer.length - 1] = text;
+    currentLine = buffer.length - 1;
+  }
+
+  showCursor(); // ← keeps blink/positioning active
+}

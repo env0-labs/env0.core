@@ -1,8 +1,9 @@
 // terminalHandler.js
 
-import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+esm';
-import { scrollToBottom, print } from './xtermWrapper.js';
+import { scrollToBottom, print, println, clearTerminal, redraw } from './xtermWrapper.js';
 import state from './stateManager.js';
+import { canvas } from './terminal/canvasTerminal.js';
+import { overwriteLastLine } from './terminal/terminalBuffer.js';
 
 let _typingDelay = 20;
 
@@ -14,37 +15,39 @@ export function getTypingDelay() {
   return _typingDelay;
 }
 
-let fitAddon;
 let keyInputHandler = null;
 
-// We no longer setup the terminal here — that's now in xtermWrapper.js
-
 export function attachTerminalInput(handler) {
-  keyInputHandler = handler;
-  state.terminal?.onKey(e => {
-    if (keyInputHandler) {
-      handler(e);
-    }
+  canvas.addEventListener('keydown', e => {
+    const event = {
+      key: e.key,
+      domEvent: e
+    };
+    handler(event);
   });
 }
 
-export function refreshLine(mode, buffer, username, hostname, pathArray) {
-  if (!state.terminal) return;
 
-  // Clear line
-  print('\x1b[2K\r');
+export function refreshLine(mode, buffer, username, hostname, pathArray) {
+  let line = '';
 
   if (mode === 'username') {
-    print('Username: ' + sanitize(buffer));
+    line = 'Username: ' + sanitize(buffer);
   } else if (mode === 'password') {
-    print('Password: ' + '*'.repeat(buffer.length));
+    line = 'Password: ' + '*'.repeat(buffer.length);
   } else {
     const prompt = `${username}@${hostname}:/${pathArray.join('/')}$ `;
-    print(prompt + sanitize(buffer));
+    line = prompt + sanitize(buffer);
   }
 
-  scrollToBottom();
+  overwriteLastLine(line);
+  redraw();
 }
+
+
+
+
+
 
 // 👇 Helper: strip illegal control characters
 function sanitize(str) {

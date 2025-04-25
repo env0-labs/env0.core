@@ -4,7 +4,8 @@ import {
   println,
   clearTerminal,
   scrollToBottom,
-  focusTerminal
+  focusTerminal,
+  redraw
 } from './terminal/env0.terminal.js';
 
 export {
@@ -13,5 +14,6 @@ export {
   println,
   clearTerminal,
   scrollToBottom,
-  focusTerminal
+  focusTerminal,
+  redraw
 };

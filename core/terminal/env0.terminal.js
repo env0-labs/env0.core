@@ -1,4 +1,4 @@
-import { createCanvas, redraw } from './canvasTerminal.js';
+import { createCanvas, redraw, canvas } from './canvasTerminal.js';
 import { writeText, writeLine, clearBuffer } from './terminalBuffer.js';
 import { startBlink } from './terminalCursor.js';
 

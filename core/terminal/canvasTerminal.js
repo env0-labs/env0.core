@@ -6,7 +6,7 @@ import { setCursorContext } from './terminalCursor.js';
 import { startBlink } from './terminalCursor.js';
 
 
-let canvas, ctx;
+export let canvas, ctx;
 let cols = 80, rows = 25;
 let charWidth = 0, charHeight = 0;
 export function getTerminalCols() {
@@ -31,6 +31,10 @@ export function createCanvas(container) {
     });
   
     window.addEventListener('resize', resizeCanvas);
+    canvas.addEventListener('click', () => {
+      canvas.focus();
+    });
+    
   }
 
   function measureCharSize() {
