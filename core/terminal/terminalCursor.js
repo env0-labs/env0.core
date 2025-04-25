@@ -39,8 +39,9 @@ export function resetCursor() {
 export function drawCursor() {
   if (!ctx || !visible) return;
 
-  const x = cursorX * charWidth;
-  const y = cursorY * charHeight + config.linePadding;
+  const x = cursorX * charWidth + config.cursorOffsetX;
+  const y = cursorY * charHeight + config.cursorOffsetY;
+  
 
   ctx.fillStyle = config.fgColor;
   ctx.fillRect(x, y, charWidth, charHeight);

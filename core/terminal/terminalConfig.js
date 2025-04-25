@@ -5,7 +5,13 @@ export const config = {
     fontFamily: 'courier, monospace',
     bgColor: '#000000',
     fgColor: '#FFFFFF',
-    linePadding: 8, // <- used for both text and cursor
+    cursorVerticalOffset: 0, // used for CRT shake, not layout
+    charWidth: 10,        // Fixed cell width in px
+    charHeight: 21,       // Fixed cell height in px
+    useFixedCellSize: true, // If true, bypass measureText() and use hardcoded grid
+    cursorOffsetX: -1,
+    cursorOffsetY: -1.5,
+
   };
 
   

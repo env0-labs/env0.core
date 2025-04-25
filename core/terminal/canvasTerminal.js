@@ -38,10 +38,16 @@ export function createCanvas(container) {
   }
 
   function measureCharSize() {
-    const metrics = ctx.measureText('M');
-    charWidth = Math.ceil(metrics.width);
-    charHeight = config.fontSize;
-    cols = Math.floor(canvas.clientWidth / charWidth); // ← update cols here
+    if (config.useFixedCellSize) {
+      charWidth = config.charWidth;
+      charHeight = config.charHeight;
+    } else {
+      const metrics = ctx.measureText('M');
+      charWidth = Math.ceil(metrics.width);
+      charHeight = Math.ceil(config.fontSize * 1.5);
+    }
+  
+    cols = Math.floor(canvas.clientWidth / charWidth);
     rows = Math.floor(canvas.clientHeight / charHeight);
   }
   
@@ -53,6 +59,7 @@ function resizeCanvas() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.font = `${config.fontSize}px ${config.fontFamily}`;
     ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
 
     measureCharSize(); // now uses the correct post-scale font
     setContext(ctx, charWidth, charHeight);
