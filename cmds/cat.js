@@ -4,7 +4,7 @@ import { getCurrentDir } from '../fs/filesystemManager.js';
 import { getTerminalCols } from '../core/terminal/canvasTerminal.js';
 
 export function catCommand(args) {
-  if (!args[1]) {
+  if (!args[0]) {
     println('Usage: cat <file>');
     return;
   }
@@ -15,7 +15,7 @@ export function catCommand(args) {
     return;
   }
   
-  const file = dir.contents?.[args[1]];
+  const file = dir.contents?.[args[0]];
 
   if (file?.type === 'file') {
     const terminalCols = getTerminalCols() || 80;
@@ -30,6 +30,6 @@ export function catCommand(args) {
       }
     });
   } else {
-    println(`No such file: ${args[1]}`);
+    println(`No such file: ${args[0]}`);
   }
 }

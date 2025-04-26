@@ -2,12 +2,12 @@ import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
 
 export function cdCommand(args) {
-  if (!args[1]) {
+  if (!args[0]) {
     println('Usage: cd <directory>');
     return;
   }
 
-  const inputPath = args[1];
+  const inputPath = args[0];
   const parts = inputPath.split('/').filter(Boolean);
   let newPath = inputPath.startsWith('/') ? [] : [...state.currentPath];
   let dir = state.machines[state.currentMachine]?.fs['/'];
