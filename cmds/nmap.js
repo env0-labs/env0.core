@@ -19,7 +19,7 @@ import { isHostReachable } from '../network/networkManager.js';
 import { discoverHost } from '../core/stateManager.js';
 
 export function nmapCommand(args) {
-  const target = args[1];
+  const target = args[0];
 
   if (!target || !target.includes('/')) {
     println('Usage: nmap <subnet>  (e.g. nmap 10.10.10.0/24)');
