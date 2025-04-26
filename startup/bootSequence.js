@@ -1,35 +1,27 @@
+// bootSequence.js
+
 import settings from '../core/settings.js';
-import state from '../core/stateManager.js';
-import { termClear, termPrint } from '../core/outputManager.js'; // ⬅️ updated
+import { termClear, termPrint } from '../core/outputManager.js';
 import { initLogin, outputIntro } from '../startup/loginManager.js';
-import { refreshPrompt } from '../core/refreshPrompt.js';
+import { setMode } from '../core/sessionManager.js';
 import { refreshLine } from '../core/terminalHandler.js';
 
 export async function startBootSequence() {
   console.log('🔥 Boot sequence started');
   console.log('🧪 initLogin about to run');
-  await initLogin(state.terminal);
+
   console.log('✅ initLogin complete');
 
   if (settings.skipIntro) {
     termClear();
     termPrint('[Boot Skipped]');
+    await outputIntro();
 
-    await initLogin(state.terminal, refreshLine);
-
-    state.currentUser = null;
-    state.loginComplete = false;
-    state.awaitingUsername = true;
-    state.awaitingPassword = false;
-    state.pendingLogin = null;
-    state.commandBuffer = '';
-    state.cursorPosition = 0;
-
-    await outputIntro(); // ← no IP = local = tutorial + hint
+    // Critical: formally switch mode
+    setMode('login');
     return;
   }
 
-  // Phase 0 — Blackout + Boot Burst - this whole thing needs ripped out post renderer - TODO later
   const blackout = document.getElementById('boot-blackout-layer');
   if (blackout) blackout.remove();
 
@@ -37,7 +29,6 @@ export async function startBootSequence() {
   triggerBootBurst();
   await sleep(400);
 
-  // Phase 1 — Boot log
   console.log('✅ Boot burst complete — starting terminal output');
   termClear();
 
@@ -89,15 +80,16 @@ export async function startBootSequence() {
     else await sleep(delay);
   }
 
-  // Phase 2 — Press any key prompt
   await sleep(600);
   termPrint('');
   termPrint('Press any key to continue...');
   await waitForKeypress();
 
-  // Phase 3 — Clear + handoff to login narrative
   termClear();
   await outputIntro();
+
+  // 🔥 Important: formally switch mode
+  setMode('login');
 }
 
 // --- Helpers below ---
@@ -144,7 +136,6 @@ async function showSpinner(duration) {
   const endTime = Date.now() + duration;
 
   while (Date.now() < endTime) {
-    // Optional: use println/spinner logic if needed
     frameIndex = (frameIndex + 1) % spinnerFrames.length;
     await sleep(interval);
   }

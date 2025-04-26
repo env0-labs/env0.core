@@ -1,7 +1,7 @@
 // networkManager.js
 
 import state from '../core/stateManager.js';
-import fsTemplates from '../fs/fsTemplates.js';
+import fs from '../fs/filesystem.js';
 import systems from './systems.js'; // optional but clean
 
 // Simulated host reachability map (manual for now, could randomize later)
@@ -33,7 +33,7 @@ export function mountReachableHosts() {
   listReachableHosts().forEach(sys => {
     if (!state.machines[sys.hostname]) {
       state.machines[sys.hostname] = {
-        fs: fsTemplates.default(),
+        fs: structuredClone(fs), // or a deepClone util
         users: {
           [sys.username]: sys.password
         }

@@ -6,18 +6,38 @@ import { handleKeyInput } from './core/inputManager.js';
 import fs from './fs/filesystem.js';
 import { setFileSystem } from './fs/filesystemManager.js';
 import { initializeMenu } from './ui/menuManager.js';
+window.DEBUG_MODE = window.DEBUG_MODE ?? false;
 
 initializeMenu();
 
 // 1. Set up the terminal using the wrapper
 document.addEventListener("DOMContentLoaded", () => {
   const terminalContainer = document.getElementById("terminal");
-  initTerminal(terminalContainer); // ⬅ uses DOM renderer, glow-safe
-  focusTerminal(); // ⬅️ ensures input is captured by the canvas
+  
+  // 🔥 Terminal Setup
+  initTerminal(terminalContainer);
+  focusTerminal();
   attachTerminalInput(handleKeyInput);
-  setFileSystem(fs);
 
-  // 4. Start the login flow
+  // 🔥 Filesystem Setup
+  setFileSystem(fs); // <-- fs is from filesystem.js
+
+  // 🔥 Machines Setup
+  state.machines = {
+    localhost: {
+      fs: fs,
+      users: {
+        root: 'toor'
+      }
+    }
+  };
+  console.warn('[main.js] State machines seeded:', JSON.stringify(state.machines, null, 2));
+
+  // 🔥 Bind loginManager with terminal refreshLine
+  console.warn('[main.js] Binding loginManager refreshLine');
+  initLogin(refreshLine);
+
+  // 🔥 Start Boot Sequence
   setTimeout(async () => {
     try {
       const { startBootSequence } = await import('./startup/bootSequence.js');
@@ -27,3 +47,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 200);
 });
+

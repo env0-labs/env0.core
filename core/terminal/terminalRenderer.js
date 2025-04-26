@@ -27,11 +27,11 @@ export function drawFromBuffer() {
     const paddedLine = shouldRender ? line + ' ' : ' ';
     ctx.fillText(paddedLine, 0, row * charHeight);
     
-    console.log(`ROW ${row}: "${line}"`);
+    //console.log(`ROW ${row}: "${line}"`);
 
 
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    ctx.strokeRect(0, row * charHeight, canvas.width, charHeight);
+    //ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    //ctx.strokeRect(0, row * charHeight, canvas.width, charHeight);
   }
 
   drawCursor();
