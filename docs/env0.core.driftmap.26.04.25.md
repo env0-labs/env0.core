@@ -64,7 +64,6 @@
 
 - `filesystem.js` — ✅ No issues detected
 - `filesystemManager.js` — 🔶 Drift: Direct print() calls; bypasses proper output wrapping
-- `fsTemplates.js` — ✅ No issues detected
 
 ---
 

@@ -4,6 +4,7 @@ import state from './stateManager.js';
 import { refreshLine } from './terminalHandler.js';
 import { handleLoginInput as processLoginInput } from '../startup/loginManager.js';
 import { getMode, setMode } from './sessionManager.js';
+import sshCommand from '../cmds/ssh.js';
 
 // Commands
 import { lsCommand } from '../cmds/ls.js';
@@ -15,7 +16,7 @@ import { pingCommand } from '../cmds/ping.js';
 import { ifconfigCommand } from '../cmds/ifconfig.js';
 import { nmapCommand } from '../cmds/nmap.js';
 import { read } from '../cmds/read.js';
-
+import { exitCommand } from '../cmds/exit.js';
 import { println, scrollToBottom } from './xtermWrapper.js';
 
 export function handleKeyInput(e) {
@@ -187,39 +188,46 @@ function processShellCommand(input) {
 
   const args = input.trim().split(/\s+/);
   const cmd = args[0];
+  const cmdArgs = args.slice(1); // <-- CRITICAL NEW LINE
 
   switch (cmd) {
     case 'ls':
-      lsCommand();
+      lsCommand(cmdArgs);
       break;
     case 'cd':
-      cdCommand(args);
+      cdCommand(cmdArgs);
       break;
     case 'cat':
-      catCommand(args);
+      catCommand(cmdArgs);
       break;
     case 'clear':
-      clearCommand();
+      clearCommand(cmdArgs);
       break;
     case 'help':
-      helpCommand();
+      helpCommand(cmdArgs);
       break;
     case 'ping':
-      pingCommand(args);
+      pingCommand(cmdArgs);
       break;
     case 'ifconfig':
-      ifconfigCommand();
+      ifconfigCommand(cmdArgs);
       break;
     case 'nmap':
-      nmapCommand(args);
+      nmapCommand(cmdArgs);
       break;
     case 'read':
-      read(args.slice(1));
+      read(cmdArgs);
+      break;
+    case 'ssh':
+      sshCommand(cmdArgs);
+      break
+    case 'exit':
+      exitCommand(cmdArgs);
+      break;
+
       break;
     default:
       println(`Command not found: ${cmd}`);
   }
-
-  // REMOVE scrollToBottom() and redraw() from here
-  // Let printlns inside commands handle visual updates
 }
+

@@ -1,7 +1,6 @@
 src\animations.js
 src\filesystem.js
 src\filesystemManager.js
-src\fsTemplates.js
 src\index.html
 src\inputManager.js
 src\loginManager.js

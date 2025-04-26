@@ -60,7 +60,6 @@ This file serves as a stable implementation reference. Unlike `README.dev.md`, t
 | `styles.css` | Core CRT layout + menu styling |
 | `main.js` | Boot and top-level init control |
 | `filesystem.js` | Filesystem structure base |
-| `fsTemplates.js` | Per-node FS templates |
 | `filesystemManager.js` | Runtime FS operations |
 | `systems.js` | Machine IP and credential map |
 | `stateManager.js` | Single truth runtime store |

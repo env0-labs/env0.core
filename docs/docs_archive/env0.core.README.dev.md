@@ -18,7 +18,6 @@ Welcome to the dev side of `env0.core`: a modular terminal engine built in JavaS
 - `stateManager.js` — global runtime state store
 - `settings.js` — persistent config (`fontSize`, `instantText`, etc.)
 - `filesystem.js` — base filesystem structure
-- `fsTemplates.js` — cloned templates per machine
 - `filesystemManager.js` — runtime FS logic
 - `loginManager.js` — handles boot + login sequence
 - `menuManager.js` — UI overlay for speed, font, and boot toggles

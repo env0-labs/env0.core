@@ -22,7 +22,6 @@ Welcome to the dev side of `node.zero`: a modular, CRT-styled terminal simulatio
 - `stateManager.js` — global runtime state store
 - `settings.js` — persistent config (e.g., `instantText`, `typingDelay`)
 - `filesystem.js` — base filesystem structure
-- `fsTemplates.js` — cloned templates for per-machine FS
 - `filesystemManager.js` — runtime FS logic
 - `loginManager.js` — handles login sequence and credential routing
 - `menuManager.js` — UI overlay with speed and flicker controls
