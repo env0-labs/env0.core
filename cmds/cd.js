@@ -1,22 +1,5 @@
-/**
- * env0.core Command Module
- * -------------------------
- * Command: cd
- *
- * 🧠 Type: Filesystem Interaction
- * 🛠️ Depends on: stateManager.js, xtermWrapper.js
- *
- * 🔒 Side Effects: Yes (modifies currentPath)
- * 🧪 Safe to test in isolation: Yes
- *
- * Description:
- * Changes the current working directory, supporting absolute,
- * relative, and parent (`..`) navigation within the virtual FS.
- */
-
 import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
-import { prompt } from '../fs/filesystemManager.js';
 
 export function cdCommand(args) {
   if (!args[1]) {
@@ -59,6 +42,6 @@ export function cdCommand(args) {
   }
 
   state.currentPath = newPath;
-  prompt();
-
+  // ✅ DO NOT CALL prompt() here
+  // Let shell lifecycle (println + refreshShellPrompt) handle it naturally
 }

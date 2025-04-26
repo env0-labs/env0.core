@@ -41,4 +41,3 @@ export function catCommand(args) {
     println(`No such file: ${args[1]}`);
   }
 }
-prompt();

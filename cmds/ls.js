@@ -42,8 +42,6 @@ export function lsCommand() {
 
   let line = '';
 
-  // Force move down one line from current shell prompt
-  println('');
 
   entries.forEach((name, index) => {
     if (typeof name !== 'string' || name === 'undefined') {

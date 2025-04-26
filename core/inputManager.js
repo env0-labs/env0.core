@@ -36,9 +36,12 @@ export function handleKeyInput(e) {
   // I DON'T KNOW WHY BUT REMOVING EITHER OF THE COMMENTS BELOW BREAKS THINGS FOR NO GOOD REASON.
      // println(input);         // Echo user command - DO NOT REMOVE THIS COMMENT
       processShellCommand(input); // Run the command (already handles its own redraw + scroll)
+      setTimeout(() => {
+        println('');
+        refreshShellPrompt();
+      }, 0);
      // println('');             // Force true blank row after command output - DO NOT REMOVE THIS ONE EITHER
-     //root
-     refreshShellPrompt();    // Redraw prompt on clean line
+     // refreshShellPrompt();    // Redraw prompt on clean line
       // NO extra scrollToBottom() here
     }
     return;
