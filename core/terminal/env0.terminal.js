@@ -1,5 +1,5 @@
-import { createCanvas, redraw, canvas } from './canvasTerminal.js';
-import { writeText, writeLine, clearBuffer } from './terminalBuffer.js';
+import { createCanvas, redraw, canvas, getTerminalRows } from './canvasTerminal.js';
+import { writeText, writeLine, clearBuffer, getVisibleBuffer, setViewportStartRow } from './terminalBuffer.js';
 import { startBlink } from './terminalCursor.js';
 
 let containerEl = null;
@@ -42,7 +42,14 @@ export function focusTerminal() {
   }
 
   export function scrollToBottom() {
-    // Not implemented yet — will hook into scrollback buffer later
+    const buffer = getVisibleBuffer();
+    const maxVisibleRows = getTerminalRows(); // however you calculate terminal viewport height
+    const totalRows = buffer.length;
+  
+    const startRow = Math.max(0, totalRows - maxVisibleRows);
+  
+    setViewportStartRow(startRow);  // <- you'd implement this
+    redraw();
   }
   
   export {

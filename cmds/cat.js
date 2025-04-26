@@ -1,24 +1,7 @@
-/**
- * env0.core Command Module
- * -------------------------
- * Command: cat
- *
- * 🧠 Type: Filesystem Interaction
- * 🛠️ Depends on: stateManager.js, xtermWrapper.js
- *
- * 🔒 Side Effects: No
- * 🧪 Safe to test in isolation: Yes
- *
- * Description:
- * Outputs the contents of a specified file in the current directory.
- * Does not support full path resolution (filename only).
- */
-
 import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
 import { getCurrentDir } from '../fs/filesystemManager.js';
-import { prompt } from '../fs/filesystemManager.js';
-
+import { getTerminalCols } from '../core/terminal/canvasTerminal.js';
 
 export function catCommand(args) {
   if (!args[1]) {
@@ -33,10 +16,19 @@ export function catCommand(args) {
   }
   
   const file = dir.contents?.[args[1]];
-  
 
   if (file?.type === 'file') {
-    println(file.content);
+    const terminalCols = getTerminalCols() || 80;
+    const lines = file.content.split('\n');
+    lines.forEach(line => {
+      if (line.length <= terminalCols) {
+        println(line);
+      } else {
+        for (let i = 0; i < line.length; i += terminalCols) {
+          println(line.slice(i, i + terminalCols));
+        }
+      }
+    });
   } else {
     println(`No such file: ${args[1]}`);
   }

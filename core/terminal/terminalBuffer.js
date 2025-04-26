@@ -1,111 +1,50 @@
-import {
-  advanceCursor,
-  newlineCursor,
-  resetCursor,
-  showCursor,
-  setCursorPosition
-} from './terminalCursor.js';
-
-import { getTerminalCols } from './canvasTerminal.js';
-
+// terminalBuffer.js
 
 const buffer = [];
+let viewportStartRow = 0;
 const maxLines = 1000;
-let currentLine = 0;
-
-export function writeText(text) {
-  const cols = getTerminalCols(); // now dynamic per-call
-  if (buffer.length === 0) buffer.push('');
-
-  let remaining = text;
-
-  while (remaining.length > 0) {
-    const line = buffer[currentLine] || '';
-    const spaceLeft = cols - line.length;
-
-    const chunk = remaining.slice(0, spaceLeft);
-    buffer[currentLine] = line + chunk;
-
-    advanceCursor(chunk.length);
-    showCursor();
-
-    remaining = remaining.slice(chunk.length);
-
-    if (remaining.length > 0) {
-      buffer.push('');
-      currentLine = buffer.length - 1;
-      newlineCursor();
-    }
-  }
-
-  clampScrollback();
-}
-
-export function writeLine(text) {
-  if (typeof text !== 'string') {
-    console.error('[writeLine] Non-string input:', text, '→', typeof text);
-    text = String(text); // convert to keep it from breaking draw
-  }
-
-  if (buffer.length === 0 || (buffer.length === 1 && buffer[0] === '')) {
-    buffer[0] = text;
-    currentLine = 0;
-  } else {
-    buffer.push(text);
-    currentLine = buffer.length - 1;
-  }
-
-  newlineCursor();
-  showCursor();
-  clampScrollback();
-}
 
 export function clearBuffer() {
   buffer.length = 0;
-  currentLine = 0;
-  resetCursor();
-  showCursor();
+  viewportStartRow = 0;
+}
+
+export function writeText(text) {
+  if (!buffer.length) {
+    buffer.push('');
+  }
+  buffer[buffer.length - 1] += text;
+  clampScrollback();
+}
+
+export function writeLine(text = '') {
+  buffer.push(text);
+  clampScrollback();
 }
 
 export function getVisibleBuffer() {
   return buffer;
 }
 
-function clampScrollback() {
+export function clampScrollback() {
   if (buffer.length > maxLines) {
-    const overflow = buffer.length - maxLines;
-    buffer.splice(0, overflow);
-    currentLine -= overflow;
-    if (currentLine < 0) currentLine = 0;
+    const excess = buffer.length - maxLines;
+    buffer.splice(0, excess);
+    viewportStartRow = Math.max(viewportStartRow - excess, 0);
   }
 }
 
-export function overwriteLastLine(text) {
-  if (typeof text !== 'string') {
-    console.error('[overwriteLastLine] Non-string input:', text);
-  }
-  
-  const cols = getTerminalCols();
-  const wrapped = [];
+export function setViewportStartRow(row) {
+  viewportStartRow = row;
+}
 
-  while (text.length > cols) {
-    wrapped.push(text.slice(0, cols));
-    text = text.slice(cols);
-  }
-  wrapped.push(text);
-
-  // 🔥 Remove the last line, then append wrapped lines cleanly
+export function getViewportStartRow() {
+  return viewportStartRow;
+}
+export function overwriteLastLine(newText) {
   if (buffer.length > 0) {
-    buffer.splice(buffer.length - 1, 1, ...wrapped);
+    buffer[buffer.length - 1] = newText;
   } else {
-    wrapped.forEach(line => buffer.push(line));
+    buffer.push(newText);
   }
-
-  currentLine = buffer.length - 1;
-  showCursor();
-
-  return wrapped.length;
 }
-
-
-

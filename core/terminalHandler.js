@@ -3,7 +3,7 @@
 import { scrollToBottom, print, println, clearTerminal, redraw } from './xtermWrapper.js';
 import state from './stateManager.js';
 import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
-import { overwriteLastLine, getVisibleBuffer } from './terminal/terminalBuffer.js';
+import { writeLine, getVisibleBuffer, overwriteLastLine } from './terminal/terminalBuffer.js';
 import { showCursor, setCursorPosition } from './terminal/terminalCursor.js';
 
 let _typingDelay = 20;
@@ -48,21 +48,20 @@ export function refreshLine(mode, buffer, username, hostname, pathArray, forceNe
   }
 
   if (forceNewLine) {
-    // Instead of overwriting last line, append a full new row here
-    println(''); 
+    println('');  // <<< Push clean blank line if requested
   }
 
-  const rowsWritten = overwriteLastLine(line);
+  overwriteLastLine(line);
+
   const lastRow = getVisibleBuffer().length - 1;
 
   const cols = getTerminalCols();
   const visualX = Math.floor(cursorOffset % cols);
-  const visualY = lastRow - (rowsWritten - 1) + Math.floor(cursorOffset / cols);
+  const visualY = lastRow - (Math.floor(cursorOffset / cols));
 
   setCursorPosition(visualX, visualY);
   redraw();
 }
-
 
 // 👇 Helper: strip illegal control characters
 function sanitize(str) {

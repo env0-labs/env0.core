@@ -18,12 +18,10 @@ import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
 
 export function ifconfigCommand() {
-  const hostname = state.currentMachine;
-  const ip = hostname === 'localhost' ? '10.10.10.99' : '10.10.10.100';
-
-  println(`eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>`);
-  println(`        inet ${ip}  netmask 255.255.255.0  broadcast 10.10.10.255`);
-  println(`        ether aa:bb:cc:dd:ee:ff  txqueuelen 1000  (Ethernet)`);
-  println(`lo: flags=73<UP,LOOPBACK,RUNNING>`);
-  println(`        inet 127.0.0.1  netmask 255.0.0.0`);
+  println('eth0: flags=UP BROADCAST RUNNING MULTICAST');
+  println('    inet 10.10.10.99  netmask 255.255.255.0  broadcast 10.10.10.255');
+  println('    ether aa:bb:cc:dd:ee:ff  txqueuelen 1000 (Ethernet)');
+  println('');
+  println('lo: flags=UP LOOPBACK RUNNING');
+  println('    inet 127.0.0.1  netmask 255.0.0.0');
 }

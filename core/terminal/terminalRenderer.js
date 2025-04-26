@@ -1,9 +1,9 @@
 // terminalRenderer.js
 
 import { config } from './terminalConfig.js';
-import { getVisibleBuffer } from './terminalBuffer.js';
+import { getVisibleBuffer, getViewportStartRow } from './terminalBuffer.js';
 import { drawCursor } from './terminalCursor.js';
-import { canvas } from './canvasTerminal.js';
+import { canvas, getTerminalRows } from './canvasTerminal.js';
 
 let ctx, charWidth, charHeight;
 
@@ -17,21 +17,22 @@ export function drawFromBuffer() {
   if (!ctx) return; // 🛡️ Skip draw until context is set
 
   const lines = getVisibleBuffer();
+  const viewportStart = getViewportStartRow();
+  const maxRows = getTerminalRows();
+
   ctx.fillStyle = config.bgColor;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   ctx.fillStyle = config.fgColor;
-  for (let row = 0; row < lines.length; row++) {
-    const line = (typeof lines[row] === 'string') ? lines[row] : '[INVALID]';
-    const shouldRender = line && line.trim().length > 0;
-    const paddedLine = shouldRender ? line + ' ' : ' ';
-    ctx.fillText(paddedLine, 0, row * charHeight);
-    
-    //console.log(`ROW ${row}: "${line}"`);
 
-
-    //ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    //ctx.strokeRect(0, row * charHeight, canvas.width, charHeight);
+  for (let screenRow = 0; screenRow < maxRows; screenRow++) {
+    const bufferRow = lines[viewportStart + screenRow];
+    if (bufferRow !== undefined) {
+      const line = (typeof bufferRow === 'string') ? bufferRow : '[INVALID]';
+      const shouldRender = line && line.trim().length > 0;
+      const paddedLine = shouldRender ? line + ' ' : ' ';
+      ctx.fillText(paddedLine, 0, screenRow * charHeight);
+    }
   }
 
   drawCursor();

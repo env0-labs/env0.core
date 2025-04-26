@@ -11,7 +11,12 @@ let cols = 80, rows = 25;
 let charWidth = 0, charHeight = 0;
 export function getTerminalCols() {
     return cols;
-  }
+    }
+export function getTerminalRows() {
+    return rows;
+    }
+    
+  
 
 export function createCanvas(container) {
     canvas = document.createElement('canvas');

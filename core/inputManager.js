@@ -16,7 +16,7 @@ import { ifconfigCommand } from '../cmds/ifconfig.js';
 import { nmapCommand } from '../cmds/nmap.js';
 import { read } from '../cmds/read.js';
 
-import { println } from './xtermWrapper.js';
+import { println, scrollToBottom } from './xtermWrapper.js';
 
 export function handleKeyInput(e) {
   const { key, domEvent } = e;
@@ -33,16 +33,18 @@ export function handleKeyInput(e) {
       const input = state.commandBuffer.trim();
       state.commandBuffer = '';
       state.cursorPosition = 0;
-  // I DON'T KNOW WHY BUT REMOVING EITHER OF THE COMMENTS BELOW BREAKS THINGS FOR NO GOOD REASON.
-     // println(input);         // Echo user command - DO NOT REMOVE THIS COMMENT
-      processShellCommand(input); // Run the command (already handles its own redraw + scroll)
+
+      // DO NOT REMOVE THESE COMMENTED LINES, AS PER YOUR NOTES
+      // println(input);
+      processShellCommand(input); // Run command output
+      
+      scrollToBottom(); // <<< scroll immediately after command output
+
       setTimeout(() => {
         println('');
         refreshShellPrompt();
+        scrollToBottom(); // <<< optional, minor correction scroll
       }, 0);
-     // println('');             // Force true blank row after command output - DO NOT REMOVE THIS ONE EITHER
-     // refreshShellPrompt();    // Redraw prompt on clean line
-      // NO extra scrollToBottom() here
     }
     return;
   }
