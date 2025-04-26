@@ -6,16 +6,7 @@ import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
 import { writeLine, getVisibleBuffer, overwriteLastLine, getViewportStartRow } from './terminal/terminalBuffer.js';
 import { showCursor, setCursorPosition } from './terminal/terminalCursor.js';
 
-// One declaration only
-const fitAddon = new FitAddon();
 
-// Load onto the terminal after it's initialized (assumes `state.terminal` exists)
-setTimeout(() => {
-  if (window.location.hostname.includes('github.io') && state.terminal) {
-    state.terminal.loadAddon(fitAddon);
-    fitAddon.fit();
-  }
-}, 100);
 
 let _typingDelay = 20;
 
