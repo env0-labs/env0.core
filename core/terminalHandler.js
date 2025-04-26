@@ -3,7 +3,7 @@
 import { scrollToBottom, print, println, clearTerminal, redraw } from './xtermWrapper.js';
 import state from './stateManager.js';
 import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
-import { writeLine, getVisibleBuffer, overwriteLastLine } from './terminal/terminalBuffer.js';
+import { writeLine, getVisibleBuffer, overwriteLastLine, getViewportStartRow } from './terminal/terminalBuffer.js';
 import { showCursor, setCursorPosition } from './terminal/terminalCursor.js';
 
 let _typingDelay = 20;
@@ -57,9 +57,12 @@ export function refreshLine(mode, buffer, username, hostname, pathArray, forceNe
 
   const cols = getTerminalCols();
   const visualX = Math.floor(cursorOffset % cols);
-  const visualY = lastRow - (Math.floor(cursorOffset / cols));
+  const visualY = lastRow - Math.floor(cursorOffset / cols);
 
-  setCursorPosition(visualX, visualY);
+  // 🛠️ Correct the Y position relative to the current viewport
+  const screenY = visualY - getViewportStartRow();
+
+  setCursorPosition(visualX, screenY);
   redraw();
 }
 
