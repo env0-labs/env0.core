@@ -1,39 +1,43 @@
-/**
- * env0.core Command Module
- * -------------------------
- * Command: ls
- *
- * 🧠 Type: Filesystem Interaction
- * 🛠️ Depends on: stateManager.js, outputManager.js
- *
- * 🔒 Side Effects: No
- * 🧪 Safe to test in isolation: Yes
- *
- * Description:
- * Lists the contents of the current working directory.
- * Resolves full virtual path via state.currentPath.
- */
-
-console.log('✅ lsCommand loaded');
-
 import state from '../core/stateManager.js';
-import { termPrint } from '../core/outputManager.js';
+import { println } from '../core/xtermWrapper.js';
+import { getTerminalCols } from '../core/terminal/canvasTerminal.js';
+import { getCurrentDir } from '../fs/filesystemManager.js';
 
 export function lsCommand() {
-  let dir = state.machines[state.currentMachine]?.fs['/'];
-  for (const part of state.currentPath) {
-    if (!dir?.contents?.[part]) {
-      termPrint('No such directory.');
-      return;
-    }
-    dir = dir.contents[part];
+  const dir = getCurrentDir();
+  if (!dir) {
+    println('No such directory.');
+    return;
   }
 
   if (dir.type !== 'dir') {
-    termPrint('Not a directory.');
+    println('Not a directory.');
     return;
   }
 
   const entries = Object.keys(dir.contents || {});
-  termPrint(entries.join('    ') || '[empty]');
+  if (entries.length === 0) {
+    println('[empty]');
+    return;
+  }
+
+  const terminalCols = getTerminalCols();
+  const colWidth = 16; // Tighter default width
+  const itemsPerRow = Math.floor(terminalCols / colWidth) || 1;
+
+  let row = '';
+
+  entries.forEach((name, index) => {
+    const padded = (name + ' '.repeat(colWidth)).slice(0, colWidth);
+    row += padded;
+
+    if ((index + 1) % itemsPerRow === 0) {
+      println(row.trimEnd());
+      row = '';
+    }
+  });
+
+  if (row.trim().length > 0) {
+    println(row.trimEnd());
+  }
 }

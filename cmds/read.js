@@ -1,4 +1,17 @@
-// read.js
+/**
+ * env0.core Command Module
+ * -------------------------
+ * Command: read
+ *
+ * 🧠 Type: Filesystem Interaction / UI Trigger
+ * 🛠️ Depends on: stateManager.js, filesystemManager.js, readerManager.js, xtermWrapper.js
+ *
+ * 🔒 Side Effects: Yes (activates reader mode)
+ * 🧪 Safe to test in isolation: Yes
+ *
+ * Description:
+ * Opens a text file in fullscreen reader mode.
+ */
 
 import { enterReaderMode } from '../ui/readerManager.js';
 import state from '../core/stateManager.js';

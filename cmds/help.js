@@ -4,7 +4,7 @@
  * Command: help
  *
  * 🧠 Type: Pure Output
- * 🛠️ Depends on: outputManager.js
+ * 🛠️ Depends on: xtermWrapper.js
  *
  * 🔒 Side Effects: No
  * 🧪 Safe to test in isolation: Yes
@@ -13,7 +13,7 @@
  * Outputs a static list of available commands and their usage.
  */
 
-import { termPrint } from '../core/outputManager.js';
+import { println } from '../core/xtermWrapper.js';
 
 export function helpCommand() {
   const helpText = [
@@ -28,5 +28,5 @@ export function helpCommand() {
     '  nmap <subnet>  - Simulate network scan (e.g. 10.10.10.0/24)'
   ];
 
-  helpText.forEach(line => termPrint(line));
+  helpText.forEach(line => println(line));
 }

@@ -1,8 +1,10 @@
 // terminalHandler.js
 
-import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+esm';
-import { scrollToBottom, print } from './xtermWrapper.js';
+import { scrollToBottom, print, println, clearTerminal, redraw } from './xtermWrapper.js';
 import state from './stateManager.js';
+import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
+import { writeLine, getVisibleBuffer, overwriteLastLine, getViewportStartRow } from './terminal/terminalBuffer.js';
+import { showCursor, setCursorPosition } from './terminal/terminalCursor.js';
 
 // One declaration only
 const fitAddon = new FitAddon();
@@ -28,32 +30,54 @@ export function getTypingDelay() {
 let keyInputHandler = null;
 
 export function attachTerminalInput(handler) {
-  keyInputHandler = handler;
-  state.terminal?.onKey(e => {
-    if (keyInputHandler) {
-      handler(e);
-    }
+  canvas.addEventListener('keydown', e => {
+    const event = {
+      key: e.key,
+      domEvent: e
+    };
+    handler(event);
   });
 }
 
-export function refreshLine(mode, buffer, username, hostname, pathArray) {
-  if (!state.terminal) return;
+export function refreshLine(mode, buffer, username, hostname, pathArray, forceNewLine = false) {
+  if (typeof buffer !== 'string') buffer = ''; // ✅ Always sanitize early
 
-  // Clear line
-  print('\x1b[2K\r');
+  let line = '';
+  let cursorOffset = 0;
 
   if (mode === 'username') {
-    print('Username: ' + sanitize(buffer));
+    line = 'Username: ' + sanitize(buffer);
+    cursorOffset = 'Username: '.length + buffer.length;
   } else if (mode === 'password') {
-    print('Password: ' + '*'.repeat(buffer.length));
+    line = 'Password: ' + '*'.repeat(buffer.length);
+    cursorOffset = 'Password: '.length + buffer.length;
   } else {
     const prompt = `${username}@${hostname}:/${pathArray.join('/')}$ `;
-    print(prompt + sanitize(buffer));
+    const fullLine = prompt + sanitize(buffer);
+    line = fullLine;
+    cursorOffset = Math.max(fullLine.length - 0.5, 0);
   }
 
-  scrollToBottom();
+  if (forceNewLine) {
+    println('');  // <<< Push clean blank line if requested
+  }
+
+  overwriteLastLine(line);
+
+  const lastRow = getVisibleBuffer().length - 1;
+
+  const cols = getTerminalCols();
+  const visualX = Math.floor(cursorOffset % cols);
+  const visualY = lastRow - Math.floor(cursorOffset / cols);
+
+  // 🛠️ Correct the Y position relative to the current viewport
+  const screenY = visualY - getViewportStartRow();
+
+  setCursorPosition(visualX, screenY);
+  redraw();
 }
 
 function sanitize(str) {
+  if (typeof str !== 'string') return '';
   return str.replace(/[\x00-\x1F\x7F]/g, '');
 }

@@ -24,11 +24,13 @@ This file serves as a stable implementation reference. Unlike `README.dev.md`, t
 
 | Feature | Status | Notes |
 |:--------|:-------|:------|
-| xterm.js integration | ✅ | FitAddon enabled |
-| Hidden Scrollbar | ✅ | CRT-style UX |
+| canvasTerminal.js integration | ✅ | Fully replaces xterm.js |
+| Buffer-backed scrollback | ✅ | Real buffer with viewport control |
+| Typing + output lifecycle | ✅ | Controlled newlines and line overwrites |
 | Responsive Scaling | ✅ | Resizes with window |
-| Auto-scroll | ✅ | Default behavior |
-| Char Wrapping | ✅ | Native xterm logic |
+| Scroll-to-bottom handling | ✅ | Explicit lifecycle, not implicit |
+| Char Wrapping | ✅ | Manual soft-wrap with buffer respect |
+
 
 ---
 
@@ -58,7 +60,6 @@ This file serves as a stable implementation reference. Unlike `README.dev.md`, t
 | `styles.css` | Core CRT layout + menu styling |
 | `main.js` | Boot and top-level init control |
 | `filesystem.js` | Filesystem structure base |
-| `fsTemplates.js` | Per-node FS templates |
 | `filesystemManager.js` | Runtime FS operations |
 | `systems.js` | Machine IP and credential map |
 | `stateManager.js` | Single truth runtime store |

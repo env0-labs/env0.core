@@ -14,17 +14,23 @@ Welcome to the dev side of `node.zero`: a modular, CRT-styled terminal simulatio
 
 **Frontend:** HTML / CSS / JS with `xterm.js` for terminal emulation.
 
+## ⚙️ Core Architecture
+
+**Frontend:** HTML / CSS / JS with custom `canvasTerminal.js` for terminal emulation.
+
 **Core Modules:**
 - `stateManager.js` — global runtime state store
 - `settings.js` — persistent config (e.g., `instantText`, `typingDelay`)
 - `filesystem.js` — base filesystem structure
-- `fsTemplates.js` — cloned templates for per-machine FS
 - `filesystemManager.js` — runtime FS logic
 - `loginManager.js` — handles login sequence and credential routing
-- `menuManager.js` — UI overlay with speed and flicker controls (theming disabled)
+- `menuManager.js` — UI overlay with speed and flicker controls
 - `visualFXManager.js` — CRT visual logic (flicker, scanline, burst)
 - `inputManager.js` — terminal input parsing and command matching
-- `outputManager.js` — print functions: `termPrint()`, `termTypeLine()`, `termClear()`
+- `outputManager.js` — print functions: `print()`, `println()`, `clearTerminal()`
+- `canvasTerminal.js` — low-level canvas terminal renderer
+- `terminalBuffer.js` — buffer and viewport state manager
+- `terminalHandler.js` — connects input handling to renderer
 
 ---
 
