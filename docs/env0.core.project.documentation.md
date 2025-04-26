@@ -24,11 +24,13 @@ This file serves as a stable implementation reference. Unlike `README.dev.md`, t
 
 | Feature | Status | Notes |
 |:--------|:-------|:------|
-| xterm.js integration | ✅ | FitAddon enabled |
-| Hidden Scrollbar | ✅ | CRT-style UX |
+| canvasTerminal.js integration | ✅ | Fully replaces xterm.js |
+| Buffer-backed scrollback | ✅ | Real buffer with viewport control |
+| Typing + output lifecycle | ✅ | Controlled newlines and line overwrites |
 | Responsive Scaling | ✅ | Resizes with window |
-| Auto-scroll | ✅ | Default behavior |
-| Char Wrapping | ✅ | Native xterm logic |
+| Scroll-to-bottom handling | ✅ | Explicit lifecycle, not implicit |
+| Char Wrapping | ✅ | Manual soft-wrap with buffer respect |
+
 
 ---
 

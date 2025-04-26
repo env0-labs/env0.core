@@ -19,19 +19,24 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 
 ---
 
-## 🔧 Immediate Tasks (Next Pass)
-- [ ] Evaluate if font size should be user-adjustable via menu (non-critical)
-- [ ] Build `env0.terminal.js` wrapper (optional, for future modularity)
-- [ ] Lock and document shell prompt renderer (echo, input, and cursor handling)
-- [ ] Clean any remaining dead logic from `settings.js`, `visualFXManager.js`, and `outputIntro()`
-- [ ] Confirm menu reflects persisted `skipIntro` and `instantText` states at load
+## 🔧 Immediate Tasks (Phase 2b Closure)
+
+- [x] Build `env0.terminal.js` wrapper
+- [x] Lock and document shell prompt renderer (echo, input, and cursor handling)
+- [x] Confirm typing speed settings (slow/fast/instant) functional
+- [x] Confirm refreshPrompt fallback logic across login, shell, error states
+
+✅ Phase 2b Immediate Tasks closed.
+
 
 ---
 
 ## 🧪 Test & Confirm
-- [ ] Typing speed settings (slow/fast/instant) still functional
-- [ ] All visual changes remain inert unless explicitly enabled
-- [ ] `refreshPrompt()` fallback logic works across login, shell, and error states
+
+- [x] Typing speed settings validated (slow/fast/instant)
+- [x] Visual changes inert unless explicitly enabled
+- [x] refreshPrompt() fallback logic confirmed stable
+
 
 ---
 

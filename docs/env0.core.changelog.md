@@ -2,6 +2,27 @@
 Starting from stable refactor and the defeat of terminal corruption.
 
 ---
+## 2025-04-26 — Phase 2b Terminal Engine Stabilization
+
+### 🛠️ Terminal Core Lifecycle Rebuild
+- `println()` rebuilt to push clean new lines into terminalBuffer
+- `overwriteLastLine()` reintroduced for controlled typing without forced scroll
+- `scrollToBottom()` implemented properly using viewportStartRow
+- `drawFromBuffer()` updated to respect viewport window during redraws
+- Typing flow (`refreshLine()`) now tracks cursor relative to viewport
+
+### 📦 Buffer and Viewport Handling
+- `terminalBuffer.js` rebuilt to cleanly separate buffer and viewport state
+- `canvasTerminal.js` gains `getTerminalRows()` for dynamic dimension reporting
+- `env0.terminal.js` scroll alignment corrected on output growth
+- `terminalRenderer.js` viewport clamping integrated into draw cycle
+
+### 🖥️ UX Stability Achieved
+- Typing and command output now scroll cleanly
+- Boot logs scroll naturally without UX hacks
+- Shell prompt redraws accurately even after heavy output
+
+✅ Phase 2b closed. Terminal now behaves like a real degraded shell environment.
 
 ---
 
