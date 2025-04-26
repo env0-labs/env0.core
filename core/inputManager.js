@@ -33,18 +33,16 @@ export function handleKeyInput(e) {
       const input = state.commandBuffer.trim();
       state.commandBuffer = '';
       state.cursorPosition = 0;
-  
-      println(input);   // Echo user's typed command
-      println('');      // First line break (finalize prompt line)
-      println('');      // Second line break (true scroll)
-      processShellCommand(input);  // Then run the command
-      // No prompt refresh here yet
+  // I DON'T KNOW WHY BUT REMOVING EITHER OF THE COMMENTS BELOW BREAKS THINGS FOR NO GOOD REASON.
+     // println(input);         // Echo user command - DO NOT REMOVE THIS COMMENT
+      processShellCommand(input); // Run the command (already handles its own redraw + scroll)
+     // println('');             // Force true blank row after command output - DO NOT REMOVE THIS ONE EITHER
+     //root
+     refreshShellPrompt();    // Redraw prompt on clean line
+      // NO extra scrollToBottom() here
     }
     return;
   }
-  
-  
-  
   
   
 
@@ -185,8 +183,6 @@ function processShellCommand(input) {
   const args = input.trim().split(/\s+/);
   const cmd = args[0];
 
-  println(''); // Force clean output start line
-
   switch (cmd) {
     case 'ls':
       lsCommand();
@@ -219,5 +215,6 @@ function processShellCommand(input) {
       println(`Command not found: ${cmd}`);
   }
 
-  // buffer was already cleared on enter now
+  // REMOVE scrollToBottom() and redraw() from here
+  // Let printlns inside commands handle visual updates
 }

@@ -21,6 +21,7 @@ export function println(text = '') {
     text = text === undefined || text === null ? '' : String(text);
   }
   writeLine(text);  // <-- not print(text + '\r\n') anymore
+  scrollToBottom();
   redraw();
 }
 
