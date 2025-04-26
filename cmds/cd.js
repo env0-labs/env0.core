@@ -16,6 +16,7 @@
 
 import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
+import { prompt } from '../fs/filesystemManager.js';
 
 export function cdCommand(args) {
   if (!args[1]) {
@@ -58,4 +59,6 @@ export function cdCommand(args) {
   }
 
   state.currentPath = newPath;
+  prompt();
+
 }

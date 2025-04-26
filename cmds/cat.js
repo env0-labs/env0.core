@@ -16,6 +16,9 @@
 
 import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
+import { getCurrentDir } from '../fs/filesystemManager.js';
+import { prompt } from '../fs/filesystemManager.js';
+
 
 export function catCommand(args) {
   if (!args[1]) {
@@ -23,16 +26,14 @@ export function catCommand(args) {
     return;
   }
 
-  let dir = state.machines[state.currentMachine]?.fs['/'];
-  for (const part of state.currentPath) {
-    if (!dir?.contents?.[part]) {
-      println('Invalid path.');
-      return;
-    }
-    dir = dir.contents[part];
+  const dir = getCurrentDir();
+  if (!dir) {
+    println('Invalid path.');
+    return;
   }
-
+  
   const file = dir.contents?.[args[1]];
+  
 
   if (file?.type === 'file') {
     println(file.content);
@@ -40,3 +41,4 @@ export function catCommand(args) {
     println(`No such file: ${args[1]}`);
   }
 }
+prompt();
