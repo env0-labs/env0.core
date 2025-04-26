@@ -19,33 +19,27 @@ export async function initLogin(termInstance, refreshLineInstance) {
 }
 
 export async function outputIntro(targetIP = null) {
-  // If provided, simulate network login
   if (!targetIP) {
     state.pendingLogin = null;
     println(`Welcome to SBC_1`);
     println(`Login hint: username 'root' / password 'toor'`);
     println('');
   }
-  
+
   state.awaitingUsername = true;
   state.commandBuffer = '';
   state.cursorPosition = 0;
-  
-  // Properly render first prompt and cursor position
-  refreshPrompt('username');
-  
+
+  refreshPromptLine('username');
 }
 
-
-
-// This function assumes Enter has been pressed
 export function handleLoginInput() {
   const input = state.commandBuffer.trim();
 
   if (state.awaitingUsername) {
     if (!input) {
       println('Login error: username required.');
-      refreshPrompt('username');
+      refreshPromptLine('username');
       return;
     }
 
@@ -55,64 +49,83 @@ export function handleLoginInput() {
     state.awaitingUsername = false;
     state.awaitingPassword = true;
 
-    refreshPrompt('password');
+    refreshPromptLine('password');
+    return;
   }
 
-  else if (state.awaitingPassword) {
+  if (state.awaitingPassword) {
     let target = null;
-  
+
     // Remote login
     if (state.pendingLogin) {
       target = systems.find(sys => sys.ip === state.pendingLogin);
     }
-  
-    // Fallback to localhost if no pendingLogin IP
+
+    // Localhost fallback
     if (!target && state.pendingLogin === null) {
-      const localPass = state.machines.localhost?.users?.[state.pendingUsername];
-      if (localPass && input === localPass) {
+      const storedPass = state.machines.localhost?.users?.[state.pendingUsername];
+      if (storedPass) {
         target = {
           hostname: 'localhost',
           username: state.pendingUsername,
-          password: input
+          password: storedPass
         };
       }
     }
-  
-    // Success
+
+    // ✅ Validate match
     if (target && input === target.password) {
+      if (!target.username || typeof target.username !== 'string' || target.username.trim() === '') {
+        println('Login error: internal state invalid. Try again.');
+        resetToUsernamePrompt();
+        return;
+      }
+
       println(`Welcome to ${target.hostname}!`);
       println(`Type 'read tutorial.txt' to begin.`);
       println('');
+
       const machineName = target.hostname.replace('.local', '');
-      resetSessionState(state.pendingUsername, machineName);
-  
+      resetSessionState(target.username, machineName);
+
       if (!state.machines[machineName]) {
         state.machines[machineName] = {
           fs: fsTemplates.default(),
           users: {
-            [state.pendingUsername]: input
+            [target.username]: target.password
           }
         };
+      } else {
+        state.machines[machineName].fs = fsTemplates.default();
       }
-    } else {
-      println('Access Denied.');
-      state.awaitingPassword = false;
-      state.awaitingUsername = true;
-      println('Returning to login...');
+
+      const fsRoot = state.machines[machineName].fs['/'];
+      if (fsRoot?.contents?.['undefined']) {
+        console.warn('[fs] Removed stray "undefined" entry from /');
+        delete fsRoot.contents['undefined'];
+      }
+
+      // Shell prompt
+      refreshPromptLine('shell');
+      return;
     }
-  
-    // Clean up
-    state.pendingUsername = '';
-    state.pendingLogin = null;
-    state.commandBuffer = '';
-    state.cursorPosition = 0;
-  
-    const promptMode = state.awaitingUsername ? 'username' : 'shell';
-    refreshPrompt(promptMode);
+
+    // ❌ Failure
+    println('Access Denied.');
+    println('Returning to login...');
+    resetToUsernamePrompt();
   }
 }
 
-function refreshPrompt(mode) {
+function resetToUsernamePrompt() {
+  state.awaitingUsername = true;
+  state.awaitingPassword = false;
+  state.commandBuffer = '';
+  state.cursorPosition = 0;
+  refreshPromptLine('username');
+}
+
+function refreshPromptLine(mode) {
   if (refreshLineFunc) {
     refreshLineFunc(mode, state.commandBuffer, state.currentUser, state.currentMachine, state.currentPath);
   }

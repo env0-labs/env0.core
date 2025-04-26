@@ -4,7 +4,7 @@
  * Command: cat
  *
  * 🧠 Type: Filesystem Interaction
- * 🛠️ Depends on: stateManager.js, outputManager.js
+ * 🛠️ Depends on: stateManager.js, xtermWrapper.js
  *
  * 🔒 Side Effects: No
  * 🧪 Safe to test in isolation: Yes
@@ -15,18 +15,18 @@
  */
 
 import state from '../core/stateManager.js';
-import { termPrint } from '../core/outputManager.js';
+import { println } from '../core/xtermWrapper.js';
 
 export function catCommand(args) {
   if (!args[1]) {
-    termPrint('Usage: cat <file>');
+    println('Usage: cat <file>');
     return;
   }
 
   let dir = state.machines[state.currentMachine]?.fs['/'];
   for (const part of state.currentPath) {
     if (!dir?.contents?.[part]) {
-      termPrint('Invalid path.');
+      println('Invalid path.');
       return;
     }
     dir = dir.contents[part];
@@ -35,8 +35,8 @@ export function catCommand(args) {
   const file = dir.contents?.[args[1]];
 
   if (file?.type === 'file') {
-    termPrint(file.content);
+    println(file.content);
   } else {
-    termPrint(`No such file: ${args[1]}`);
+    println(`No such file: ${args[1]}`);
   }
 }

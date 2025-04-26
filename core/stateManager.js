@@ -37,6 +37,16 @@ const state = {
 // --------------------
 
 export function resetSessionState(username, machineName) {
+  if (!username || typeof username !== 'string' || username.trim() === '') {
+    console.error('[resetSessionState] Invalid username');
+    return;
+  }
+
+  if (!machineName || typeof machineName !== 'string') {
+    console.error('[resetSessionState] Invalid machine name');
+    return;
+  }
+
   state.currentUser = username;
   state.currentMachine = machineName;
   state.currentPath = [];
@@ -46,6 +56,8 @@ export function resetSessionState(username, machineName) {
   state.awaitingUsername = false;
   state.awaitingPassword = false;
 }
+
+
 
 export function logoutSession() {
   state.currentUser = null;

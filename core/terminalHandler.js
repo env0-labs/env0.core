@@ -4,10 +4,7 @@ import { scrollToBottom, print, println, clearTerminal, redraw } from './xtermWr
 import state from './stateManager.js';
 import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
 import { overwriteLastLine, getVisibleBuffer } from './terminal/terminalBuffer.js';
-import {
-  showCursor,
-  setCursorPosition
-} from './terminal/terminalCursor.js';
+import { showCursor, setCursorPosition } from './terminal/terminalCursor.js';
 
 let _typingDelay = 20;
 
@@ -31,11 +28,12 @@ export function attachTerminalInput(handler) {
   });
 }
 
-
 export function refreshLine(mode, buffer, username, hostname, pathArray) {
+  if (typeof buffer !== 'string') buffer = ''; // ✅ Always sanitize early
+
   let line = '';
   let cursorOffset = 0;
-  
+
   if (mode === 'username') {
     line = 'Username: ' + sanitize(buffer);
     cursorOffset = 'Username: '.length + buffer.length;
@@ -46,29 +44,22 @@ export function refreshLine(mode, buffer, username, hostname, pathArray) {
     const prompt = `${username}@${hostname}:/${pathArray.join('/')}$ `;
     const fullLine = prompt + sanitize(buffer);
     line = fullLine;
-    cursorOffset = Math.max(fullLine.length - 0.5, 0); // use your subpixel offset here
-
-
+    cursorOffset = Math.max(fullLine.length - 0.5, 0);
   }
-  
+
   const rowsWritten = overwriteLastLine(line);
   const lastRow = getVisibleBuffer().length - 1;
-  
+
   const cols = getTerminalCols();
   const visualX = Math.floor(cursorOffset % cols);
   const visualY = lastRow - (rowsWritten - 1) + Math.floor(cursorOffset / cols);
-  
+
   setCursorPosition(visualX, visualY);
   redraw();
-  
-
-
-
-
-
+}
 
 // 👇 Helper: strip illegal control characters
 function sanitize(str) {
+  if (typeof str !== 'string') return '';
   return str.replace(/[\x00-\x1F\x7F]/g, '');
-}
 }

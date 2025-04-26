@@ -42,6 +42,11 @@ export function writeText(text) {
 }
 
 export function writeLine(text) {
+  if (typeof text !== 'string') {
+    console.error('[writeLine] Non-string input:', text, '→', typeof text);
+    text = String(text); // convert to keep it from breaking draw
+  }
+
   if (buffer.length === 0 || (buffer.length === 1 && buffer[0] === '')) {
     buffer[0] = text;
     currentLine = 0;
@@ -76,6 +81,10 @@ function clampScrollback() {
 }
 
 export function overwriteLastLine(text) {
+  if (typeof text !== 'string') {
+    console.error('[overwriteLastLine] Non-string input:', text);
+  }
+  
   const cols = getTerminalCols();
   const wrapped = [];
 
@@ -85,15 +94,18 @@ export function overwriteLastLine(text) {
   }
   wrapped.push(text);
 
-  for (let i = 0; i < wrapped.length; i++) {
-    const lineIndex = buffer.length - wrapped.length + i;
-    buffer[lineIndex] = wrapped[i];
+  // 🔥 Remove the last line, then append wrapped lines cleanly
+  if (buffer.length > 0) {
+    buffer.splice(buffer.length - 1, 1, ...wrapped);
+  } else {
+    wrapped.forEach(line => buffer.push(line));
   }
 
   currentLine = buffer.length - 1;
   showCursor();
 
-  return wrapped.length; // 👈 this is new
+  return wrapped.length;
 }
+
 
 

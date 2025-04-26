@@ -6,16 +6,27 @@ import { print, println, clearTerminal } from './xtermWrapper.js';
 /**
  * Write a single line to the terminal with a newline.
  */
-export function termPrint(text = '') {
+export function termPrint(text) {
+  if (typeof text !== 'string') {
+    throw new Error(`[termPrint] Invalid input: ${text}`);
+  }
   println(text);
 }
+
 
 /**
  * Write multiple lines to the terminal, one after the other.
  */
 export function termPrintLines(lines = []) {
-  lines.forEach(println);
+  lines.forEach(line => {
+    if (typeof line !== 'string') {
+      console.warn('[termPrintLines] Non-string line:', line);
+      line = line === undefined || line === null ? '' : String(line);
+    }
+    println(line);
+  });
 }
+
 
 /**
  * Clear the terminal screen.

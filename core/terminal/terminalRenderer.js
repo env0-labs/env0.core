@@ -22,9 +22,13 @@ export function drawFromBuffer() {
 
   ctx.fillStyle = config.fgColor;
   for (let row = 0; row < lines.length; row++) {
-    const line = lines[row];
-    if (!line) continue;
-    ctx.fillText(line, 0, row * charHeight);
+    const line = (typeof lines[row] === 'string') ? lines[row] : '[INVALID]';
+    const shouldRender = line && line.trim().length > 0;
+    const paddedLine = shouldRender ? line + ' ' : ' ';
+    ctx.fillText(paddedLine, 0, row * charHeight);
+    
+    console.log(`ROW ${row}: "${line}"`);
+
 
     ctx.strokeStyle = 'rgba(255,255,255,0.1)';
     ctx.strokeRect(0, row * charHeight, canvas.width, charHeight);
@@ -32,7 +36,3 @@ export function drawFromBuffer() {
 
   drawCursor();
 }
-
-
-  drawCursor(); // final layer
-

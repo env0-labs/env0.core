@@ -4,7 +4,7 @@
  * Command: cd
  *
  * 🧠 Type: Filesystem Interaction
- * 🛠️ Depends on: stateManager.js, outputManager.js
+ * 🛠️ Depends on: stateManager.js, xtermWrapper.js
  *
  * 🔒 Side Effects: Yes (modifies currentPath)
  * 🧪 Safe to test in isolation: Yes
@@ -15,11 +15,11 @@
  */
 
 import state from '../core/stateManager.js';
-import { termPrint } from '../core/outputManager.js';
+import { println } from '../core/xtermWrapper.js';
 
 export function cdCommand(args) {
   if (!args[1]) {
-    termPrint('Usage: cd <directory>');
+    println('Usage: cd <directory>');
     return;
   }
 
@@ -30,7 +30,7 @@ export function cdCommand(args) {
 
   for (const segment of newPath) {
     if (!dir?.contents?.[segment] || dir.contents[segment].type !== 'dir') {
-      termPrint(`${segment} is not a directory or doesn't exist`);
+      println(`${segment} is not a directory or doesn't exist`);
       return;
     }
     dir = dir.contents[segment];
@@ -42,14 +42,14 @@ export function cdCommand(args) {
       dir = state.machines[state.currentMachine]?.fs['/'];
       for (const segment of newPath) {
         if (!dir?.contents?.[segment] || dir.contents[segment].type !== 'dir') {
-          termPrint(`${segment} is not a directory or doesn't exist`);
+          println(`${segment} is not a directory or doesn't exist`);
           return;
         }
         dir = dir.contents[segment];
       }
     } else {
       if (!dir?.contents?.[part] || dir.contents[part].type !== 'dir') {
-        termPrint(`${part} is not a directory or doesn't exist`);
+        println(`${part} is not a directory or doesn't exist`);
         return;
       }
       newPath.push(part);

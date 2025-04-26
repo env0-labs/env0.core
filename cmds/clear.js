@@ -4,16 +4,15 @@
  * Command: clear
  *
  * 🧠 Type: Pure Output
- * 🛠️ Depends on: stateManager.js
+ * 🛠️ Depends on: xtermWrapper.js
  *
  * 🔒 Side Effects: No (visual only)
  * 🧪 Safe to test in isolation: Yes
  *
  * Description:
- * Clears the terminal display using the xterm.js API.
+ * Clears the terminal display using the canvas renderer interface.
  */
 
-import state from '../core/stateManager.js';
 import { clearTerminal } from '../core/xtermWrapper.js';
 
 export function clearCommand() {

@@ -15,10 +15,15 @@ export function print(text) {
   redraw();
 }
 
-export function println(text) {
-  writeLine(text);
-  redraw();
+export function println(text = '') {
+  if (typeof text !== 'string') {
+    console.warn('[println] Coerced non-string input:', text);
+    text = text === undefined || text === null ? '' : String(text);
+  }
+  print(text + '\r\n');
 }
+
+
 
 export function clearTerminal() {
   clearBuffer();
