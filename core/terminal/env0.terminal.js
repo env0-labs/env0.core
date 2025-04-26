@@ -20,8 +20,11 @@ export function println(text = '') {
     console.warn('[println] Coerced non-string input:', text);
     text = text === undefined || text === null ? '' : String(text);
   }
-  print(text + '\r\n');
+  writeLine(text);  // <-- not print(text + '\r\n') anymore
+  redraw();
 }
+
+
 
 
 
@@ -40,4 +43,8 @@ export function focusTerminal() {
   export function scrollToBottom() {
     // Not implemented yet — will hook into scrollback buffer later
   }
+  
+  export {
+       writeLine,   // <-- ✅ now available to xtermWrapper
+      };
   

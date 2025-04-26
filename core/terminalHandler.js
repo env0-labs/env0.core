@@ -28,7 +28,7 @@ export function attachTerminalInput(handler) {
   });
 }
 
-export function refreshLine(mode, buffer, username, hostname, pathArray) {
+export function refreshLine(mode, buffer, username, hostname, pathArray, forceNewLine = false) {
   if (typeof buffer !== 'string') buffer = ''; // ✅ Always sanitize early
 
   let line = '';
@@ -47,6 +47,11 @@ export function refreshLine(mode, buffer, username, hostname, pathArray) {
     cursorOffset = Math.max(fullLine.length - 0.5, 0);
   }
 
+  if (forceNewLine) {
+    // Instead of overwriting last line, append a full new row here
+    println(''); 
+  }
+
   const rowsWritten = overwriteLastLine(line);
   const lastRow = getVisibleBuffer().length - 1;
 
@@ -57,6 +62,7 @@ export function refreshLine(mode, buffer, username, hostname, pathArray) {
   setCursorPosition(visualX, visualY);
   redraw();
 }
+
 
 // 👇 Helper: strip illegal control characters
 function sanitize(str) {

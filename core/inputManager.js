@@ -28,12 +28,25 @@ export function handleKeyInput(e) {
 
   if (key === 'Enter') {
     if (currentMode === 'login') {
-      processLoginInput(); // from loginManager
+      processLoginInput();
     } else if (currentMode === 'shell') {
-      processShellCommand(); // your shell logic
+      const input = state.commandBuffer.trim();
+      state.commandBuffer = '';
+      state.cursorPosition = 0;
+  
+      println(input);   // Echo user's typed command
+      println('');      // First line break (finalize prompt line)
+      println('');      // Second line break (true scroll)
+      processShellCommand(input);  // Then run the command
+      // No prompt refresh here yet
     }
     return;
   }
+  
+  
+  
+  
+  
 
   if (key === 'Backspace') {
     if (state.cursorPosition > 0) {
@@ -158,18 +171,21 @@ function handleReaderInput(key, printable) {
   // For now, assume any key exits reader mode
 }
 
-function refreshShellPrompt() {
-  refreshLine('shell', state.commandBuffer, state.currentUser, state.currentMachine, state.currentPath);
+function refreshShellPrompt(forceNewLine = false) {
+  refreshLine('shell', state.commandBuffer, state.currentUser, state.currentMachine, state.currentPath, forceNewLine);
 }
 
-function processShellCommand() {
-  if (state.commandBuffer.trim() !== '') {
-    state.commandHistory.push(state.commandBuffer);
+
+function processShellCommand(input) {
+  if (input.trim() !== '') {
+    state.commandHistory.push(input);
   }
   state.historyIndex = state.commandHistory.length;
 
-  const args = state.commandBuffer.trim().split(/\s+/);
+  const args = input.trim().split(/\s+/);
   const cmd = args[0];
+
+  println(''); // Force clean output start line
 
   switch (cmd) {
     case 'ls':
@@ -203,6 +219,5 @@ function processShellCommand() {
       println(`Command not found: ${cmd}`);
   }
 
-  state.commandBuffer = '';
-  state.cursorPosition = 0;
+  // buffer was already cleared on enter now
 }

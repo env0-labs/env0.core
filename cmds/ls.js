@@ -19,7 +19,7 @@ import { getTerminalCols } from '../core/terminal/canvasTerminal.js';
 import { getCurrentDir } from '../fs/filesystemManager.js';
 
 export function lsCommand() {
-  let dir = getCurrentDir();
+  const dir = getCurrentDir();
   if (!dir) {
     println('No such directory.');
     return;
@@ -36,27 +36,31 @@ export function lsCommand() {
     return;
   }
 
-  const cols = getTerminalCols();
+  const terminalCols = getTerminalCols();
+  const colWidth = 20; // Each filename block is 20 characters wide
+  const itemsPerLine = Math.floor(terminalCols / colWidth) || 1;
+
   let line = '';
 
-  entries.forEach(name => {
+  // Force move down one line from current shell prompt
+  println('');
+
+  entries.forEach((name, index) => {
     if (typeof name !== 'string' || name === 'undefined') {
       console.warn('[ls] Skipping invalid entry:', name);
       return;
     }
 
-    const entry = name + '    ';
-    if ((line.length + entry.length) >= cols) {
-      if (line.trim().length > 0) println(line);
-      line = entry;
-    } else {
-      line += entry;
+    const paddedName = (name + ' '.repeat(colWidth)).slice(0, colWidth);
+    line += paddedName;
+
+    if ((index + 1) % itemsPerLine === 0) {
+      println(line.trimEnd());
+      line = '';
     }
   });
 
-  if (line && line.trim().length > 0) {
-    println(line);
-  } else {
-    println('[empty]');
+  if (line.trim().length > 0) {
+    println(line.trimEnd());
   }
 }
