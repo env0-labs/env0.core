@@ -8,7 +8,8 @@ const settings = {
   enableCRT: true,
   crtFlicker: localStorage.getItem('crtFlicker') || 'medium',
   terminalTheme: localStorage.getItem('terminalTheme') || 'green',
-  audioEnabled: localStorage.getItem('audioEnabled') === 'true'
+  audioEnabled: localStorage.getItem('audioEnabled') === 'true',
+  enableVisualFX: true, // Enables overlay visual FX like glitch, scanlines, flicker (affects terminalRenderer layering)
 };
 
 export default settings;

@@ -6,6 +6,13 @@ import { handleKeyInput } from './core/inputManager.js';
 import fs from './fs/filesystem.js';
 import { setFileSystem } from './fs/filesystemManager.js';
 import { initializeMenu } from './ui/menuManager.js';
+import { redraw } from './core/terminal/canvasTerminal.js';
+
+import { triggerGlitch } from './fx/canvasFXManager.js';
+window.triggerGlitch = triggerGlitch; // [DEV TOOL] Manual trigger for glitch effects during testing
+
+
+
 window.DEBUG_MODE = window.DEBUG_MODE ?? false;
 
 initializeMenu();
@@ -46,5 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Boot sequence failed:", err);
     }
   }, 200);
-});
+
+  function mainLoop() {
+    redraw();
+    requestAnimationFrame(mainLoop); // [PHASE 3] Temporary main loop driving redraws until full system expansion
+  }
+  
+  requestAnimationFrame(mainLoop);
+  
+
+}
+
+);
 

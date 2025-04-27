@@ -17,6 +17,7 @@ import systems from '../network/systems.js';
 import { println } from '../core/xtermWrapper.js';
 import { isHostReachable } from '../network/networkManager.js';
 import { discoverHost } from '../core/stateManager.js';
+import { triggerGlitch } from '../fx/canvasFXManager.js'; // Adjust path if needed
 
 export function nmapCommand(args) {
   const target = args[0];
@@ -51,4 +52,6 @@ export function nmapCommand(args) {
   if (found === 0) {
     println('No hosts found.');
   }
+  triggerGlitch(500); // [TEMPORARY/OPTIONAL FX] Trigger glitch effect after successful nmap scan (for visual feedback)
+
 }

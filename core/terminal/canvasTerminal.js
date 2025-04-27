@@ -4,6 +4,7 @@ import { config } from './terminalConfig.js';
 import { setContext, drawFromBuffer } from './terminalRenderer.js';
 import { setCursorContext } from './terminalCursor.js';
 import { startBlink } from './terminalCursor.js';
+import { initCanvasFX } from '../../fx/canvasFXManager.js';
 
 
 export let canvas, ctx;
@@ -29,7 +30,7 @@ export function createCanvas(container) {
     ctx = canvas.getContext('2d');
     ctx.font = `${config.fontSize}px ${config.fontFamily}`;
     ctx.textBaseline = 'top';
-  
+
     // Don’t measure or resize immediately — wait for layout
     requestAnimationFrame(() => {
       resizeCanvas(); // safe context, correct dimensions
@@ -69,7 +70,10 @@ function resizeCanvas() {
     measureCharSize(); // now uses the correct post-scale font
     setContext(ctx, charWidth, charHeight);
     setCursorContext(ctx, charWidth, charHeight); // here
-      
+    
+    
+    initCanvasFX(ctx, canvas.width, canvas.height); // [TEMPORARY] Bind FX to terminal canvas context; will migrate to fxCanvas later
+
     redraw();
     startBlink(); // add this
 
