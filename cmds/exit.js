@@ -1,7 +1,7 @@
 // cmds/exit.js
 
 import { clearTerminal, println } from '../core/xtermWrapper.js';
-import { setFileSystem, prompt } from '../fs/filesystemManager.js';
+import { setFileSystem, prompt } from '../core/fs/filesystemManager.js';
 import state from '../core/stateManager.js';
 
 function exitCommand() {

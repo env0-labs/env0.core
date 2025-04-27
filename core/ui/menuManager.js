@@ -1,8 +1,8 @@
-import { setTypingDelay } from '../core/terminalHandler.js';
-import settings from '../core/settings.js';
-import state from '../core/stateManager.js';
+import { setTypingDelay } from '../terminalHandler.js';
+import settings from '../settings.js';
+import state from '../stateManager.js';
 import { applyFlicker, applyTheme } from '../fx/visualFXManager.js';
-import { focusTerminal } from '../core/xtermWrapper.js';
+import { focusTerminal } from '../xtermWrapper.js';
 
 
 export function initializeMenu() {

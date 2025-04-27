@@ -1,6 +1,6 @@
 // networkManager.js
 
-import state from '../core/stateManager.js';
+import state from '../stateManager.js';
 import fs from '../fs/filesystem.js';
 import systems from './systems.js'; // optional but clean
 

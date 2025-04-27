@@ -1,6 +1,6 @@
 // stateManager.js
 
-import defaultFS from '../fs/filesystem.js';
+import defaultFS from './fs/filesystem.js';
 
 const state = {
   // Core session state

@@ -1,7 +1,7 @@
 import state from '../core/stateManager.js';
 import { println } from '../core/xtermWrapper.js';
 import { getTerminalCols } from '../core/terminal/canvasTerminal.js';
-import { getCurrentDir } from '../fs/filesystemManager.js';
+import { getCurrentDir } from '../core/fs/filesystemManager.js';
 
 export function lsCommand() {
   const dir = getCurrentDir();

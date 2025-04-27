@@ -1,6 +1,6 @@
-import state from '../core/stateManager.js';
-import { refreshLine } from '../core/terminalHandler.js';
-import { print, println, clearTerminal } from '../core/xtermWrapper.js';
+import state from '../stateManager.js';
+import { refreshLine } from '../terminalHandler.js';
+import { print, println, clearTerminal } from '../xtermWrapper.js';
 
 
 let active = false;

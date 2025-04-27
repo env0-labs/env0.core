@@ -13,9 +13,9 @@
  * Opens a text file in fullscreen reader mode.
  */
 
-import { enterReaderMode } from '../ui/readerManager.js';
+import { enterReaderMode } from '../core/ui/readerManager.js';
 import state from '../core/stateManager.js';
-import { resolveFile } from '../fs/filesystemManager.js';
+import { resolveFile } from '../core/fs/filesystemManager.js';
 import { println } from '../core/xtermWrapper.js';
 
 export function read(args) {

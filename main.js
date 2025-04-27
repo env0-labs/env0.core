@@ -1,14 +1,14 @@
 import state from './core/stateManager.js';
 import { initTerminal, focusTerminal } from './core/xtermWrapper.js'; // ✅ with focusTerminal
 import { refreshLine, attachTerminalInput } from './core/terminalHandler.js';
-import { initLogin, outputIntro } from './startup/loginManager.js';
+import { initLogin, outputIntro } from './core/startup/loginManager.js';
 import { handleKeyInput } from './core/inputManager.js';
-import fs from './fs/filesystem.js';
-import { setFileSystem } from './fs/filesystemManager.js';
-import { initializeMenu } from './ui/menuManager.js';
+import fs from './core/fs/filesystem.js';
+import { setFileSystem } from './core/fs/filesystemManager.js';
+import { initializeMenu } from './core/ui/menuManager.js';
 import { redraw } from './core/terminal/canvasTerminal.js';
 
-import { triggerGlitch } from './fx/canvasFXManager.js';
+import { triggerGlitch } from './core/fx/canvasFXManager.js';
 window.triggerGlitch = triggerGlitch; // [DEV TOOL] Manual trigger for glitch effects during testing
 
 
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔥 Start Boot Sequence
   setTimeout(async () => {
     try {
-      const { startBootSequence } = await import('./startup/bootSequence.js');
+      const { startBootSequence } = await import('./core/startup/bootSequence.js');
       await startBootSequence();
     } catch (err) {
       console.error("Boot sequence failed:", err);

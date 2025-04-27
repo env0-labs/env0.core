@@ -1,10 +1,10 @@
 // bootSequence.js
 
-import settings from '../core/settings.js';
-import { termClear, termPrint } from '../core/outputManager.js';
-import { initLogin, outputIntro } from '../startup/loginManager.js';
-import { setMode } from '../core/sessionManager.js';
-import { refreshLine } from '../core/terminalHandler.js';
+import settings from '../settings.js';
+import { termClear, termPrint } from '../outputManager.js';
+import { initLogin, outputIntro } from './loginManager.js';
+import { setMode } from '../sessionManager.js';
+import { refreshLine } from '../terminalHandler.js';
 
 export async function startBootSequence() {
   console.log('🔥 Boot sequence started');

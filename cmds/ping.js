@@ -15,7 +15,7 @@
  */
 
 import { println } from '../core/xtermWrapper.js';
-import { getHostByIP, isHostReachable } from '../network/networkManager.js';
+import { getHostByIP, isHostReachable } from '../core/network/networkManager.js';
 
 export function pingCommand(args) {
   const targetIP = args[0];

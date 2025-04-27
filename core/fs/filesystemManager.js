@@ -1,7 +1,7 @@
 // filesystemManager.js
 
-import state from '../core/stateManager.js';
-import { print } from '../core/xtermWrapper.js';
+import state from '../stateManager.js';
+import { print } from '../xtermWrapper.js';
 
 
 // Still used if you dynamically assign file systems

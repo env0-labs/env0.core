@@ -1,14 +1,14 @@
 // loginManager.js
 
-import { getTypingDelay } from '../core/terminalHandler.js';
+import { getTypingDelay } from '../terminalHandler.js';
 import systems from '../network/systems.js';
-import state, { resetSessionState } from '../core/stateManager.js';
+import state, { resetSessionState } from '../stateManager.js';
 import fs from '../fs/filesystem.js';
-import settings from '../core/settings.js';
+import settings from '../settings.js';
 import { initVisualFX } from '../fx/visualFXManager.js';
-import { println } from '../core/xtermWrapper.js';
-import { getMode, setMode } from '../core/sessionManager.js';
-import { writeLine } from '../core/terminal/terminalBuffer.js';
+import { println } from '../xtermWrapper.js';
+import { getMode, setMode } from '../sessionManager.js';
+import { writeLine } from '../terminal/terminalBuffer.js';
 
 initVisualFX();
 

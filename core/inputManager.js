@@ -2,7 +2,7 @@
 
 import state from './stateManager.js';
 import { refreshLine } from './terminalHandler.js';
-import { handleLoginInput as processLoginInput } from '../startup/loginManager.js';
+import { handleLoginInput as processLoginInput } from './startup/loginManager.js';
 import { getMode, setMode } from './sessionManager.js';
 import sshCommand from '../cmds/ssh.js';
 

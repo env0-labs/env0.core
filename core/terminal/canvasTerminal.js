@@ -4,7 +4,7 @@ import { config } from './terminalConfig.js';
 import { setContext, drawFromBuffer } from './terminalRenderer.js';
 import { setCursorContext } from './terminalCursor.js';
 import { startBlink } from './terminalCursor.js';
-import { initCanvasFX } from '../../fx/canvasFXManager.js';
+import { initCanvasFX } from '../../core/fx/canvasFXManager.js';
 
 
 export let canvas, ctx;

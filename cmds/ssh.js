@@ -2,9 +2,9 @@
 
 import { print, println, clearTerminal } from '../core/xtermWrapper.js';
 import state from '../core/stateManager.js';
-import { setFileSystem, prompt } from '../fs/filesystemManager.js';
-import systems from '../network/systems.js';
-import defaultFS from '../fs/filesystem.js';
+import { setFileSystem, prompt } from '../core/fs/filesystemManager.js';
+import systems from '../core/network/systems.js';
+import defaultFS from '../core/fs/filesystem.js';
 
 function sshCommand(args) {
   if (!args || args.length === 0) {
