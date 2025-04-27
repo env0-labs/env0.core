@@ -2,6 +2,26 @@
 Starting from stable refactor and the defeat of terminal corruption.
 
 ---
+
+## 2025-04-27 — Phase 3 Preparation and FX Scaffolding
+
+### 🖥️ Terminal Renderer Expansion
+- Added FX lifecycle hook into terminalRenderer.js (temporary deltaTime = 16ms).
+- FX drawing inserted after buffer and cursor draw cycle.
+- FX Manager now scaffolded pending full fxCanvas split.
+
+### 🧩 Multi-Canvas System Confirmed
+- Future layering: terminalCanvas → fxCanvas → glassCanvas.
+- FX and physical visuals separated from terminal logic.
+
+### 🔧 Settings and Dev Tools
+- enableVisualFX setting activated.
+- window.triggerGlitch() exposed for manual FX test.
+
+✅ Stabilized base for Phase 3 FX development.
+
+
+---
 ## 2025-04-26 — Phase 2b Terminal Engine Stabilization
 
 ### 🛠️ Terminal Core Lifecycle Rebuild

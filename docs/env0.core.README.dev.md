@@ -1,118 +1,105 @@
-# node.zero — Developer README
-
-Welcome to the dev side of `node.zero`: a modular, CRT-styled terminal simulation built in JavaScript using `xterm.js`. This isn't a toy — it's a fake system that acts like a real one. Modular commands, persistent settings, login flow, fake filesystem. No bullshit.
+# env0.core — Developer README
 
 ---
 
-## 🧠 Project Philosophy
+## 📦 Project Overview
 
-`node.zero` should feel alive, responsive, and internally consistent. It’s not a "simulator" — it’s a modular environment that mimics a real terminal. Everything is built for extensibility.
+env0.core is a modular terminal simulation engine designed to support immersive narrative projects requiring degraded or emergent system behavior.
 
----
-
-## ⚙️ Core Architecture
-
-**Frontend:** HTML / CSS / JS with `xterm.js` for terminal emulation.
-
-## ⚙️ Core Architecture
-
-**Frontend:** HTML / CSS / JS with custom `canvasTerminal.js` for terminal emulation.
-
-**Core Modules:**
-- `stateManager.js` — global runtime state store
-- `settings.js` — persistent config (e.g., `instantText`, `typingDelay`)
-- `filesystem.js` — base filesystem structure
-- `filesystemManager.js` — runtime FS logic
-- `loginManager.js` — handles login sequence and credential routing
-- `menuManager.js` — UI overlay with speed and flicker controls
-- `visualFXManager.js` — CRT visual logic (flicker, scanline, burst)
-- `inputManager.js` — terminal input parsing and command matching
-- `outputManager.js` — print functions: `print()`, `println()`, `clearTerminal()`
-- `canvasTerminal.js` — low-level canvas terminal renderer
-- `terminalBuffer.js` — buffer and viewport state manager
-- `terminalHandler.js` — connects input handling to renderer
+It replaces xterm.js fully with a **custom canvasTerminal** and layered **canvas-based FX system**.
 
 ---
 
-## 📂 Commands
+## 🖥️ Visual Stack (Rendering Architecture)
 
-All commands are defined as separate files in `/commands/`.
-Each is a named export and handled manually in the switch logic of `inputManager.js`.
+| Layer | Purpose |
+|:------|:--------|
+| `terminalCanvas` | Core text output (shell buffer, prompt, cursor) |
+| `fxCanvas` | Visual overlay FX (glitch, scanlines, bloom, screen flicker) |
+| `glassCanvas` | Static CRT screen frame and dynamic reflection effects (planned) |
 
-### ✅ Implemented Commands
-- `ls`
-- `cd` — supports full path chaining (`cd etc/network`) and relative (`cd ..`)
-- `cat` — supports file vs directory detection
-- `clear`
-- `help`
-- `ssh` — fake network jump to secondary machine
-- `nmap` — fake subnet scanner
-- `ping` — fake success/fail ping
-- `ifconfig` — fake network device readout
-
-### 🔒 Not Implemented (by design)
-- `mkdir`, `touch`, `echo`, etc. — read-only simulation
-- No dispatcher system like `runCommand()` — command routing is explicit
-
-All command output goes through `termPrint()` or `termTypeLine()`.
+These canvases are stacked visually inside a locked 16:9 container.  
+Each canvas is isolated — text logic and FX do not interfere.
 
 ---
 
-## 🖥️ Menu / UI Features
+## ⚙️ Subsystem Stack (Operational Architecture)
 
-The menu overlay includes:
-- Text speed toggle: `slow`, `fast`, `instant`
-- CRT flicker intensity control: `Stable`, `Signal Interference`, `Broken Terminal`
-- Skip Boot Sequence toggle (persists via `localStorage`)
-- Audio tick toggle (placeholder only)
+| Subsystem | Purpose |
+|:----------|:--------|
+| `inputManager.js` | Keyboard/mouse/touch input capture and dispatch |
+| `outputManager.js` | Terminal printing, screen clear, scrollback handling |
+| `stateManager.js` | Shared runtime system state (user, path, machine, mode) |
+| `filesystemManager.js` | Virtual filesystem navigation and mutation |
+| `networkManager.js` | Simulated network systems and host resolution |
+| `bootSequence.js` | Modular startup/boot visuals and system handoff |
+| `loginManager.js` | User authentication and shell session entry |
+| `settings.js` | User-configurable options (themes, FX toggles) |
+| (Planned) `audioManager.js` | Sound FX, ambient layers, narrative audio triggers |
+| (Planned) `saveManager.js` | Save/load user progress and states |
 
-All settings persist via `settings.js` and apply instantly.
-Terminal focus is restored after closing the menu.
-
-> Theme selector has been **disabled** due to xterm.js DOM layering issues. Fallout button removed from UI, logic retained in code.
-
----
-
-## 🧪 Boot & Login Flow
-
-- Full boot sequence triggered unless `skipIntro` is set
-- Boot includes:
-  - Faux Linux log output with `[ OK ]`, `[FAIL]`, `[SKIP]`
-  - Delays and randomness for realism
-  - `Press any key to continue...` gate
-- Final screen clear before login prompt
-- Login accepts `user@ip` format or defaults to `pendingLogin`
-- If credentials match, terminal session is launched
+Subsystems power the terminal simulation independently from the visual stack.
 
 ---
 
-## 🧱 Style & Naming
+## 📏 Scaling Rules
 
-- Public name: `node.zero`
-- Safe folder name: `node_zero`
-- Prefer `snake_case` in filenames and variables
-- UI text styling is loose — lowercased or themed
-
----
-
-## 🛠️ Development Tips
-
-- Use Git. Commit often. Feature branches preferred.
-- Clarity over cleverness — name things cleanly.
-- Every command must be testable in isolation.
-- Don’t use global dispatchers.
-- State always lives in `stateManager.js` — treat it as truth.
+- Internal rendering locked to **4K (3840x2160)**.
+- **Aspect ratio fixed at 16:9** — no live dynamic canvas resizing during session.
+- Scaling handled via `transform: scale()` on the terminal container.
+- If resolution changes mid-session, user reload is required.
 
 ---
 
-## 📦 Project Setup
+## 🧩 Input Handling
 
-```bash
-# No build tools required
-# Just open index.html in a browser
-```
+- **Unified Input Path**: Keyboard input and mouse/touch button input both converge into the same command execution logic.
+- No split logic trees.
+- InputManager modularized for future expansion (e.g., mobile support, accessibility UI overlays).
 
 ---
 
-This project is held together with care, spite, and caffeine.
-Use the menu. Break the terminal. Stay weird.
+## 🎨 FX System
+
+- Visual FX currently scaffolded into `terminalRenderer.js` under `[TEMPORARY]` markers.
+- FX timing currently uses fake deltaTime = 16ms — will be replaced with proper frame delta handling later.
+- FXManager (`canvasFXManager.js`) draws onto `fxCanvas` (planned).
+- Dev tool `window.triggerGlitch()` exposed for manual testing during FX development.
+
+---
+
+## 🎵 Audio System (Future)
+
+- Planned 3-layer system:
+  - FX Sounds (typing, success, error)
+  - Ambient Atmosphere (CRT hum, background static)
+  - Narrative Events (specific story sounds)
+- AudioManager integration deferred until after core FX layers are finalized.
+
+---
+
+## 🚀 Boot and Startup
+
+- Boot sequence modular but currently simple.
+- Phase 4 will introduce bootSequence injection hooks for project-specific fake BIOS, network scans, etc.
+
+---
+
+## 📚 Save/Load System (Future)
+
+- Save/load functionality parked for node.zero/entropy.echo integration points.
+- No active save system wired yet.
+
+---
+
+# 📋 Developer Discipline
+
+- All experimental code must be flagged `[TEMPORARY]`, `[DEV TOOL]`, or `[PHASE X]`.
+- Stabilization commits must be clearly labeled.
+- No direct blending of test scaffolds into production logic without cleanup.
+
+---
+
+✅ Last major stabilization: April 27, 2025
+
+env0.core is ready for Phase 3 expansion into full CRT terminal simulation.

@@ -1,169 +1,85 @@
-# projectdocumentation.md — node.zero (Golden Copy)
-
-This file serves as a stable implementation reference. Unlike `README.dev.md`, this includes detailed system maps, variable definitions, and technical commentary.
+# env0.core — Project Documentation
 
 ---
 
-## 🎛️ Visual Effects Matrix
+## 🧠 Project Purpose
 
-| Effect | Status | Notes |
-|:------|:------|:------|
-| CRT Background | ✅ | #001100 radioactive green |
-| Terminal Text Glow | ✅ | Multi-layer green shadows |
-| Flicker | ✅ | 3-tier system (low, medium, high) |
-| Scanlines | ✅ | Animated vertical sweep, tied to flicker intensity |
-| Noise Layer | ✅ | Static + subtle drift overlays |
-| Burn-in / Ghosting | ✅ | Text ghosting blend layer |
-| Startup Flash | ⏳ | Planned: boot burst pulse |
-| Vignette | ⏳ | Planned: dark corners radial gradient |
-| RGB Ghosting | ⏳ | Planned: subtle chromatic offset |
+env0.core is a lightweight, modular engine designed to simulate degraded terminal environments with:
+- Realistic command handling (cd, ls, cat, ping, etc.)
+- Modular filesystem and network simulation
+- Multi-canvas rendering system (terminal, FX, glass)
+- Visual FX support (glitch, scanlines, bloom, flicker)
+- Full narrative and atmosphere layering capabilities
 
----
-
-## 🖥️ Terminal Emulation
-
-| Feature | Status | Notes |
-|:--------|:-------|:------|
-| canvasTerminal.js integration | ✅ | Fully replaces xterm.js |
-| Buffer-backed scrollback | ✅ | Real buffer with viewport control |
-| Typing + output lifecycle | ✅ | Controlled newlines and line overwrites |
-| Responsive Scaling | ✅ | Resizes with window |
-| Scroll-to-bottom handling | ✅ | Explicit lifecycle, not implicit |
-| Char Wrapping | ✅ | Manual soft-wrap with buffer respect |
-
+It serves as the foundation for projects like:
+- `node.zero` — cybersecurity exploration and training simulator
+- `entropy.echo` — narrative-driven horror terminal experience
 
 ---
 
-## 🧠 State Variables
+## 🖥️ Core Architecture
 
-| Variable | Purpose |
-|:---------|:--------|
-| `currentMachine` | Current connected node (IP) |
-| `currentUsername` | Logged-in user |
-| `currentHostname` | Active machine hostname |
-| `pendingLogin` | IP queued for login attempt |
-| `pendingUsername` | Temp user input during login |
-| `awaitingUsername` | Awaiting username entry |
-| `awaitingPassword` | Awaiting password entry |
-| `commandBuffer` | Current typed command text |
-| `commandHistory` | Array of all previous commands |
-| `historyIndex` | Navigation through history |
-| `currentPath` | Current working directory |
+| Layer | Role |
+|:------|:-----|
+| `terminalCanvas` | Text rendering — buffer, cursor, command output |
+| `fxCanvas` | Visual FX — glitch, scanlines, flicker, bloom |
+| `glassCanvas` | Physical CRT frame — reflections, glass textures, dirt, cracks |
+
+✅  
+Each canvas is stacked visually.  
+✅  
+Each system modularized and managed independently.
 
 ---
 
-## 📁 File Overview
+## 📏 Visual Scaling and Resolution
 
-| File | Purpose |
-|:-----|:--------|
-| `index.html` | Terminal shell + overlay entrypoint |
-| `styles.css` | Core CRT layout + menu styling |
-| `main.js` | Boot and top-level init control |
-| `filesystem.js` | Filesystem structure base |
-| `filesystemManager.js` | Runtime FS operations |
-| `systems.js` | Machine IP and credential map |
-| `stateManager.js` | Single truth runtime store |
-| `inputManager.js` | Command parsing + routing |
-| `outputManager.js` | Output helpers (type, print, clear) |
-| `settings.js` | localStorage management |
-| `visualFXManager.js` | Flicker/scanline/effects controller |
-| `menuManager.js` | UI panel logic, toggle, sync |
-| `loginManager.js` | Login logic + post-boot setup |
-| `terminalHandler.js` | Prompt refresh + typing delay |
-| `bootSequence.js` | Full boot experience manager |
+- Internal design resolution locked to **3840x2160** (4K).
+- Aspect ratio fixed to **16:9**.
+- Dynamic window scaling handled by container `transform: scale()`.
+- No live canvas resizing mid-session — resolution change requires full reload.
 
 ---
 
-## 🗂️ Menu Overlay
+## 🧩 Core Subsystems
 
-| Element | Status | Notes |
-|:--------|:-------|:------|
-| Menu Button | ✅ | Top right, green border |
-| Overlay Panel | ✅ | Full screen, semi-transparent |
-| Close Button (X) | ✅ | Accessible via hover or click |
-| Audio Toggle | ✅ | Placeholder wiring only |
-| Text Speed Select | ✅ | Controls typing pace |
-| Skip Boot Checkbox | ✅ | Fully wired, localStorage-backed |
-| CRT Flicker Select | ✅ | Cycles intensity tier visually |
-| Theme Selector | ❌ | Fallout option removed — xterm override issues |
-
----
-
-## 🔧 Available Commands
-
-| Command | Status | Notes |
-|:--------|:-------|:------|
-| `ls` | ✅ | Lists current directory |
-| `cd` | ✅ | Handles relative and root paths |
-| `cat` | ✅ | Reads text content |
-| `clear` | ✅ | Clears screen |
-| `ssh` | ✅ | Switches node via auth |
-| `nmap` | ✅ | Reveals machine IPs |
-| `ping` | ✅ | Fake up/down check |
-| `ifconfig` | ✅ | Shows fake device info |
-| `help` | ✅ | Lists valid commands |
-
-Note: **No write commands supported** (`mkdir`, `touch`, etc. intentionally omitted).
+| Subsystem | Status |
+|:----------|:-------|
+| FilesystemManager | ✅ Stable |
+| NetworkManager | ✅ Stable |
+| Command Handling (inputManager.js) | ✅ Stable |
+| TerminalRenderer (drawFromBuffer.js) | ✅ Stable with FX hook scaffolding |
+| FXManager (canvasFXManager.js) | 🟠 In progress (scaffolded, pending fxCanvas migration) |
+| Glass Layer (glassCanvas.js) | ⚪ Planned (Phase 3) |
+| Boot Sequence (bootSequence.js) | ✅ Functional, needs future modular hooks |
+| UI Layer (menuManager.js, readerManager.js) | ✅ Stable |
 
 ---
 
-## 🌐 Simulated Network
+## 🎨 Visual Effects Matrix
 
-| Feature | Status | Notes |
-|:--------|:-------|:------|
-| SSH Login | ✅ | IP + user/password auth |
-| Hostname Stripping | ✅ | Removes `.local` for brevity |
-| Discovery (nmap) | ✅ | Fake subnet map |
-| Ping | ✅ | Returns `up/down` for known machines |
-
----
-
-## 🧪 Boot Sequence Notes
-
-- Full log sequence includes ~40 lines of `[ OK ]`, `[WARN]`, `[FAIL]`, `[SKIP]`
-- Lines typed using `termTypeLine()` with random pacing delays
-- Critical lines pause longer (e.g., microcode failure)
-- Ends with "SBC_1 ready", then clears to login
-- Guarded by `skipIntro` toggle via menu → stored in `settings.js`
+| Effect | Status |
+|:-------|:-------|
+| Glitch Bursts | 🟠 Scaffolded (working via FXManager) |
+| Scanline Overlay | ⚪ Planned |
+| Bloom/Pulse Effects | ⚪ Planned |
+| Screen Flicker | ⚪ Planned |
+| CRT Frame Overlay (glassCanvas) | ⚪ Planned |
+| Color Aberration | ⚪ Future stretch goal |
 
 ---
 
-## 🪵 Known Issues
+## 🛠️ Developer Notes
 
-| Issue | Impact | Notes |
-|:------|:-------|:------|
-| xterm ignores background CSS | Low | Theme override not working |
-| `animations.js` | Unknown | Verify before deletion |
-| `narrative.js` | Deprecated | Reserved for future `narrativeManager` system |
-
----
-
-## 🧭 Internal Naming
-
-| Label | Meaning |
-|:------|:--------|
-| `node.zero` | Public/project name |
-| `node_zero` | Safe version (filepaths, URLs, etc.) |
+- FX hooks are flagged with `[TEMPORARY]` comments where relevant.
+- Current FX timing uses fake deltaTime = 16ms placeholder.
+- Dev tools like `window.triggerGlitch()` exposed temporarily for manual testing.
+- Audio system (FX and atmosphere) stubs exist — full integration parked for later.
+- Save/load system planning deferred until project-specific narrative design is locked.
 
 ---
 
-## 🗒️ Dev Notes
+# ✅ System Status: April 27, 2025
 
-- Visual fidelity confirmed across flicker tiers
-- Menu reflects full persistent state
-- Login/boot system now modular
-- File structure is logically grouped by purpose
+env0.core is stable, modular, and prepared for full Phase 3 FX and visual expansion.
 
-> This doc reflects implemented behavior. For roadmap/ideas, see `tasklist.md` and `blackbox.md`.
-
-
-## ⚙️ Shell Engine Extraction
-
-- Extract boot manager, shell, prompt renderer into reusable "node.shell" module
-- Support for:
-  - Custom IP
-  - Login flow
-  - FS mounting per node
-- Nodes can simulate different OS versions, FS corruption, partial access
-
----
