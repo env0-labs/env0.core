@@ -22,9 +22,6 @@ export async function startBootSequence() {
     return;
   }
 
-  const blackout = document.getElementById('boot-blackout-layer');
-  if (blackout) blackout.remove();
-
   await sleep(1000);
   triggerBootBurst();
   await sleep(400);
