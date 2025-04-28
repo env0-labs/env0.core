@@ -17,8 +17,11 @@ Try the following commands:
 - \`cd\` to move around directories
 - \`read\` to read files
 - \`cat\` is also available, but does not pause or format
+- \`nmap\` can scan local subnets for available machines
+- \`ping\` can test connectivity to a machine
+- \`ssh\` can connect to other machines (usage: ssh username@IP or ssh username@hostname)
 
-Type \`read tutorial.txt\` to revisit this guide at any time.
+Type \`help\` to revisit this guide at any time.
 
 Explore. Observe. Learn by doing.
 `.trim()
@@ -101,6 +104,23 @@ Correlation is not causation, but this feels... recursive.
 This file shouldn't be here.
 
 Someone ran \`nmap\` and found an open port with a heartbeat signature. We traced it to /mnt/echo_state.
+
+Credential Dump:
+
+    "ip": "10.10.10.14",
+    "hostname": "server13.local",
+    "username": "admin",
+    "password": "serverpass"
+
+      "ip": "10.10.20.13",
+    "hostname": "workstation03.local",
+    "username": "user03",
+    "password": "workpass"
+
+      "ip": "10.10.30.25",
+    "hostname": "printer05.local",
+    "username": "admin",
+    "password": "printerpass"  
 
 We didn't open it.
 
