@@ -11,19 +11,17 @@
       height: 1080px;
       background: url('../assets/70sterminal.png') center center no-repeat;
       background-size: cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
 
     #frameWrapper {
+      position: absolute;
       width: 800px;
       height: 600px;
-      padding: 0;
+      left: 520px; /* 1920/2 - 400 */
+      top: 170px;  /* CRT alignment */
       border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     iframe {
@@ -37,7 +35,29 @@
 </head>
 <body>
   <div id="frameWrapper">
-    <iframe src="./terminal.html"></iframe>
+    <iframe src="./terminal.html" id="terminalFrame"></iframe>
   </div>
+
+  <script>
+    const frame = document.getElementById("terminalFrame");
+
+    // Refocus iframe on load
+    window.addEventListener("load", () => {
+      frame.focus();
+    });
+
+    // Refocus iframe if anything outside is clicked
+    document.addEventListener("mousedown", (e) => {
+      if (!frame.contains(e.target)) {
+        e.preventDefault();
+        frame.focus();
+      }
+    });
+
+    // Refocus iframe on blur (keyboard tab-out, etc.)
+    window.addEventListener("blur", () => {
+      setTimeout(() => frame.focus(), 10);
+    });
+  </script>
 </body>
 </html>
