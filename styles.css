@@ -1,5 +1,5 @@
 /* ==================================================
-   env0.core Terminal Stylesheet (cleaned + stable)
+   env0.core Terminal Stylesheet (cleaned + canvas-ready)
    ================================================== */
 
 /* --- Base Layout --- */
@@ -21,17 +21,11 @@ html, body {
   flex-direction: column;
 }
 
-/* --- Terminal Window --- */
+/* --- Terminal Canvas --- */
 #terminal {
   flex: 1;
   width: 100%;
   overflow: hidden;
-}
-
-/* --- Terminal Appearance --- */
-.xterm {
-  background-color: #000 !important;
-  color: #fff !important;
 }
 
 canvas {
@@ -40,48 +34,7 @@ canvas {
   display: block;
 }
 
-#terminal .xterm-screen {
-  text-shadow: none !important; /* fallback for older xterm content */
-}
-
-.xterm .xterm-rows {
-  color: #ffffff !important;
-  background-color: #000000 !important;
-  font-size: 18px !important;
-  font-weight: bold;
-  line-height: 1.4;
-  animation: softGlowPulse 6s ease-in-out infinite;
-}
-
-/* --- Terminal Glow Pulse --- */
-@keyframes softGlowPulse {
-  0% {
-    text-shadow:
-      0 0 2px #ffffff,
-      0 0 5px #ffffff,
-      0 0 10px #f0f0f0,
-      0 0 20px #e0e0e0,
-      0 1px 0 #000000;
-  }
-  50% {
-    text-shadow:
-      0 0 1px #cccccc,
-      0 0 3px #dddddd,
-      0 0 6px #e0e0e0,
-      0 0 12px #f0f0f0,
-      0 1px 0 #000000;
-  }
-  100% {
-    text-shadow:
-      0 0 2px #ffffff,
-      0 0 5px #ffffff,
-      0 0 10px #f0f0f0,
-      0 0 20px #e0e0e0,
-      0 1px 0 #000000;
-  }
-}
-
-/* --- Flicker Keyframes (for future use) --- */
+/* --- Flicker Keyframes --- */
 @keyframes flickerLow {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.9; }
@@ -117,16 +70,6 @@ canvas {
 
 #boot-burst {
   animation: bootFlash 0.4s ease-out;
-}
-
-/* --- Scrollbar Suppression for xterm.js --- */
-#terminal .xterm-viewport {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-#terminal .xterm-viewport::-webkit-scrollbar {
-  display: none;
 }
 
 /* --- Menu UI --- */
@@ -225,7 +168,7 @@ canvas {
   appearance: none;
 }
 
-/* --- Flicker, Theme, and Speed Button States --- */
+/* --- Button and Theme States --- */
 #flickerLow.selected,
 #flickerMedium.selected,
 #flickerHigh.selected,
