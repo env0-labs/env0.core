@@ -8,7 +8,7 @@ Starting from stable refactor and the defeat of terminal corruption.
 - CRT shell now wraps terminal via iframe (800x600)
 - Login flow, shell commands, reader mode tested clean
 - All layout-related bugs deferred to wrapper
-- Breakpoint: safe to branch main
+- Breakpoint: safe to branch main  
 
 
 ---
