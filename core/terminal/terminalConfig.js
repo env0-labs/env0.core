@@ -3,6 +3,7 @@
 export const config = {
     fontSize: 16,
     fontFamily: 'courier, monospace',
+    fontWeight: 'bold',
     bgColor: '#000000',
     fgColor: '#FFFFFF',
     cursorVerticalOffset: 0, // used for CRT shake, not layout

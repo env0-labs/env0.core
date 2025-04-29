@@ -28,7 +28,7 @@ export function createCanvas(container) {
     container.appendChild(canvas);
   
     ctx = canvas.getContext('2d');
-    ctx.font = `${config.fontSize}px ${config.fontFamily}`;
+    ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
     ctx.textBaseline = 'top';
 
     // Don’t measure or resize immediately — wait for layout
@@ -57,30 +57,39 @@ export function createCanvas(container) {
     rows = Math.floor(canvas.clientHeight / charHeight);
   }
   
+  let animating = false;
 
-function resizeCanvas() {
+export function startRenderLoop() {
+  if (animating) return;
+  animating = true;
+  function frame() {
+    drawFromBuffer();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+
+  function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     canvas.width = canvas.clientWidth * dpr;
     canvas.height = canvas.clientHeight * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.font = `${config.fontSize}px ${config.fontFamily}`;
+    ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
     ctx.textBaseline = 'top';
     ctx.textAlign = 'left';
-
-    measureCharSize(); // now uses the correct post-scale font
-    setContext(ctx, charWidth, charHeight);
-    setCursorContext(ctx, charWidth, charHeight); // here
-    
-    
-    initCanvasFX(ctx, canvas.width, canvas.height); // [TEMPORARY] Bind FX to terminal canvas context; will migrate to fxCanvas later
-
-    redraw();
-    startBlink(); // add this
-
-  }
   
+    measureCharSize();
+    setContext(ctx, charWidth, charHeight);
+    setCursorContext(ctx, charWidth, charHeight);
+    initCanvasFX(ctx, canvas.width, canvas.height);
+  
+    redraw();
+    startBlink();
+    startRenderLoop(); // ← Added here
+    
+  }
   export function redraw() {
     drawFromBuffer();
   }
-
-
+  
