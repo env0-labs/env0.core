@@ -6,6 +6,8 @@ import { canvas, getTerminalCols } from './terminal/canvasTerminal.js';
 import { writeLine, getVisibleBuffer, overwriteLastLine, getViewportStartRow } from './terminal/terminalBuffer.js';
 import { showCursor, setCursorPosition } from './terminal/terminalCursor.js';
 
+
+
 let _typingDelay = 20;
 
 export function setTypingDelay(value) {
@@ -66,7 +68,6 @@ export function refreshLine(mode, buffer, username, hostname, pathArray, forceNe
   redraw();
 }
 
-// 👇 Helper: strip illegal control characters
 function sanitize(str) {
   if (typeof str !== 'string') return '';
   return str.replace(/[\x00-\x1F\x7F]/g, '');
