@@ -24,6 +24,6 @@ export function draw(ctx) {
 
   ctx.save();
   ctx.shadowColor = `rgba(0, 255, 0, ${glowStrength})`;
-  ctx.shadowBlur = 8;
+  ctx.shadowBlur = 2;
   ctx.restore();
 }

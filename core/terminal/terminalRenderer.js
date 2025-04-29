@@ -6,6 +6,8 @@ import { drawCursor } from './terminalCursor.js';
 import { canvas, getTerminalRows } from './canvasTerminal.js';
 import { updateCanvasFX, drawCanvasFX } from '../../core/fx/canvasFXManager.js';
 import state from '../stateManager.js';
+import * as glitchFX from './terminalFX/glitchFX.js';
+import * as rowJitterFX from './terminalFX/rowJitterFX.js';
 
 let ctx, charWidth, charHeight;
 let glowTimer = 0;
@@ -39,6 +41,16 @@ export function drawFromBuffer() {
       const line = (typeof bufferRow === 'string') ? bufferRow : '[INVALID]';
       const shouldRender = line && line.trim().length > 0;
       const paddedLine = shouldRender ? line + ' ' : ' ';
+      let renderLine = '';
+      
+      for (let col = 0; col < paddedLine.length; col++) {
+        const originalChar = paddedLine[col];
+        const glitchedChar = glitchFX.getGlitchedChar(screenRow, col, originalChar);
+        renderLine += glitchedChar;
+      }
+
+      // Get horizontal jitter offset for this row
+      const xOffset = rowJitterFX.getRowOffset ? rowJitterFX.getRowOffset(screenRow) : 0;
 
       if (shouldRender) {
         // Glow pass
@@ -47,16 +59,17 @@ export function drawFromBuffer() {
         ctx.shadowBlur = 8;
         ctx.globalAlpha = glowStrength;
         ctx.fillStyle = config.fgColor;
-        ctx.fillText(paddedLine, 0.9, screenRow * charHeight); // slight x offset
+        ctx.fillText(renderLine, 0.9 + xOffset, screenRow * charHeight); // slight manual offset + jitter
         ctx.restore();
       }
 
       // Solid text pass
       ctx.globalAlpha = 0.5;
       ctx.fillStyle = config.fgColor;
-      ctx.fillText(paddedLine, 0, screenRow * charHeight);
+      ctx.fillText(renderLine, 0 + xOffset, screenRow * charHeight);
     }
   }
+
 
   drawCursor();
 
