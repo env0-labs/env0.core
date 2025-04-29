@@ -10,6 +10,22 @@ Starting from stable refactor and the defeat of terminal corruption.
 - All layout-related bugs deferred to wrapper
 - Breakpoint: safe to branch main  
 
+---
+
+## 2025-04-29 — Terminal FX System Finalized
+
+### 🎨 Terminal FX Stack Completed
+- Integrated glowFX (pulsing text glow with jitter)
+- Added flickerFX (screen-wide alpha instability)
+- Enabled ghostFX (frame echo trail with drift)
+- Added glitchFX (per-character substitution and decay)
+- Integrated rowJitterFX (horizontal scanline instability)
+- Implemented burnFX (per-character phosphor decay buffer)
+
+All FX are modular, toggleable, and layered via `terminalFXManager.js`.  
+TerminalRenderer now cleanly delegates visual instability to FX modules.
+
+✅ Phase 2 visual architecture closed. Terminal now reflects entropy at every layer.
 
 ---
 

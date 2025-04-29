@@ -61,10 +61,17 @@ Subsystems power the terminal simulation independently from the visual stack.
 
 ## 🎨 FX System
 
-- Visual FX currently scaffolded into `terminalRenderer.js` under `[TEMPORARY]` markers.
-- FX timing currently uses fake deltaTime = 16ms — will be replaced with proper frame delta handling later.
-- FXManager (`canvasFXManager.js`) draws onto `fxCanvas` (planned).
-- Dev tool `window.triggerGlitch()` exposed for manual testing during FX development.
+- FX system fully modular via `terminalFXManager.js`
+- Current active FX:
+  - `glowFX` — text glow pulse with jitter
+  - `flickerFX` — screen-wide brightness variation
+  - `ghostFX` — previous frame residue
+  - `glitchFX` — per-char corruption with TTL
+  - `rowJitterFX` — horizontal row instability
+  - `burnFX` — per-character memory decay
+- FX applied after drawFromBuffer() but before overlays
+- FX toggleable via settings or external state triggers
+
 
 ---
 

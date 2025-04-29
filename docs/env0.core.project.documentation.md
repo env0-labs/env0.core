@@ -53,19 +53,23 @@ Each system modularized and managed independently.
 | Glass Layer (glassCanvas.js) | ⚪ Planned (Phase 3) |
 | Boot Sequence (bootSequence.js) | ✅ Functional, needs future modular hooks |
 | UI Layer (menuManager.js, readerManager.js) | ✅ Stable |
+| FXManager (terminalFXManager.js) | ✅ Active |
 
 ---
 
 ## 🎨 Visual Effects Matrix
 
-| Effect | Status |
-|:-------|:-------|
-| Glitch Bursts | 🟠 Scaffolded (working via FXManager) |
-| Scanline Overlay | ⚪ Planned |
-| Bloom/Pulse Effects | ⚪ Planned |
-| Screen Flicker | ⚪ Planned |
-| CRT Frame Overlay (glassCanvas) | ⚪ Planned |
-| Color Aberration | ⚪ Future stretch goal |
+| Effect             | Status       |
+|--------------------|--------------|
+| Glitch Bursts      | ✅ Complete   |
+| Scanline Overlay   | ✅ Via rowJitterFX |
+| Bloom/Pulse Effects| ✅ Via glowFX |
+| Screen Flicker     | ✅ Via flickerFX |
+| CRT Frame Overlay  | ⚪ Planned    |
+| Color Aberration   | ⚪ Future     |
+| Burn-in Decay      | ✅ Via burnFX |
+| Ghost Echo         | ✅ Via ghostFX |
+
 
 ---
 

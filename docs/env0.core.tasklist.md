@@ -16,7 +16,8 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 - [x] visualFXManager safely stubbed (no active visuals)
 - [x] Menu renders and functions cleanly
 - [x] Known shell commands confirmed operational: `ls`, `cd`, `cat`, `clear`, `help`, `ifconfig`, `ping`, `nmap`
-
+- [x] terminalFXManager.js integrated
+- [x] glowFX, flickerFX, ghostFX, glitchFX, rowJitterFX, burnFX implemented
 ---
 
 ## 🔧 Immediate Tasks (Phase 2b Closure)
@@ -54,5 +55,11 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 - [ ] `narrativeManager.js` for system-bound storytelling
 
 ---
+
+## 🧩 Phase 3 Prep
+- [ ] EntropyManager hooks to drive FX intensity
+- [ ] Shell triggers for glitch/flicker/burn events
+- [ ] External theme control for tint + CRT overlays
+
 
 > This tasklist is built on top of a known-stable system. The goal is clarity, modularity, and preserving behavioral trust.
