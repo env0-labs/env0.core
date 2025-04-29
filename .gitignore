@@ -1,0 +1,35 @@
+# Node modules (if used in build tooling)
+node_modules/
+
+# macOS system files
+.DS_Store
+
+# VSCode settings (optional, unless you're syncing workspace)
+.vscode/
+
+# Chrome/Electron temp profiles
+chrome_temp_profile/
+*.crdownload
+*.pb
+*.pb.gz
+*.tflite
+*.store*
+*.json
+*.db
+*.db-journal
+
+# Build artifacts or temp scripts
+dist/
+*.log
+*.tmp
+*.bak
+
+# OS junk
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Editor swap/temp files
+*~
+*.swp
+*.swo
