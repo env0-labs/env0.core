@@ -15,7 +15,7 @@ import * as flickerFX from './flickerFX.js';
 import * as ghostFX from './ghostFX.js';
 import * as glitchFX from './glitchFX.js';
 import * as rowJitterFX from './rowJitterFX.js';
-// import * as burnFX from './burnFX.js';
+import * as burnFX from './burnFX.js';
 
 let enabled = true;
 
@@ -25,6 +25,8 @@ export function initTerminalFX(ctx, width, height) {
     ghostFX.init(ctx, width, height);
     glitchFX.init(ctx, width, height);
     rowJitterFX.init(ctx, width, height);
+    burnFX.init(ctx, width, height);
+
   }
   
   export function updateTerminalFX(deltaTime) {
@@ -33,12 +35,16 @@ export function initTerminalFX(ctx, width, height) {
     ghostFX.update(deltaTime);
     glitchFX.update(deltaTime);
     rowJitterFX.update(deltaTime);
+    burnFX.update(deltaTime);
+
   }
   
   export function drawTerminalFX(ctx) {
     glowFX.draw(ctx);
     flickerFX.draw(ctx);
     ghostFX.draw(ctx);
+    burnFX.draw(ctx);
+
   }
   
 

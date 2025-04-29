@@ -1,17 +1,61 @@
 // burnFX.js
 //
-// Simulates phosphor burn-in or slow pixel decay.
-// Requires per-cell brightness memory to fade out over time.
+// Simulates phosphor burn-in: old characters slowly fade over time
+// after being replaced or erased. Decoupled from main terminal buffer.
 
-export function init(ctx, width, height) {
-    // Setup per-char intensity buffer
+let burnBuffer = [];
+let width = 0, height = 0;
+const maxRows = 100;
+const maxCols = 120;
+
+const fadeRate = 0.1; // How much intensity fades per frame (tweak later)
+
+export function init(ctx, w, h) {
+  width = w;
+  height = h;
+  burnBuffer = new Array(maxRows).fill(null).map(() =>
+    new Array(maxCols).fill(null)
+  );
+}
+
+export function update(deltaTime) {
+    for (let row = 0; row < maxRows; row++) {
+        const rowData = burnBuffer[row];
+        if (!rowData) continue;
+        for (let col = 0; col < maxCols; col++) {
+          const cell = rowData[col];
+      if (cell && cell.opacity > 0) {
+        cell.opacity -= fadeRate * deltaTime;
+        if (cell.opacity < 0) cell.opacity = 0;
+      }
+    }
   }
-  
-  export function update(deltaTime) {
-    // Fade intensity map over time
+}
+
+export function draw(ctx) {
+  ctx.save();
+  ctx.font = `bold 16px monospace`; // match terminal font settings
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = '#00FF00'; // CRT green for burn, could be param
+
+  for (let row = 0; row < maxRows; row++) {
+    for (let col = 0; col < maxCols; col++) {
+      const cell = burnBuffer[row][col];
+      if (cell && cell.opacity > 0) {
+        ctx.globalAlpha = cell.opacity * 0.2; // Scale to low glow
+        ctx.fillText(cell.char, col * 10, row * 21); // charWidth/charHeight match
+      }
+    }
   }
-  
-  export function draw(ctx) {
-    // Render faint ghosts where old characters were
+
+  ctx.restore();
+}
+
+export function recordChar(row, col, char) {
+  if (row >= 0 && col >= 0 && row < maxRows && col < maxCols) {
+    burnBuffer[row][col] = {
+      char: char,
+      opacity: 1.0
+    };
   }
-  
+}

@@ -8,6 +8,7 @@ import { updateCanvasFX, drawCanvasFX } from '../../core/fx/canvasFXManager.js';
 import state from '../stateManager.js';
 import * as glitchFX from './terminalFX/glitchFX.js';
 import * as rowJitterFX from './terminalFX/rowJitterFX.js';
+import * as burnFX from './terminalFX/burnFX.js';
 
 let ctx, charWidth, charHeight;
 let glowTimer = 0;
@@ -42,11 +43,14 @@ export function drawFromBuffer() {
       const shouldRender = line && line.trim().length > 0;
       const paddedLine = shouldRender ? line + ' ' : ' ';
       let renderLine = '';
-      
+
       for (let col = 0; col < paddedLine.length; col++) {
         const originalChar = paddedLine[col];
         const glitchedChar = glitchFX.getGlitchedChar(screenRow, col, originalChar);
         renderLine += glitchedChar;
+
+        burnFX.recordChar(screenRow, col, glitchedChar);
+
       }
 
       // Get horizontal jitter offset for this row
