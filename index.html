@@ -7,30 +7,17 @@
   <link rel="stylesheet" href="./styles.css">
   <style>
 
-    #frameWrapper {
-      position: absolute;
-      width: 800px;
-      height: 600px;
-      left: 520px; /* 1920/2 - 400 */
-      top: 151px;  /* CRT alignment */
-      border: none;
-    }
-
-    iframe {
-      width: 800px;
-      height: 600px;
-      border: none;
-      background: black;
-      display: block;
-    }
   </style>
 </head>
 <body>
 
-  <div id="crtFXOverlay"></div>
+    <div id="glassFXLayer"></div>
+  
   <div id="frameWrapper">
     <iframe src="./terminal.html" id="terminalFrame"></iframe>
   </div>
+  
+  
   
 
   <script>

@@ -80,10 +80,11 @@ function resizeCanvas() {
 }
 
 export function redraw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // 💥 clear buffer
   drawFromBuffer();
   drawTerminalFX(ctx);
-
 }
+
 
 export function startRenderLoop() {
   if (animating) return;
