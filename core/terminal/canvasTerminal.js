@@ -57,7 +57,8 @@ function measureCharSize() {
 
   cols = Math.floor(canvas.clientWidth / charWidth);
   rows = Math.floor(canvas.clientHeight / charHeight);
-}
+
+  }
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -81,6 +82,7 @@ function resizeCanvas() {
 export function redraw() {
   drawFromBuffer();
   drawTerminalFX(ctx);
+
 }
 
 export function startRenderLoop() {

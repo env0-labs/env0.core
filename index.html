@@ -3,17 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>env0.core Engine Demo</title>
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="./styles.css">
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 1920px;
-      height: 1080px;
-      background: url('./assets/70sterminal.png') center center no-repeat;
-      background-size: cover;
-      position: relative;
-      overflow: hidden;
-    }
 
     #frameWrapper {
       position: absolute;
@@ -34,9 +26,12 @@
   </style>
 </head>
 <body>
+
+  <div id="crtFXOverlay"></div>
   <div id="frameWrapper">
     <iframe src="./terminal.html" id="terminalFrame"></iframe>
   </div>
+  
 
   <script>
     const frame = document.getElementById("terminalFrame");
@@ -53,6 +48,13 @@
         frame.focus();
       }
     });
+
+//This forces the terminal to repaint after boot, without modifying internal logic yet.
+    frame.contentWindow.addEventListener('DOMContentLoaded', () => {
+  frame.contentWindow.requestAnimationFrame(() => {
+    frame.contentWindow.redraw?.();
+  });
+});
 
     // Refocus iframe on blur (keyboard tab-out, etc.)
     window.addEventListener("blur", () => {

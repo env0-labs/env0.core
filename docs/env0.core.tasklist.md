@@ -1,3 +1,4 @@
+
 # tasklist.md — env0.core Stable Base
 
 This file tracks tasks moving forward from the clean `stable_login` branch checkpoint. All prior visual and terminal instability has been resolved.
@@ -18,6 +19,7 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 - [x] Known shell commands confirmed operational: `ls`, `cd`, `cat`, `clear`, `help`, `ifconfig`, `ping`, `nmap`
 - [x] terminalFXManager.js integrated
 - [x] glowFX, flickerFX, ghostFX, glitchFX, rowJitterFX, burnFX implemented
+
 ---
 
 ## 🔧 Immediate Tasks (Phase 2b Closure)
@@ -29,7 +31,6 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 
 ✅ Phase 2b Immediate Tasks closed.
 
-
 ---
 
 ## 🧪 Test & Confirm
@@ -38,13 +39,16 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 - [x] Visual changes inert unless explicitly enabled
 - [x] refreshPrompt() fallback logic confirmed stable
 
-
 ---
 
 ## 🧼 Cleanup / Refactor Targets
 - [ ] Remove or quarantine legacy `narrative.js` hooks (keep stub if needed)
 - [ ] Confirm all command output routes through `termPrint()` or `termTypeLine()`
 - [ ] Strip any residual ANSI behavior or cursor jumps left from earlier versions
+- [ ] Remove `@keyframes bootFlash` and `#boot-burst` element from CSS/HTML
+- [ ] Remove CSS-based flicker logic (keyframes, classes, menu toggles)
+- [ ] Sweep project for dynamic `await import()` paths before folder reorg
+- [ ] Move `/fs/`, `/network/`, `/ui/`, `/startup/` into `/core/`
 
 ---
 
@@ -53,13 +57,27 @@ This file tracks tasks moving forward from the clean `stable_login` branch check
 - [ ] Future boot flags: `--safe`, `--verbose` (passed via state injection)
 - [ ] Canvas FX activation triggers (e.g. `ping` burst, `nmap` distortion)
 - [ ] `narrativeManager.js` for system-bound storytelling
+- [ ] Create `themeManager.js` to centralize text/glow/background color logic
+- [ ] Replace hardcoded renderer colors with `themeManager` bindings
+- [ ] Create `visualFXManager.js` to bridge canvas FX and DOM-based FX
+- [ ] Sync room glow (radial gradient) with theme glow color
+- [ ] Convert screen glow to radial CSS gradient using shared theme color
+- [ ] Add `#crtFXOverlay` with feathered-edge mask image for CRT glass containment
+- [ ] Add `#glassFXLayer` (specular glare, lens bloom, scanline warp)
+- [ ] Add `#reflectionsLayer` (room reflection layer above glass)
+- [ ] Toggle reflection visibility when background switches to “lights-off” state
+- [ ] Remove `tintFX.js` permanently from FX manager
+- [ ] External theme triggers (text/glow/background sync) via shell or config
+- [ ] Menu UI should be extracted from terminal iframe and externally positioned
 
 ---
 
 ## 🧩 Phase 3 Prep
 - [ ] EntropyManager hooks to drive FX intensity
 - [ ] Shell triggers for glitch/flicker/burn events
-- [ ] External theme control for tint + CRT overlays
-
+- [ ] Theme-based modulation of glow and glitch thresholds
+- [ ] Plan hallucinated shell drift (entropy-induced syntax corruption)
+- [ ] Reflection + glow dynamics bound to terminal state
+- [ ] Begin prototyping `blackbox.md` features: cursed LLMs, faulty experts, entropy hallucination overlays
 
 > This tasklist is built on top of a known-stable system. The goal is clarity, modularity, and preserving behavioral trust.

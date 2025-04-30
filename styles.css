@@ -3,12 +3,15 @@
    ================================================== */
 
 /* --- Base Layout --- */
+
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
-  background: #000000; /* Default black */
+  width: 1920px;
+  height: 1080px;
+  background: url('./assets/70sterminal.png') center center no-repeat;
+  background-size: cover;
+  position: relative;
   overflow: hidden;
 }
 
@@ -181,3 +184,52 @@ canvas {
   font-weight: bold;
   border-color: #FFFFFF;
 }
+
+#frameWrapper {
+  position: absolute;
+  width: 800px;
+  height: 600px;
+  left: 520px;
+  top: 151px;
+  z-index: 10; /* base layer */
+  transform: translateZ(0);
+  will-change: transform;
+
+}
+#crtFXOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  pointer-events: none;
+  z-index: 9999;
+  isolation: isolate;
+
+
+  outline: 2px solid red; /* 🔧 highlight full mask bounds */
+  background: rgba(255, 0, 0, 0.1); /* optional red tint for edge bleed debug */
+
+  /* Temporarily disable the mask while aligning */
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+
+
+
+
+#crtFXOverlay::before {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('./assets/scanlines.png') repeat;
+  background-size: 100% 6px;
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+
