@@ -28,13 +28,13 @@ export function update(deltaTime) {
   }
 
   // Randomly spawn a few glitches per frame
-  const glitchRate = 2;
+  const glitchRate = 1;
   for (let i = 0; i < glitchRate; i++) {
-    if (Math.random() < 0.01) {
+    if (Math.random() < 0.002) {
       const row = Math.floor(Math.random() * 25);
       const col = Math.floor(Math.random() * 80);
       const char = substitutionPool[Math.floor(Math.random() * substitutionPool.length)];
-      glitchMap.set(key(row, col), { char, ttl: 1000 + Math.random() * 2000 });
+      glitchMap.set(key(row, col), { char, ttl: 400 + Math.random() * 600 });
     }
   }
 }  

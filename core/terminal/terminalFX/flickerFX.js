@@ -11,7 +11,7 @@ export function init(ctx, width, height) {
 
 export function update(deltaTime) {
   // Simple frame-by-frame intensity
-  intensity = 0.92 + Math.random() * 0.08; // flickers between 0.92 and 1.0
+  intensity = 0.97 + Math.random() * 0.03; // flickers between 0.92 and 1.0
 }
 
 export function draw(ctx) {

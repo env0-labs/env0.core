@@ -18,7 +18,7 @@ export function update(deltaTime) {
 }
 
 export function draw(ctx) {
-  const pulse = 0.3 + Math.sin(glowTimer * 0.1) * 0.3;
+  const pulse = 0.1 + Math.sin(glowTimer * 0.1) * 0.05;
   const jitter = (Math.random() - 0.5) * 0.1;
   const glowStrength = Math.max(0, pulse + jitter);
 

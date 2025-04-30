@@ -8,7 +8,7 @@ let width = 0, height = 0;
 const maxRows = 100;
 const maxCols = 120;
 
-const fadeRate = 0.1; // How much intensity fades per frame (tweak later)
+const fadeRate = 0.05; // How much intensity fades per frame (tweak later)
 
 export function init(ctx, w, h) {
   width = w;
@@ -42,7 +42,7 @@ export function draw(ctx) {
     for (let col = 0; col < maxCols; col++) {
       const cell = burnBuffer[row][col];
       if (cell && cell.opacity > 0) {
-        ctx.globalAlpha = cell.opacity * 0.2; // Scale to low glow
+        ctx.globalAlpha = cell.opacity * 0.08; // Scale to low glow
         ctx.fillText(cell.char, col * 10, row * 21); // charWidth/charHeight match
       }
     }
