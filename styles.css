@@ -167,6 +167,10 @@ iframe {
   display: block;
 }
 
+iframe:focus {
+  outline: none;
+}
+
 #glassFXLayer {
   position: absolute;
   top: 0;
