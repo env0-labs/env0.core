@@ -37,12 +37,4 @@ export function drawCanvasFX() {
     return;
   }
 
-  // Simple glitch overlay: jitter horizontal lines slightly
-  ctx.save();
-  ctx.globalAlpha = 0.5;
-  ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-  ctx.restore();
-  
-  }
-
+}

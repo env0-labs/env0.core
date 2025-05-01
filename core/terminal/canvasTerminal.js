@@ -28,10 +28,22 @@ export function createCanvas(container) {
   canvas.style.width = '100%';
   canvas.style.height = '100%';
   canvas.style.display = 'block';
+  canvas.style.backgroundColor = '#000000';
   canvas.setAttribute('tabindex', 0);
+
+  // Attach early so DOM exists even if ctx fails
   container.appendChild(canvas);
 
-  ctx = canvas.getContext('2d');
+  ctx = canvas.getContext('2d', {
+    alpha: false,
+    colorSpace: 'srgb'
+  }) || canvas.getContext('2d', { alpha: false }) || canvas.getContext('2d');
+
+  if (!ctx) {
+    console.error("❌ Failed to create 2D canvas context.");
+    return;
+  }
+
   ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
   ctx.textBaseline = 'top';
 
@@ -44,6 +56,7 @@ export function createCanvas(container) {
     canvas.focus();
   });
 }
+
 
 function measureCharSize() {
   if (config.useFixedCellSize) {
