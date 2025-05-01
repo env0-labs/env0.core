@@ -22,12 +22,7 @@ export async function startBootSequence() {
     return;
   }
 
-  await sleep(1000);
-  triggerBootBurst();
-  await sleep(400);
 
-  console.log('✅ Boot burst complete — starting terminal output');
-  termClear();
 
   const bootLines = [
     '[ OK ] Bootloader initialized',
@@ -95,25 +90,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function triggerBootBurst() {
-  const overlay = document.createElement('div');
-  overlay.id = 'boot-burst';
-  overlay.style.position = 'absolute';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100%';
-  overlay.style.height = '100%';
-  overlay.style.background = 'rgba(255, 255, 255, 0.25)';
-  overlay.style.pointerEvents = 'none';
-  overlay.style.zIndex = '9999';
-  overlay.style.animation = 'bootFlash 0.4s ease-out';
 
-  document.body.appendChild(overlay);
-
-  overlay.addEventListener('animationend', () => {
-    overlay.remove();
-  });
-}
 
 function getLineDelay(line = '') {
   const norm = line.toUpperCase();
