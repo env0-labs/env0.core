@@ -2,6 +2,7 @@
 
 import { config } from './terminalConfig.js';
 import { redraw } from './canvasTerminal.js'; // add this at top
+import { getTerminalCols } from './canvasTerminal.js'; // add this
 
 let blinkInterval = null;
 let cursorX = 0;
@@ -24,6 +25,12 @@ export function moveCursorTo(x, y) {
 
 export function advanceCursor(chars = 1) {
   cursorX += chars;
+  const cols = getTerminalCols(); // safe global reader
+
+  if (cursorX >= cols) {
+    cursorX = 0;
+    cursorY += 1;
+  }
 }
 
 export function newlineCursor() {
