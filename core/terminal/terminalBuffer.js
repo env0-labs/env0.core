@@ -48,3 +48,15 @@ export function overwriteLastLine(newText) {
     buffer.push(newText);
   }
 }
+
+export function setLineAt(index, text) {
+  while (buffer.length <= index) {
+    buffer.push('');
+  }
+  buffer[index] = text;
+}
+
+
+export function pushLine(text = '') {
+  buffer.push(text);
+}

@@ -1,4 +1,6 @@
 // loginManager.js
+// Manages login state and credential validation
+// Prompt rendering now handled by drawLoginPrompt() from terminalOutputManager
 
 import { getTypingDelay } from '../terminalHandler.js';
 import systems from '../network/systems.js';
@@ -8,18 +10,13 @@ import settings from '../settings.js';
 import { initVisualFX } from '../fx/visualFXManager.js';
 import { println } from '../xtermWrapper.js';
 import { getMode, setMode } from '../sessionManager.js';
-import { writeLine } from '../terminal/terminalBuffer.js';
+import { drawLoginPrompt, drawShellPrompt } from '../terminal/terminalOutputManager.js';
+import { pushLine, getVisibleBuffer } from '../terminal/terminalBuffer.js'; // if not already
 
 initVisualFX();
 
-let refreshLineFunc = null;
 
-export function initLogin(refreshLineInstance) {
-  console.warn('[loginManager] initLogin called');
-  console.warn('[loginManager] received refreshLineInstance:', typeof refreshLineInstance);
-  refreshLineFunc = refreshLineInstance;
-}
-
+// 🟡 Called by bootSequence — outputs welcome and forces login mode
 export async function outputIntro(targetIP = null) {
   if (!targetIP) {
     println(`Welcome to SBC_1`);
@@ -30,16 +27,20 @@ export async function outputIntro(targetIP = null) {
   state.pendingUsername = null;
   state.commandBuffer = '';
   state.cursorPosition = 0;
-
   setMode('login');
 
-  if (refreshLineFunc) {
-    refreshLineFunc('username', '', '', '', []); // Force Username prompt
-  } else {
-    console.error('[loginManager] No refreshLineFunc bound.');
-  }
+  // Preallocate login rows and store their indices
+  pushLine(''); // Username line
+  pushLine(''); // Password line
+  state.loginUsernameRow = getVisibleBuffer().length - 2;
+  state.loginPasswordRow = getVisibleBuffer().length - 1;
+
+  drawLoginPrompt();
 }
 
+
+
+// 🔐 Handles both username and password input flows
 export function handleLoginInput() {
   console.warn('[loginManager] handleLoginInput fired');
   console.warn('[loginManager] commandBuffer =', state.commandBuffer);
@@ -48,45 +49,38 @@ export function handleLoginInput() {
   const input = state.commandBuffer.trim();
 
   if (!state.pendingUsername || state.pendingUsername.trim() === '') {
+    // Phase: USERNAME
     if (input === '') {
       println('Login error: username required.');
-      refreshPromptLine('username');
+      drawLoginPrompt();
       return;
     }
-  
-    writeLine(state.commandBuffer);
-    state.pendingUsername = input;
-    state.commandBuffer = '';
+
+    // Accept username, switch to password input
+  state.pendingUsername = input;
+  setTimeout(() => {
+  drawLoginPrompt();
+  }, 0);
+
+    state.commandBuffer = ''; // ← move AFTER drawLoginPrompt
     state.cursorPosition = 0;
-    
-    // 🔥 Defer refresh to next tick
-    setTimeout(() => {
-      refreshPromptLine('password');
-    }, 0);
-    
+
+
     return;
   }
-  
 
-  // 🔐 Handling password input
+  // Phase: PASSWORD
   const enteredPassword = input;
   let target = null;
 
+  // Check pending login target (if SSH or external system)
   if (state.pendingLogin) {
     target = systems.find(sys => sys.ip === state.pendingLogin);
   }
-  console.warn('[loginManager] state.pendingLogin =', state.pendingLogin);
 
+  // Localhost fallback
   if (!target && !state.pendingLogin) {
-    if (DEBUG_MODE) {
-      console.warn(`[loginManager] phase=${state.pendingUsername ? 'password' : 'username'}, buffer="${state.commandBuffer}"`);
-    }
-    
-
     const storedPass = state.machines.localhost?.users?.[state.pendingUsername];
-
-    console.warn('[loginManager] storedPass =', storedPass);
-
     if (storedPass) {
       target = {
         hostname: 'localhost',
@@ -96,10 +90,8 @@ export function handleLoginInput() {
     }
   }
 
-  console.warn('[loginManager] target =', target);
-  console.warn('[loginManager] checking if', enteredPassword, '===', target?.password);
-
   if (target && enteredPassword === target.password) {
+    // ✅ Login Success
     if (!target.username || typeof target.username !== 'string' || target.username.trim() === '') {
       println('Login error: internal state invalid. Try again.');
       resetLoginPrompt();
@@ -130,31 +122,29 @@ export function handleLoginInput() {
       delete fsRoot.contents['undefined'];
     }
 
+    // Transition to shell
     setMode('shell');
     state.pendingUsername = null;
     state.commandBuffer = '';
     state.cursorPosition = 0;
 
-    refreshPromptLine('shell');
-    return;
+    drawShellPrompt();
+
+return;
   }
 
-  // ❌ Password failed
+  // ❌ Login failed
   println('Access Denied.');
   println('Returning to login...');
   resetLoginPrompt();
 }
 
+
+// 🔁 Return to username input after failed login
 function resetLoginPrompt() {
   setMode('login');
   state.pendingUsername = null;
   state.commandBuffer = '';
   state.cursorPosition = 0;
-  refreshPromptLine('username');
-}
-
-function refreshPromptLine(forcedPhase = 'username') {
-  if (refreshLineFunc) {
-    refreshLineFunc(forcedPhase, state.commandBuffer, state.currentUser, state.currentMachine, state.currentPath);
-  }
+  drawLoginPrompt();
 }

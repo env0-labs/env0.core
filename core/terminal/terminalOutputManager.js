@@ -1,45 +1,53 @@
 // terminalOutputManager.js
-// Manages mode-aware prompt and terminal output logic
-// Do not use println/print directly in loginManager or inputManager — route through here
 
-import { println, print } from '../xtermWrapper.js'
-import { getMode } from '../sessionManager.js'
-import state from '../stateManager.js'
-import { getCurrentDir } from '../fs/filesystemManager.js'
+import state from '../stateManager.js';
+import { setCursorPosition, getCursorPosition } from './terminalCursor.js';
+import { setLineAt, getVisibleBuffer } from './terminalBuffer.js';
+import { redraw } from './canvasTerminal.js';
+import { clearLine } from '../xtermWrapper.js';
 
-// Helper: returns shell prompt like `user@host:/path $ `
-function getShellPrompt() {
-  const username = state.username || 'user'
-  const hostname = state.machineName || 'host'
-  const path = getCurrentDir().join('/') || '/'
-  return `${username}@${hostname}:${path} $ `
+// --- Cursor-aware buffer write ---
+export function writeAtCursor(text) {
+  const { y } = getCursorPosition();
+  setLineAt(y, text);
+  redraw();
 }
 
-// PUBLIC: Draw shell prompt after output
-export function drawShellPrompt(buffer = '') {
-  println('') // Always advance to next line
-  print(getShellPrompt())
-  print(buffer)
-}
-
-// PUBLIC: Draw login prompt (username or password)
+// --- Mode-aware login prompt rendering ---
 export function drawLoginPrompt() {
-  println('')
-  if (!state.pendingUsername) {
-    print('Username: ')
-  } else {
-    print('Password: ')
+    const isUsernamePhase = !state.pendingUsername;
+    const promptText = isUsernamePhase ? 'Username: ' : 'Password: ';
+    const inputText = isUsernamePhase
+      ? state.commandBuffer
+      : '*'.repeat(state.commandBuffer.length);
+  
+    const row = isUsernamePhase
+      ? state.loginUsernameRow
+      : state.loginPasswordRow;
+  
+    clearLine(row);
+    setCursorPosition(0, row);
+    writeAtCursor(promptText + inputText);
+    setCursorPosition(promptText.length + inputText.length, row);
   }
-}
+  
+  
+  
+  
 
-// Optional: centralized output if mode-dependent
-export function drawPrompt(buffer = '') {
-  const mode = getMode()
-  if (mode === 'shell') {
-    drawShellPrompt(buffer)
-  } else if (mode === 'login') {
-    drawLoginPrompt()
-  } else {
-    println('') // Safe default
+// --- Shell prompt rendering stub (if needed later) ---
+export function drawShellPrompt(commandBuffer = '') {
+    const prompt = `${state.currentUser}@${state.currentMachine}:${state.currentPath} $ `;
+  
+    // 🔹 Push empty line into buffer first
+    const buffer = getVisibleBuffer();
+    const row = buffer.length;
+    buffer.push('');
+  
+    const fullLine = prompt + commandBuffer;
+    setCursorPosition(0, row);
+    writeAtCursor(fullLine);
+    setCursorPosition(fullLine.length, row);
+    state.cursorPosition = fullLine.length;
   }
-}
+  

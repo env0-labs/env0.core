@@ -3,7 +3,7 @@
 import { config } from './terminalConfig.js';
 import { getVisibleBuffer, getViewportStartRow } from './terminalBuffer.js';
 import { drawCursor } from './terminalCursor.js';
-import { canvas, getTerminalRows } from './canvasTerminal.js';
+import { getTerminalRows } from './canvasTerminal.js';
 import { updateCanvasFX, drawCanvasFX } from '../../core/fx/canvasFXManager.js';
 import state from '../stateManager.js';
 import * as glitchFX from './terminalFX/glitchFX.js';
@@ -32,14 +32,15 @@ export function drawFromBuffer() {
   const base = 0.6 + Math.sin(glowTimer * 0.1) * 0.3;
   const jitter = (Math.random() - 0.5) * 0.25;
   const glowStrength = Math.max(0, base + jitter);
-  
+
+  // Fill background — NOTE: canvas wipe already happens in canvasTerminal.redraw()
   ctx.fillStyle = config.bgColor;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   for (let screenRow = 0; screenRow < maxRows; screenRow++) {
     const bufferRow = lines[viewportStart + screenRow];
     if (bufferRow !== undefined) {
-      const line = (typeof bufferRow === 'string') ? bufferRow : '[INVALID]';
+      const line = typeof bufferRow === 'string' ? bufferRow : '[INVALID]';
       const shouldRender = line && line.trim().length > 0;
       const paddedLine = shouldRender ? line + ' ' : ' ';
       let renderLine = '';
@@ -48,12 +49,9 @@ export function drawFromBuffer() {
         const originalChar = paddedLine[col];
         const glitchedChar = glitchFX.getGlitchedChar(screenRow, col, originalChar);
         renderLine += glitchedChar;
-
         burnFX.recordChar(screenRow, col, glitchedChar);
-
       }
 
-      // Get horizontal jitter offset for this row
       const xOffset = rowJitterFX.getRowOffset ? rowJitterFX.getRowOffset(screenRow) : 0;
 
       if (shouldRender) {
@@ -63,7 +61,7 @@ export function drawFromBuffer() {
         ctx.shadowBlur = 8;
         ctx.globalAlpha = glowStrength;
         ctx.fillStyle = config.fgColor;
-        ctx.fillText(renderLine, 0.9 + xOffset, screenRow * charHeight); // slight manual offset + jitter
+        ctx.fillText(renderLine, 0.9 + xOffset, screenRow * charHeight);
         ctx.restore();
       }
 
@@ -74,7 +72,6 @@ export function drawFromBuffer() {
     }
   }
 
-
   drawCursor();
 
   if (state.settings?.enableVisualFX) {
@@ -83,4 +80,3 @@ export function drawFromBuffer() {
     drawCanvasFX();
   }
 }
-

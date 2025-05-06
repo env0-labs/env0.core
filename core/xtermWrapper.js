@@ -6,7 +6,9 @@ import {
   scrollToBottom,
   focusTerminal,
   redraw
-} from './terminal/env0.terminal.js'; // adjusted to real location
+} from './terminal/env0.terminal.js';
+
+import { clearCurrentLine as rendererClearLine } from './terminal/canvasTerminal.js';
 
 export {
   initTerminal,
@@ -21,4 +23,8 @@ export function println(text = '') {
   writeLine(text);
   scrollToBottom();
   redraw();
+}
+
+export function clearLine(row = null) {
+  rendererClearLine(row);
 }

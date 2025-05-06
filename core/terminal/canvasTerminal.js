@@ -2,17 +2,12 @@
 
 import { config } from './terminalConfig.js';
 import { setContext, drawFromBuffer } from './terminalRenderer.js';
-import { setCursorContext, startBlink } from './terminalCursor.js';
-import {
-  initTerminalFX,
-  updateTerminalFX,
-  drawTerminalFX
-} from './terminalFX/terminalFXManager.js';
+import { setCursorContext, startBlink, getCursorPosition } from './terminalCursor.js';
+import { initTerminalFX, updateTerminalFX, drawTerminalFX } from './terminalFX/terminalFXManager.js';
 
 export let canvas, ctx;
 let cols = 80, rows = 25;
 let charWidth = 0, charHeight = 0;
-
 let animating = false;
 
 export function getTerminalCols() {
@@ -31,13 +26,12 @@ export function createCanvas(container) {
   canvas.style.backgroundColor = '#000000';
   canvas.setAttribute('tabindex', 0);
 
-  // Attach early so DOM exists even if ctx fails
   container.appendChild(canvas);
 
   ctx = canvas.getContext('2d', {
     alpha: false,
     colorSpace: 'srgb'
-  }) || canvas.getContext('2d', { alpha: false }) || canvas.getContext('2d');
+  }) || canvas.getContext('2d');
 
   if (!ctx) {
     console.error("❌ Failed to create 2D canvas context.");
@@ -52,11 +46,8 @@ export function createCanvas(container) {
   });
 
   window.addEventListener('resize', resizeCanvas);
-  canvas.addEventListener('click', () => {
-    canvas.focus();
-  });
+  canvas.addEventListener('click', () => canvas.focus());
 }
-
 
 function measureCharSize() {
   if (config.useFixedCellSize) {
@@ -70,8 +61,7 @@ function measureCharSize() {
 
   cols = Math.floor(canvas.clientWidth / charWidth);
   rows = Math.floor(canvas.clientHeight / charHeight);
-
-  }
+}
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -93,21 +83,32 @@ function resizeCanvas() {
 }
 
 export function redraw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // 💥 clear buffer
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawFromBuffer();
   drawTerminalFX(ctx);
 }
-
 
 export function startRenderLoop() {
   if (animating) return;
   animating = true;
   function frame() {
-    const deltaTime = 16; // Placeholder, replace with real delta later
+    const deltaTime = 16;
     drawFromBuffer();
     updateTerminalFX(deltaTime);
     drawTerminalFX(ctx);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+}
+
+// --- External API for terminal control ---
+export function clearCurrentLine(targetRow = null) {
+  const { y } = getCursorPosition();
+  const row = targetRow !== null ? targetRow : y;
+  const pixelY = row * config.charHeight;
+
+  console.warn('[clearLine] Clearing row:', row, '→ pixelY:', pixelY);
+  console.warn('[clearLine] Canvas height:', canvas.height);
+
+  ctx.clearRect(0, pixelY, canvas.width, config.charHeight);
 }

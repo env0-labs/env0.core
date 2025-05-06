@@ -1,17 +1,16 @@
-// bootSequence.js
-
 import settings from '../settings.js';
 import { termClear, termPrint } from '../outputManager.js';
-import { initLogin, outputIntro } from './loginManager.js';
+import { outputIntro } from './loginManager.js';
 import { setMode } from '../sessionManager.js';
-import { refreshLine } from '../terminalHandler.js';
+
+
 
 export async function startBootSequence() {
   console.log('🔥 Boot sequence started');
-  console.log('🧪 initLogin about to run');
 
-  console.log('✅ initLogin complete');
+  localStorage.setItem('skipIntro', 'true');
 
+  
   if (settings.skipIntro) {
     termClear();
     termPrint('[Boot Skipped]');
@@ -21,8 +20,6 @@ export async function startBootSequence() {
     setMode('login');
     return;
   }
-
-
 
   const bootLines = [
     '[ OK ] Bootloader initialized',
@@ -47,7 +44,7 @@ export async function startBootSequence() {
     '[FAIL] Load microcode update — unsupported hardware',
     '[ OK ] Starting SSH service',
     '[ OK ] Starting TELNET service',
-    '[ SKIP ] Bluetooth stack — not present',
+    '[SKIP] Bluetooth stack — not present',
     '[ OK ] Checking disk integrity (/dev/mmcblk0)',
     '[ OK ] tmpfs mounted on /run',
     '[ OK ] Mounting /mnt/usb — no media present',
@@ -89,8 +86,6 @@ export async function startBootSequence() {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-
 
 function getLineDelay(line = '') {
   const norm = line.toUpperCase();
