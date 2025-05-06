@@ -1,5 +1,9 @@
 // terminalBuffer.js
 
+import { newlineCursor } from './terminalCursor.js';
+import { redraw } from './canvasTerminal.js';
+
+
 const buffer = [];
 let viewportStartRow = 0;
 const maxLines = 1000;
@@ -56,7 +60,8 @@ export function setLineAt(index, text) {
   buffer[index] = text;
 }
 
-
 export function pushLine(text = '') {
   buffer.push(text);
+  newlineCursor();   // moves cursorY down 1, resets X
+  redraw();          // triggers full redraw of canvas
 }

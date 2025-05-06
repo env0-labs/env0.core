@@ -2,7 +2,7 @@
 
 import state from '../stateManager.js';
 import { setCursorPosition, getCursorPosition } from './terminalCursor.js';
-import { setLineAt, getVisibleBuffer } from './terminalBuffer.js';
+import { setLineAt, getVisibleBuffer, pushLine } from './terminalBuffer.js';
 import { redraw } from './canvasTerminal.js';
 import { clearLine } from '../xtermWrapper.js';
 
@@ -37,17 +37,21 @@ export function drawLoginPrompt() {
 
 // --- Shell prompt rendering stub (if needed later) ---
 export function drawShellPrompt(commandBuffer = '') {
-    const prompt = `${state.currentUser}@${state.currentMachine}:${state.currentPath} $ `;
-  
-    // 🔹 Push empty line into buffer first
+    const path = '/' + state.currentPath.join('/');
+    const prompt = `${state.currentUser}@${state.currentMachine}:${path} $ `;
     const buffer = getVisibleBuffer();
-    const row = buffer.length;
-    buffer.push('');
+    const row = buffer.length - 1;
+  
+    if (row < 0) {
+      pushLine(''); // Ensure at least one line exists
+    }
   
     const fullLine = prompt + commandBuffer;
-    setCursorPosition(0, row);
-    writeAtCursor(fullLine);
-    setCursorPosition(fullLine.length, row);
-    state.cursorPosition = fullLine.length;
+  
+    setLineAt(row, fullLine);                     
+    setCursorPosition(prompt.length + commandBuffer.length, row); 
+  
+    redraw();
   }
+  
   

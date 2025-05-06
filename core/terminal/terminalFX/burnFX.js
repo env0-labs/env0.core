@@ -3,6 +3,9 @@
 // Simulates phosphor burn-in: old characters slowly fade over time
 // after being replaced or erased. Decoupled from main terminal buffer.
 
+import { config } from '../terminalConfig.js';
+
+
 let burnBuffer = [];
 let width = 0, height = 0;
 const maxRows = 100;
@@ -34,16 +37,20 @@ export function update(deltaTime) {
 
 export function draw(ctx) {
   ctx.save();
-  ctx.font = `bold 16px monospace`; // match terminal font settings
+  ctx.font = `bold ${config.charHeight}px ${config.fontFamily}`;
   ctx.textBaseline = 'top';
-  ctx.fillStyle = '#00FF00'; // CRT green for burn, could be param
+  ctx.fillStyle = '#00FF00'; // Optional: could use config.fgColor
 
   for (let row = 0; row < maxRows; row++) {
     for (let col = 0; col < maxCols; col++) {
       const cell = burnBuffer[row][col];
       if (cell && cell.opacity > 0) {
-        ctx.globalAlpha = cell.opacity * 0.08; // Scale to low glow
-        ctx.fillText(cell.char, col * 10, row * 21); // charWidth/charHeight match
+        ctx.globalAlpha = cell.opacity * 0.08;
+        ctx.fillText(
+          cell.char,
+          col * config.charWidth,
+          row * config.charHeight
+        );
       }
     }
   }

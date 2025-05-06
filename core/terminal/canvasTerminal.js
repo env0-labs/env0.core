@@ -7,7 +7,6 @@ import { initTerminalFX, updateTerminalFX, drawTerminalFX } from './terminalFX/t
 
 export let canvas, ctx;
 let cols = 80, rows = 25;
-let charWidth = 0, charHeight = 0;
 let animating = false;
 
 export function getTerminalCols() {
@@ -34,12 +33,20 @@ export function createCanvas(container) {
   }) || canvas.getContext('2d');
 
   if (!ctx) {
-    console.error("❌ Failed to create 2D canvas context.");
+    console.error('❌ Failed to create 2D canvas context.');
     return;
   }
 
   ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
   ctx.textBaseline = 'top';
+
+  // ⬇️ Replaced single-char measure with averaged width of 10 'M's
+  const sample = 'MMMMMMMMMM'; // 10 glyphs
+  const measuredWidth = ctx.measureText(sample).width;
+  config.charWidth = Math.ceil(measuredWidth / 10);
+
+  config.charHeight = config.fontSize;
+  console.log('[Canvas Init] charWidth:', config.charWidth, 'charHeight:', config.charHeight);
 
   requestAnimationFrame(() => {
     resizeCanvas();
@@ -49,38 +56,34 @@ export function createCanvas(container) {
   canvas.addEventListener('click', () => canvas.focus());
 }
 
-function measureCharSize() {
-  if (config.useFixedCellSize) {
-    charWidth = config.charWidth;
-    charHeight = config.charHeight;
-  } else {
-    const metrics = ctx.measureText('M');
-    charWidth = Math.ceil(metrics.width);
-    charHeight = Math.ceil(config.fontSize * 1.5);
-  }
-
-  cols = Math.floor(canvas.clientWidth / charWidth);
-  rows = Math.floor(canvas.clientHeight / charHeight);
-}
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
   canvas.width = canvas.clientWidth * dpr;
   canvas.height = canvas.clientHeight * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
   ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
   ctx.textBaseline = 'top';
   ctx.textAlign = 'left';
 
-  measureCharSize();
-  setContext(ctx, charWidth, charHeight);
-  setCursorContext(ctx, charWidth, charHeight);
+  // Remeasure charWidth using multi-glyph sample
+  const sample = 'MMMMMMMMMM';
+  const measuredWidth = ctx.measureText(sample).width;
+  config.charWidth = Math.ceil(measuredWidth / 10);
+
+  cols = Math.floor(canvas.clientWidth / config.charWidth);
+  rows = Math.floor(canvas.clientHeight / config.charHeight);
+
+  setContext(ctx, config.charWidth, config.charHeight);
+  setCursorContext(ctx);
   initTerminalFX(ctx, canvas.width, canvas.height);
 
   redraw();
   startBlink();
   startRenderLoop();
 }
+
 
 export function redraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -91,6 +94,7 @@ export function redraw() {
 export function startRenderLoop() {
   if (animating) return;
   animating = true;
+
   function frame() {
     const deltaTime = 16;
     drawFromBuffer();
@@ -98,17 +102,14 @@ export function startRenderLoop() {
     drawTerminalFX(ctx);
     requestAnimationFrame(frame);
   }
+
   requestAnimationFrame(frame);
 }
 
-// --- External API for terminal control ---
 export function clearCurrentLine(targetRow = null) {
   const { y } = getCursorPosition();
   const row = targetRow !== null ? targetRow : y;
   const pixelY = row * config.charHeight;
-
-  console.warn('[clearLine] Clearing row:', row, '→ pixelY:', pixelY);
-  console.warn('[clearLine] Canvas height:', canvas.height);
 
   ctx.clearRect(0, pixelY, canvas.width, config.charHeight);
 }

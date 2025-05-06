@@ -1,21 +1,15 @@
 // terminalCursor.js
-
 import { config } from './terminalConfig.js';
-import { redraw } from './canvasTerminal.js'; // add this at top
-import { getTerminalCols } from './canvasTerminal.js'; // add this
+import { redraw } from './canvasTerminal.js';
 
-let blinkInterval = null;
+let ctx = null;
 let cursorX = 0;
 let cursorY = 0;
-let charWidth = 0;
-let charHeight = 0;
-let ctx = null;
 let visible = true;
+let blinkTimer = null;
 
-export function setCursorContext(context, cw, ch) {
+export function setCursorContext(context) {
   ctx = context;
-  charWidth = cw;
-  charHeight = ch;
 }
 
 export function moveCursorTo(x, y) {
@@ -25,8 +19,7 @@ export function moveCursorTo(x, y) {
 
 export function advanceCursor(chars = 1) {
   cursorX += chars;
-  const cols = getTerminalCols(); // safe global reader
-
+  const cols = Math.floor(ctx.canvas.width / config.charWidth);
   if (cursorX >= cols) {
     cursorX = 0;
     cursorY += 1;
@@ -39,19 +32,29 @@ export function newlineCursor() {
 }
 
 export function resetCursor() {
-    cursorX = 0;
-    cursorY = 0;
-  }
+  cursorX = 0;
+  cursorY = 0;
+}
+
+export function getCursorPosition() {
+  return { x: cursorX, y: cursorY };
+}
+
+export function setCursorPosition(x, y) {
+  cursorX = x;
+  cursorY = y;
+}
 
 export function drawCursor() {
   if (!ctx || !visible) return;
 
-  const x = cursorX * charWidth + config.cursorOffsetX;
-  const y = cursorY * charHeight + config.cursorOffsetY;
-  
+  const px = Math.round(cursorX * config.charWidth);
+  const py = Math.round(cursorY * config.charHeight);
 
   ctx.fillStyle = config.fgColor;
-  ctx.fillRect(x, y, charWidth, charHeight);
+  ctx.fillRect(px, py, config.charWidth, config.charHeight);
+
+  console.log(`[drawCursor] cursor at grid (${cursorX}, ${cursorY}) → px: ${px}, py: ${py}`);
 }
 
 export function showCursor() {
@@ -60,19 +63,10 @@ export function showCursor() {
 }
 
 export function startBlink(rate = 500) {
-    if (blinkInterval) clearInterval(blinkInterval);
-  
-    blinkInterval = setInterval(() => {
-      visible = !visible;
-      redraw(); // redraw clears canvas, redraws text + cursor
-    }, rate);
-  }
-  export function getCursorPosition() {
-    return { x: cursorX, y: cursorY };
-  }
-  
-  export function setCursorPosition(x, y) {
-    cursorX = x;
-    cursorY = y;
-  }
-  
+  if (blinkTimer) clearInterval(blinkTimer);
+
+  blinkTimer = setInterval(() => {
+    visible = !visible;
+    redraw(); // will call drawCursor internally
+  }, rate);
+}

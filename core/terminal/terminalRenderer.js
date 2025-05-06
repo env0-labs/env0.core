@@ -1,24 +1,56 @@
 // terminalRenderer.js
-
-import { config } from './terminalConfig.js';
 import { getVisibleBuffer, getViewportStartRow } from './terminalBuffer.js';
-import { drawCursor } from './terminalCursor.js';
+import { config } from './terminalConfig.js';
 import { getTerminalRows } from './canvasTerminal.js';
-import { updateCanvasFX, drawCanvasFX } from '../../core/fx/canvasFXManager.js';
 import state from '../stateManager.js';
+import { drawCursor } from './terminalCursor.js';
 import * as glitchFX from './terminalFX/glitchFX.js';
-import * as rowJitterFX from './terminalFX/rowJitterFX.js';
 import * as burnFX from './terminalFX/burnFX.js';
+import * as rowJitterFX from './terminalFX/rowJitterFX.js';
+import { initTerminalFX, updateTerminalFX, drawTerminalFX } from './terminalFX/terminalFXManager.js';
 
-let ctx, charWidth, charHeight;
-let glowTimer = 0;
+let ctx = null;
+let charWidth = config.charWidth;
+let charHeight = config.charHeight;
 
-export function setContext(newCtx, width, height) {
-  ctx = newCtx;
-  ctx.font = `bold ${config.fontSize}px ${config.fontFamily}`;
-  ctx.textBaseline = 'top';
+// Offscreen glow layer
+let glowCanvas = document.createElement('canvas');
+let glowCtx = glowCanvas.getContext('2d');
+
+export function setContext(context, width, height) {
+  ctx = context;
   charWidth = width;
   charHeight = height;
+
+  // Resize glow canvas
+  glowCanvas.width = ctx.canvas.width;
+  glowCanvas.height = ctx.canvas.height;
+
+  glowCtx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
+  glowCtx.textBaseline = 'top';
+  glowCtx.textAlign = 'left';
+}
+
+// --- Optional glow layer function ---
+function drawGlowLayer(lines, viewportStart) {
+  glowCtx.clearRect(0, 0, glowCanvas.width, glowCanvas.height);
+  glowCtx.shadowBlur = 6;
+  glowCtx.shadowColor = '#0F0'; // CRT green
+  glowCtx.fillStyle = 'rgba(0,0,0,0)'; // transparent glyph fill
+
+  for (let screenRow = 0; screenRow < getTerminalRows(); screenRow++) {
+    const bufferRow = lines[viewportStart + screenRow];
+    if (typeof bufferRow !== 'string' || !bufferRow.length) continue;
+
+    const baseY = screenRow * charHeight;
+
+    for (let col = 0; col < bufferRow.length; col++) {
+      const char = bufferRow[col];
+      const px = col * charWidth;
+      const py = baseY;
+      glowCtx.fillText(char, px, py);
+    }
+  }
 }
 
 export function drawFromBuffer() {
@@ -28,47 +60,33 @@ export function drawFromBuffer() {
   const viewportStart = getViewportStartRow();
   const maxRows = getTerminalRows();
 
-  glowTimer += 0.016;
-  const base = 0.6 + Math.sin(glowTimer * 0.1) * 0.3;
-  const jitter = (Math.random() - 0.5) * 0.25;
-  const glowStrength = Math.max(0, base + jitter);
-
-  // Fill background — NOTE: canvas wipe already happens in canvasTerminal.redraw()
   ctx.fillStyle = config.bgColor;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+  if (state.settings?.enableGlow) {
+    drawGlowLayer(lines, viewportStart);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.drawImage(glowCanvas, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
   for (let screenRow = 0; screenRow < maxRows; screenRow++) {
     const bufferRow = lines[viewportStart + screenRow];
-    if (bufferRow !== undefined) {
-      const line = typeof bufferRow === 'string' ? bufferRow : '[INVALID]';
-      const shouldRender = line && line.trim().length > 0;
-      const paddedLine = shouldRender ? line + ' ' : ' ';
-      let renderLine = '';
+    if (typeof bufferRow !== 'string') continue;
 
-      for (let col = 0; col < paddedLine.length; col++) {
-        const originalChar = paddedLine[col];
-        const glitchedChar = glitchFX.getGlitchedChar(screenRow, col, originalChar);
-        renderLine += glitchedChar;
-        burnFX.recordChar(screenRow, col, glitchedChar);
-      }
+    const baseY = screenRow * charHeight;
 
-      const xOffset = rowJitterFX.getRowOffset ? rowJitterFX.getRowOffset(screenRow) : 0;
+    for (let col = 0; col < bufferRow.length; col++) {
+      const originalChar = bufferRow[col];
+      const glitchedChar = glitchFX.getGlitchedChar(screenRow, col, originalChar);
+      burnFX.recordChar(screenRow, col, glitchedChar);
 
-      if (shouldRender) {
-        // Glow pass
-        ctx.save();
-        ctx.shadowColor = 'rgb(255, 255, 255)';
-        ctx.shadowBlur = 8;
-        ctx.globalAlpha = glowStrength;
-        ctx.fillStyle = config.fgColor;
-        ctx.fillText(renderLine, 0.9 + xOffset, screenRow * charHeight);
-        ctx.restore();
-      }
+      const px = col * charWidth;
+      const py = baseY;
 
-      // Solid text pass
-      ctx.globalAlpha = 0.5;
       ctx.fillStyle = config.fgColor;
-      ctx.fillText(renderLine, 0 + xOffset, screenRow * charHeight);
+      ctx.shadowBlur = 0;
+      ctx.fillText(glitchedChar, px, py);
     }
   }
 
@@ -76,7 +94,7 @@ export function drawFromBuffer() {
 
   if (state.settings?.enableVisualFX) {
     const deltaTime = 16;
-    updateCanvasFX(deltaTime);
-    drawCanvasFX();
+    updateTerminalFX(deltaTime);
+    drawTerminalFX(ctx);
   }
 }
