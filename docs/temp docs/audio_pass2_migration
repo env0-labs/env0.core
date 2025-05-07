@@ -1,0 +1,120 @@
+# AUDIT2.md
+
+This file defines structured audit scenarios for evaluating the `env0.core` codebase.  
+All audits are **read-only**: no rewriting, refactoring, or speculative improvement is to be performed.  
+
+Each scenario assumes a specific role or task context. Output should be a structured report listing file paths, line references (if available), and clear issue descriptions. Confidence levels are encouraged (e.g., "low / medium / high").
+
+---
+
+## SCENARIO 1: Terminal Renderer Integrity Check
+
+**Goal**:  
+Verify that terminal rendering logic is predictable and correctly isolated across modules.
+
+**Focus Files**:
+- `/core/terminal/terminalRenderer.js`
+- `/core/terminal/terminalBuffer.js`
+- `/core/terminal/terminalCursor.js`
+
+**Exclude**:
+- All visual FX (handled in another scenario)
+
+**Questions**:
+- Does the render system avoid hidden state leaks between redraws?
+- Are responsibilities between render, buffer, and cursor clearly separated?
+- Are there remnants of older hacks (e.g. `wrapFix`, `forceCursorSync`) that suggest architectural decay?
+
+**Output Format**:
+- File + line (if possible)
+- Issue category (`logic`, `coupling`, `performance`, etc.)
+- Short description of the concern
+- Confidence rating
+
+---
+
+## SCENARIO 2: Boot Sequence Review
+
+**Goal**:  
+Assess clarity, modularity, and safety of system boot logic.
+
+**Focus Files**:
+- `/core/init.js`
+- `/core/boot.js`
+- Any other top-level entry handlers
+
+**Exclude**:
+- Terminal internals, FX layers
+
+**Questions**:
+- Is startup predictable across environments?
+- Is control passed cleanly between subsystems (state, renderer, commands)?
+- Can external projects override or extend boot behavior safely?
+
+---
+
+## SCENARIO 3: FX Isolation Audit
+
+**Goal**:  
+Confirm that visual FX systems do not interfere with terminal logic state.
+
+**Focus Files**:
+- `/core/terminal/terminalFX/`
+- `/core/terminal/terminalFXManager.js`
+- `/core/terminal/xtermWrapper.js` (if involved in FX rendering)
+
+**Questions**:
+- Are FX applied as post-process layers, or do they risk altering buffer/cursor state?
+- Are FX modular and clearly scoped?
+- Are animation/loop systems cleanly encapsulated?
+
+---
+
+## SCENARIO 4: Refactor Residue Scan
+
+**Goal**:  
+Identify legacy code, dead branches, or brittle patches leftover from previous rewrites.
+
+**Focus**:
+- All `/core/` and `/cmds/` files
+
+**Signals to Look For**:
+- Unused functions or stubbed handlers
+- Obsolete comments referencing removed systems
+- Incoherent logic paths (e.g., conditional paths that no longer make sense)
+
+---
+
+## SCENARIO 5: Input System Consistency Check
+
+**Goal**:  
+Evaluate the consistency and robustness of user input handling.
+
+**Focus Files**:
+- `/core/terminal/terminalInput.js` (if present)
+- Any input hooks in the renderer or command system
+
+**Questions**:
+- Are edge cases (backspace at prompt start, newline overflow, etc.) handled cleanly?
+- Are input and prompt rendering clearly decoupled?
+- Does the system maintain a coherent state during rapid or malformed input?
+
+---
+
+## Reporting Template
+
+For each issue, output in the following format:
+
+```text
+[FILE]: [LINE]  
+[CATEGORY]: logic / cohesion / fragility / performance / naming / unknown  
+[DESCRIPTION]:  
+Short summary of the issue and suspected cause  
+[CONFIDENCE]: low / medium / high  
+Notes
+If an issue spans multiple files, note both and label it as cross-module.
+
+Do not attempt to fix or restructure anything as part of this audit.
+
+Flag any module as needing a standalone audit if it proves too complex for current scenarios.
+

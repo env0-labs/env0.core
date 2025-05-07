@@ -1,0 +1,80 @@
+# AUDIT_PASS_1.md
+
+## Structural Comprehension Audit (No Context Given)
+
+This audit simulates a new developer or external system being handed the codebase with **no documentation, no background, and no live guidance**.
+
+The task is to answer, using only the code:
+
+---
+
+### 1. What is this?
+
+Describe what the project appears to be.  
+- What kind of system is it?  
+- What is it structured to simulate or produce?  
+- What is the domain or problem space (as inferred from code only)?
+
+---
+
+### 2. What is it supposed to do?
+
+List what major systems, behaviors, or outputs the code *seems* to be trying to produce.  
+For each, note:
+- What evidence supports this assumption?
+- Which files are responsible for delivering it?
+
+---
+
+### 3. Does it do what it's supposed to do?
+
+For each behavior guessed above:
+- Is the logic coherent?
+- Are components clearly separated?
+- Are there signs of instability (e.g., awkward hacks, inconsistent data flow, duplication)?
+- Are names, comments, or structure misleading?
+
+Use confidence ratings for each judgment.
+
+---
+
+### 4. What does not belong?
+
+List any modules, files, or functions that appear:
+- Out of scope
+- Deprecated or unused
+- Architecturally misplaced
+
+---
+
+### 5. Where is it fragile?
+
+Identify areas that look brittle, overcomplicated, or liable to break on modification.  
+Include:
+- Complex conditionals
+- State leakage
+- Circular dependencies
+- Hand-tuned visual logic
+
+---
+
+### 6. What questions would you ask the original author?
+
+List any questions needed to fully understand or safely modify the system.  
+These can highlight:
+- Implicit design rules
+- Missing abstractions
+- Areas where intent is unclear
+
+---
+
+### Notes for the Auditor
+
+- Do not attempt to fix or restructure. This is a comprehension and assessment pass only.
+- Document your reasoning and uncertainties. Partial guesses are valid.
+- Assume this is a production-adjacent system; focus on *intent and clarity*, not stylistic preferences.
+
+
+
+RESPONSE
+
