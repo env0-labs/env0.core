@@ -1,4 +1,5 @@
 // terminalRenderer.js
+
 import { getVisibleBuffer, getViewportStartRow } from './terminalBuffer.js';
 import { config } from './terminalConfig.js';
 import { getTerminalRows } from './canvasTerminal.js';
@@ -13,7 +14,6 @@ let ctx = null;
 let charWidth = config.charWidth;
 let charHeight = config.charHeight;
 
-// Offscreen glow layer
 let glowCanvas = document.createElement('canvas');
 let glowCtx = glowCanvas.getContext('2d');
 
@@ -22,25 +22,32 @@ export function setContext(context, width, height) {
   charWidth = width;
   charHeight = height;
 
-  // Resize glow canvas
+  glowCanvas = document.createElement('canvas');
   glowCanvas.width = ctx.canvas.width;
   glowCanvas.height = ctx.canvas.height;
+  glowCtx = glowCanvas.getContext('2d', { alpha: true });
 
   glowCtx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
   glowCtx.textBaseline = 'top';
   glowCtx.textAlign = 'left';
 }
 
-// --- Optional glow layer function ---
 function drawGlowLayer(lines, viewportStart) {
   glowCtx.clearRect(0, 0, glowCanvas.width, glowCanvas.height);
-  glowCtx.shadowBlur = 6;
-  glowCtx.shadowColor = '#0F0'; // CRT green
-  glowCtx.fillStyle = 'rgba(0,0,0,0)'; // transparent glyph fill
 
-  for (let screenRow = 0; screenRow < getTerminalRows(); screenRow++) {
+  glowCtx.shadowBlur = 4;
+  glowCtx.shadowColor = '#00FF66';
+  glowCtx.fillStyle = 'rgba(255,255,255,0.8)';
+  glowCtx.globalAlpha = 1.0;
+  glowCtx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
+  glowCtx.textBaseline = 'top';
+  glowCtx.textAlign = 'left';
+
+  const maxRows = getTerminalRows();
+
+  for (let screenRow = 0; screenRow < maxRows; screenRow++) {
     const bufferRow = lines[viewportStart + screenRow];
-    if (typeof bufferRow !== 'string' || !bufferRow.length) continue;
+    if (typeof bufferRow !== 'string') continue;
 
     const baseY = screenRow * charHeight;
 
@@ -48,10 +55,16 @@ function drawGlowLayer(lines, viewportStart) {
       const char = bufferRow[col];
       const px = col * charWidth;
       const py = baseY;
-      glowCtx.fillText(char, px, py);
+
+      // Skip drawing space for glow pass — no visual benefit
+      if (char !== ' ') {
+        glowCtx.fillText(char, px, py);
+      }
     }
   }
 }
+
+
 
 export function drawFromBuffer() {
   if (!ctx) return;
@@ -63,12 +76,11 @@ export function drawFromBuffer() {
   ctx.fillStyle = config.bgColor;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  if (state.settings?.enableGlow) {
-    drawGlowLayer(lines, viewportStart);
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.drawImage(glowCanvas, 0, 0);
-    ctx.globalCompositeOperation = 'source-over';
-  }
+  drawGlowLayer(lines, viewportStart);
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.drawImage(glowCanvas, 0, 0);
+  ctx.globalCompositeOperation = 'source-over';
+  
 
   for (let screenRow = 0; screenRow < maxRows; screenRow++) {
     const bufferRow = lines[viewportStart + screenRow];
@@ -84,17 +96,12 @@ export function drawFromBuffer() {
       const px = col * charWidth;
       const py = baseY;
 
-      ctx.fillStyle = config.fgColor;
+      ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
+      ctx.fillStyle = config.fgColor || 'rgb(220,255,220)';
       ctx.shadowBlur = 0;
       ctx.fillText(glitchedChar, px, py);
     }
   }
 
   drawCursor();
-
-  if (state.settings?.enableVisualFX) {
-    const deltaTime = 16;
-    updateTerminalFX(deltaTime);
-    drawTerminalFX(ctx);
-  }
 }

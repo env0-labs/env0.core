@@ -37,17 +37,6 @@ export function createCanvas(container) {
     return;
   }
 
-  ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
-  ctx.textBaseline = 'top';
-
-  // ⬇️ Replaced single-char measure with averaged width of 10 'M's
-  const sample = 'MMMMMMMMMM'; // 10 glyphs
-  const measuredWidth = ctx.measureText(sample).width;
-  config.charWidth = Math.ceil(measuredWidth / 10);
-
-  config.charHeight = config.fontSize;
-  console.log('[Canvas Init] charWidth:', config.charWidth, 'charHeight:', config.charHeight);
-
   requestAnimationFrame(() => {
     resizeCanvas();
   });
@@ -56,6 +45,18 @@ export function createCanvas(container) {
   canvas.addEventListener('click', () => canvas.focus());
 }
 
+function applyFontSettings() {
+  const font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
+  ctx.font = font;
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+
+  const metrics = ctx.measureText('M');
+  config.charWidth = Math.ceil(metrics.width);
+  config.charHeight = config.fontSize;
+
+  console.log('[Canvas Init] charWidth:', config.charWidth, 'charHeight:', config.charHeight);
+}
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -63,14 +64,8 @@ function resizeCanvas() {
   canvas.height = canvas.clientHeight * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
-  ctx.textBaseline = 'top';
-  ctx.textAlign = 'left';
-
-  // Remeasure charWidth using multi-glyph sample
-  const sample = 'MMMMMMMMMM';
-  const measuredWidth = ctx.measureText(sample).width;
-  config.charWidth = Math.ceil(measuredWidth / 10);
+  config.fontWeight = 'bold';
+  applyFontSettings();
 
   cols = Math.floor(canvas.clientWidth / config.charWidth);
   rows = Math.floor(canvas.clientHeight / config.charHeight);
@@ -83,7 +78,6 @@ function resizeCanvas() {
   startBlink();
   startRenderLoop();
 }
-
 
 export function redraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);

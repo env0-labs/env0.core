@@ -1,7 +1,7 @@
 // terminalConfig.js
 
 export const config = {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Courier New, monospace',
     fontWeight: 'normal',
     bgColor: '#000000',
