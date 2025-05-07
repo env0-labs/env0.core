@@ -54,7 +54,6 @@ export function drawCursor() {
   ctx.fillStyle = config.fgColor;
   ctx.fillRect(px, py, config.charWidth, config.charHeight);
 
-  console.log(`[drawCursor] cursor at grid (${cursorX}, ${cursorY}) → px: ${px}, py: ${py}`);
 }
 
 export function showCursor() {

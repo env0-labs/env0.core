@@ -39,7 +39,7 @@ canvas {
 
 
 /* --- Menu UI --- */
-/*#menuButton {
+#menuButton {
   position: fixed;
   top: 10px;
   right: 10px;
@@ -61,7 +61,7 @@ canvas {
   color: #FFFFFF;
   font-family: 'Courier New', monospace;
   font-size: 16px;
-  z-index: 199;
+  z-index: 10000;
   flex-direction: column;
   padding: 20px;
 }
@@ -102,7 +102,7 @@ canvas {
 }
 
 /* --- Checkbox Styling --- */
-/*#menuOverlay input[type="checkbox"] {
+#menuOverlay input[type="checkbox"] {
   appearance: none;
   background-color: transparent;
   border: 2px solid #FFFFFF;
@@ -118,7 +118,7 @@ canvas {
 }
 
 /* --- Select Dropdown Styling --- */
-/*#menuOverlay select,
+#menuOverlay select,
 #menuOverlay select:hover,
 #menuOverlay select:focus,
 #menuOverlay select:active {
@@ -135,7 +135,7 @@ canvas {
 }
 
 /* --- Button and Theme States --- */
-/*#flickerLow.selected,
+#flickerLow.selected,
 #flickerMedium.selected,
 #flickerHigh.selected,
 #slowNarrativeSpeed.selected,

@@ -7,12 +7,14 @@ import { setFileSystem } from './core/fs/filesystemManager.js';
 import { initializeMenu } from './core/ui/menuManager.js';
 import { redraw } from './core/terminal/canvasTerminal.js';
 import { triggerGlitch } from './core/fx/canvasFXManager.js';
-window.triggerGlitch = triggerGlitch; // [DEV TOOL] Manual trigger for glitch effects during testing
+import { startBootSequence } from './core/startup/bootSequence.js';
 
+window.triggerGlitch = triggerGlitch; // [DEV TOOL] Manual trigger for glitch effects during testing
 window.DEBUG_MODE = window.DEBUG_MODE ?? false;
 
 // 🧭 UI Initialization
 initializeMenu();
+
 document.addEventListener("DOMContentLoaded", () => {
   const terminalContainer = document.getElementById("terminal");
 
@@ -32,23 +34,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // 🔥 Start Boot Sequence
-  setTimeout(async () => {
-    console.log('[BOOT] About to import and run bootSequence.js');
-    try {
-      const { startBootSequence } = await import('./core/startup/bootSequence.js');
-      await startBootSequence();
-      console.log('[BOOT] Boot sequence complete');
-  
-      redraw();
-    } catch (err) {
-      console.error("[BOOT ERROR]", err);
-    }
-  }, 200);
+  // ✅ Check Skip Intro Flag (Guaranteed Clean)
+  const skipIntro = localStorage.getItem('skipIntro') === 'true';
+  console.log('[Boot] Skip Intro:', skipIntro);
 
-  // 🎞 Redraw Loop
+  if (skipIntro) {
+    console.log('[Boot] Skipping Boot Sequence Immediately');
+    startBootSequence({ skipIntro: true });
+  } else {
+    console.log('[Boot] Running Normal Boot Sequence');
+    startBootSequence();
+  }
+
+  // 🎞 Redraw Loop (Optimized)
   function mainLoop() {
-    redraw();
+    if (state.FXActive) {
+      redraw();
+    }
     requestAnimationFrame(mainLoop);
   }
 

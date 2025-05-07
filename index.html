@@ -5,48 +5,26 @@
   <title>env0.core Engine Demo</title>
   <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="./styles.css">
-  <style>
-
-  </style>
 </head>
 <body>
 
-    <div id="glassFXLayer"></div>
+  <button id="menuButton">Menu</button>
+  <div id="menuOverlay" style="display: none;">
+    <button id="closeMenu">Close</button>
+    <label>
+      <input type="checkbox" id="skipBoot"> Skip Intro
+    </label>
+  </div>
   
   <div id="frameWrapper">
     <iframe src="./terminal.html" id="terminalFrame"></iframe>
   </div>
   
-  
-  
-
-  <script>
-    const frame = document.getElementById("terminalFrame");
-
-    // Refocus iframe on load
-    window.addEventListener("load", () => {
-      frame.focus();
-    });
-
-    // Refocus iframe if anything outside is clicked
-    document.addEventListener("mousedown", (e) => {
-      if (!frame.contains(e.target)) {
-        e.preventDefault();
-        frame.focus();
-      }
-    });
-
-//This forces the terminal to repaint after boot, without modifying internal logic yet.
-    frame.contentWindow.addEventListener('DOMContentLoaded', () => {
-  frame.contentWindow.requestAnimationFrame(() => {
-    frame.contentWindow.redraw?.();
-  });
-});
-
-    // Refocus iframe on blur (keyboard tab-out, etc.)
-    window.addEventListener("blur", () => {
-      setTimeout(() => frame.focus(), 10);
-    });
+  <script type="module" src="./parentMessenger.js"></script>
+  <script type="module" src="./core/ui/menuManager.js"></script>
+  <script type="module">
+    import { initializeMenu } from './core/ui/menuManager.js';
+    initializeMenu();
   </script>
 </body>
 </html>

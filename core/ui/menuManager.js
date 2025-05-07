@@ -1,177 +1,40 @@
-import { setTypingDelay } from '../terminalHandler.js';
-import settings from '../settings.js';
-import state from '../stateManager.js';
-import { applyFlicker, applyTheme } from '../fx/visualFXManager.js';
-import { focusTerminal } from '../xtermWrapper.js';
+// menuManager.js - Modular Menu Initialization (Parent Context Only)
+import { sendMessageToIframe } from '../../parentMessenger.js';
 
-
+// Initialize Menu Function (Modular)
 export function initializeMenu() {
+  console.log('[Menu] Initializing Menu...');
+
   const menuButton = document.getElementById('menuButton');
   const menuOverlay = document.getElementById('menuOverlay');
   const closeMenu = document.getElementById('closeMenu');
+  const skipIntroCheckbox = document.getElementById('skipBoot');
 
-  if (menuButton && menuOverlay && closeMenu) {
-    menuButton.addEventListener('click', () => {
-      menuOverlay.style.display = 'flex';
-      menuButton.style.display = 'none';
-    });
-
-    closeMenu.addEventListener('click', () => {
-      menuOverlay.style.display = 'none';
-      menuButton.style.display = 'block';
-
-      setTimeout(() => {
-        if (state.terminal) {
-          focusTerminal();
-        } else {
-          console.warn('Terminal not ready.');
-        }
-      }, 0);
-    });
+  if (!menuButton || !menuOverlay) {
+    console.error('[Menu] Menu elements not found in parent context.');
+    return;
   }
 
-  // --- Narrative Speed Buttons ---
-  const slowButton = document.getElementById('slowNarrativeSpeed');
-  const fastButton = document.getElementById('fastNarrativeSpeed');
-  const instantButton = document.getElementById('instantNarrativeSpeed');
+  console.log('[Menu] Menu Elements Found');
 
-  const speedButtons = {
-    slow: slowButton,
-    fast: fastButton,
-    instant: instantButton
-  };
+  // Toggle Menu Visibility
+  menuButton.addEventListener('click', () => {
+    menuOverlay.style.display = menuOverlay.style.display === 'flex' ? 'none' : 'flex';
+  });
 
-  function updateSpeedSelected(selectedKey) {
-    Object.entries(speedButtons).forEach(([key, el]) => {
-      if (el) {
-        el.classList.toggle('selected', key === selectedKey);
-      }
-    });
-  }
+  // Close Menu
+  closeMenu?.addEventListener('click', () => {
+    menuOverlay.style.display = 'none';
+  });
 
-  if (slowButton && fastButton && instantButton) {
-    slowButton.addEventListener('click', () => {
-      settings.instantText = false;
-      updateSpeedSelected('slow');
-      setTypingDelay(40);
-      localStorage.setItem('typingDelay', '40');
-      localStorage.setItem('instantText', 'false');
-    });
+  // Skip Intro Checkbox
+  skipIntroCheckbox?.addEventListener('change', (e) => {
+    const skip = e.target.checked;
+    localStorage.setItem('skipIntro', skip);
+    sendMessageToIframe('skipIntro', { skip });
+    console.log('[Menu] Sent Skip Intro Command');
+  });
 
-    fastButton.addEventListener('click', () => {
-      settings.instantText = false;
-      updateSpeedSelected('fast');
-      setTypingDelay(10);
-      localStorage.setItem('typingDelay', '10');
-      localStorage.setItem('instantText', 'false');
-    });
-
-    instantButton.addEventListener('click', () => {
-      settings.instantText = true;
-      updateSpeedSelected('instant');
-      setTypingDelay(0);
-      localStorage.setItem('typingDelay', '0');
-      localStorage.setItem('instantText', 'true');
-    });
-  }
-
-  // --- Flicker Intensity Buttons ---
-  const flickerLow = document.getElementById('flickerLow');
-  const flickerMedium = document.getElementById('flickerMedium');
-  const flickerHigh = document.getElementById('flickerHigh');
-
-  const flickerButtons = {
-    low: flickerLow,
-    medium: flickerMedium,
-    high: flickerHigh
-  };
-
-  function updateFlickerSelected(level) {
-    Object.entries(flickerButtons).forEach(([key, el]) => {
-      if (el) {
-        el.classList.toggle('selected', key === level);
-      }
-    });
-  }
-
-  if (flickerLow && flickerMedium && flickerHigh) {
-    flickerLow.addEventListener('click', () => {
-      updateFlickerSelected('low');
-      applyFlicker('low');
-    });
-
-    flickerMedium.addEventListener('click', () => {
-      updateFlickerSelected('medium');
-      applyFlicker('medium');
-    });
-
-    flickerHigh.addEventListener('click', () => {
-      updateFlickerSelected('high');
-      applyFlicker('high');
-    });
-
-    updateFlickerSelected(settings.crtFlicker || 'medium');
-  }
-
-  // --- Theme Buttons ---
-  const themeMatrix = document.getElementById('themeGreen');
-  const themeFallout = document.getElementById('themeYellow');
-
-  const themeButtons = {
-    green: themeMatrix,
-    yellow: themeFallout
-  };
-
-  function updateThemeSelected(theme) {
-    Object.entries(themeButtons).forEach(([key, el]) => {
-      if (el) el.classList.toggle('selected', key === theme);
-    });
-  }
-
-  if (themeMatrix && themeFallout) {
-    themeMatrix.addEventListener('click', () => {
-      applyTheme('green');
-      updateThemeSelected('green');
-    });
-
-    themeFallout.addEventListener('click', () => {
-      applyTheme('yellow');
-      updateThemeSelected('yellow');
-    });
-
-    updateThemeSelected(settings.terminalTheme || 'green');
-  }
-
-  // --- Checkboxes ---
-  function bindCheckbox(id, settingKey) {
-    const checkbox = document.getElementById(id);
-    if (checkbox) {
-      checkbox.checked = settings[settingKey] || false;
-      checkbox.addEventListener('change', () => {
-        settings[settingKey] = checkbox.checked;
-        localStorage.setItem(settingKey, checkbox.checked);
-      });
-    }
-  }
-
-  bindCheckbox('audioToggle', 'audioEnabled');
-  bindCheckbox('skipBoot', 'skipIntro');
-
-  // --- Apply saved settings ---
-  const savedDelay = localStorage.getItem('typingDelay');
-  const savedInstant = localStorage.getItem('instantText');
-
-  if (savedDelay !== null) {
-    setTypingDelay(parseInt(savedDelay, 10));
-  }
-
-  settings.instantText = savedInstant === 'true';
-
-  if (savedInstant === 'true') {
-    updateSpeedSelected('instant');
-  } else if (savedDelay === '10') {
-    updateSpeedSelected('fast');
-  } else {
-    updateSpeedSelected('slow');
-  }
+  // Initialize checkbox state from localStorage
+  skipIntroCheckbox.checked = localStorage.getItem('skipIntro') === 'true';
 }

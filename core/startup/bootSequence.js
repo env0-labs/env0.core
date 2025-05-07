@@ -2,25 +2,22 @@ import settings from '../settings.js';
 import { termClear, termPrint } from '../outputManager.js';
 import { outputIntro } from './loginManager.js';
 import { setMode } from '../sessionManager.js';
+import state from '../stateManager.js';
 
-
-
-export async function startBootSequence() {
+export async function startBootSequence({ skipIntro = false } = {}) {
   console.log('🔥 Boot sequence started');
 
-  localStorage.setItem('skipIntro', 'true');
-
-  
-  if (settings.skipIntro) {
+  // Skip Intro Check (state takes priority)
+  if (state.skipIntro || skipIntro) {
+    console.log('[BOOT] Skipping intro by user choice.');
     termClear();
     termPrint('[Boot Skipped]');
     await outputIntro();
-
-    // Critical: formally switch mode
     setMode('login');
     return;
   }
 
+  // Normal Boot Sequence
   const bootLines = [
     '[ OK ] Bootloader initialized',
     '[ OK ] Kernel loaded: Linux 3.12.6-sbc (armv7l)',
@@ -76,13 +73,10 @@ export async function startBootSequence() {
 
   termClear();
   await outputIntro();
-
-  // 🔥 Important: formally switch mode
   setMode('login');
 }
 
 // --- Helpers below ---
-
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
