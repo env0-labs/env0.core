@@ -22,7 +22,7 @@ export function draw(ctx) {
 
   // Step 1: draw old ghost onto current frame with offset
   ctx.save();
-  ctx.globalAlpha = 0.04;  // bump up for visibility
+  ctx.globalAlpha = 0.02;  // bump up for visibility
   ctx.drawImage(ghostCanvas, 2, 2); // drift direction
   ctx.restore();
 

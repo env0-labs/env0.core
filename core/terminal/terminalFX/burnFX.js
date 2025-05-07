@@ -1,35 +1,30 @@
 // burnFX.js
-//
-// Simulates phosphor burn-in: old characters slowly fade over time
-// after being replaced or erased. Decoupled from main terminal buffer.
 
 import { config } from '../terminalConfig.js';
 
+const burnBuffer = [];
 
-let burnBuffer = [];
-let width = 0, height = 0;
-const maxRows = 100;
-const maxCols = 120;
+export function init(ctx, width, height) {
+  burnBuffer.length = 0;
+}
 
-const fadeRate = 0.05; // How much intensity fades per frame (tweak later)
-
-export function init(ctx, w, h) {
-  width = w;
-  height = h;
-  burnBuffer = new Array(maxRows).fill(null).map(() =>
-    new Array(maxCols).fill(null)
-  );
+export function recordChar(row, col, char) {
+  if (!burnBuffer[row]) burnBuffer[row] = [];
+  burnBuffer[row][col] = { char, opacity: 1.0 };
 }
 
 export function update(deltaTime) {
-    for (let row = 0; row < maxRows; row++) {
-        const rowData = burnBuffer[row];
-        if (!rowData) continue;
-        for (let col = 0; col < maxCols; col++) {
-          const cell = rowData[col];
-      if (cell && cell.opacity > 0) {
-        cell.opacity -= fadeRate * deltaTime;
-        if (cell.opacity < 0) cell.opacity = 0;
+  for (let row = 0; row < burnBuffer.length; row++) {
+    const rowData = burnBuffer[row];
+    if (!rowData) continue;
+
+    for (let col = 0; col < rowData.length; col++) {
+      const cell = rowData[col];
+      if (!cell) continue;
+
+      cell.opacity -= deltaTime * 0.0005;
+      if (cell.opacity <= 0) {
+        delete rowData[col];
       }
     }
   }
@@ -37,32 +32,26 @@ export function update(deltaTime) {
 
 export function draw(ctx) {
   ctx.save();
-  ctx.font = `bold ${config.charHeight}px ${config.fontFamily}`;
+  ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
   ctx.textBaseline = 'top';
-  ctx.fillStyle = '#00FF00'; // Optional: could use config.fgColor
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#00FF66';
 
-  for (let row = 0; row < maxRows; row++) {
-    for (let col = 0; col < maxCols; col++) {
-      const cell = burnBuffer[row][col];
-      if (cell && cell.opacity > 0) {
-        ctx.globalAlpha = cell.opacity * 0.08;
-        ctx.fillText(
-          cell.char,
-          col * config.charWidth,
-          row * config.charHeight
-        );
-      }
+  for (let row = 0; row < burnBuffer.length; row++) {
+    const rowData = burnBuffer[row];
+    if (!rowData) continue;
+
+    for (let col = 0; col < rowData.length; col++) {
+      const cell = rowData[col];
+      if (!cell || !cell.char) continue;
+
+      ctx.globalAlpha = cell.opacity * 0.1; // high for debug
+      const px = col * config.charWidth + 0.5; // offset for visibility
+      const py = row * config.charHeight + 0.5;
+
+      ctx.fillText(cell.char, px, py);
     }
   }
 
   ctx.restore();
-}
-
-export function recordChar(row, col, char) {
-  if (row >= 0 && col >= 0 && row < maxRows && col < maxCols) {
-    burnBuffer[row][col] = {
-      char: char,
-      opacity: 1.0
-    };
-  }
 }

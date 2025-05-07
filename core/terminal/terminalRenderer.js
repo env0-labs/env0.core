@@ -9,6 +9,8 @@ import * as glitchFX from './terminalFX/glitchFX.js';
 import * as burnFX from './terminalFX/burnFX.js';
 import * as rowJitterFX from './terminalFX/rowJitterFX.js';
 import { initTerminalFX, updateTerminalFX, drawTerminalFX } from './terminalFX/terminalFXManager.js';
+import * as ghostFX from './terminalFX/ghostFX.js';
+import * as flickerFX from './terminalFX/flickerFX.js';
 
 let ctx = null;
 let charWidth = config.charWidth;
@@ -56,15 +58,12 @@ function drawGlowLayer(lines, viewportStart) {
       const px = col * charWidth;
       const py = baseY;
 
-      // Skip drawing space for glow pass — no visual benefit
       if (char !== ' ') {
         glowCtx.fillText(char, px, py);
       }
     }
   }
 }
-
-
 
 export function drawFromBuffer() {
   if (!ctx) return;
@@ -80,20 +79,25 @@ export function drawFromBuffer() {
   ctx.globalCompositeOperation = 'lighter';
   ctx.drawImage(glowCanvas, 0, 0);
   ctx.globalCompositeOperation = 'source-over';
-  
+
+  ctx.save();
+  flickerFX.apply(ctx); // Apply flicker only to main glyph layer
 
   for (let screenRow = 0; screenRow < maxRows; screenRow++) {
     const bufferRow = lines[viewportStart + screenRow];
     if (typeof bufferRow !== 'string') continue;
 
     const baseY = screenRow * charHeight;
+    const xOffset = rowJitterFX.getRowOffset(screenRow);
+
+    ctx.clearRect(0, baseY, ctx.canvas.width, charHeight);
 
     for (let col = 0; col < bufferRow.length; col++) {
       const originalChar = bufferRow[col];
       const glitchedChar = glitchFX.getGlitchedChar(screenRow, col, originalChar);
       burnFX.recordChar(screenRow, col, glitchedChar);
 
-      const px = col * charWidth;
+      const px = col * charWidth + xOffset;
       const py = baseY;
 
       ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
@@ -103,5 +107,9 @@ export function drawFromBuffer() {
     }
   }
 
+  ctx.restore();
+
+  burnFX.draw(ctx);
   drawCursor();
+  ghostFX.draw(ctx);
 }

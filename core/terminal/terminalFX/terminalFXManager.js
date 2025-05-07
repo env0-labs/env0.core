@@ -21,7 +21,6 @@ let enabled = true;
 
 export function initTerminalFX(ctx, width, height) {
     glowFX.init(ctx, width, height);
-    flickerFX.init(ctx, width, height);
     ghostFX.init(ctx, width, height);
     glitchFX.init(ctx, width, height);
     rowJitterFX.init(ctx, width, height);
@@ -31,7 +30,6 @@ export function initTerminalFX(ctx, width, height) {
   
   export function updateTerminalFX(deltaTime) {
     glowFX.update(deltaTime);
-    flickerFX.update(deltaTime);
     ghostFX.update(deltaTime);
     glitchFX.update(deltaTime);
     rowJitterFX.update(deltaTime);
@@ -41,8 +39,6 @@ export function initTerminalFX(ctx, width, height) {
   
   export function drawTerminalFX(ctx) {
     glowFX.draw(ctx);
-    flickerFX.draw(ctx);
-    ghostFX.draw(ctx);
     burnFX.draw(ctx);
 
   }

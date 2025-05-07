@@ -1,23 +1,8 @@
 // flickerFX.js
 //
-// Applies a low-opacity flicker to simulate unstable electron gun refresh.
-// Intended to modulate terminal brightness slightly per frame.
+// Applies a brightness flicker only to the text layer via globalAlpha modulation.
 
-let intensity = 0;
-
-export function init(ctx, width, height) {
-  // No setup needed — stateless flicker
-}
-
-export function update(deltaTime) {
-  // Simple frame-by-frame intensity
-  intensity = 0.97 + Math.random() * 0.03; // flickers between 0.92 and 1.0
-}
-
-export function draw(ctx) {
-  ctx.save();
-  ctx.globalAlpha = 1 - intensity;
-  ctx.fillStyle = '#000000';
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.restore();
+export function apply(ctx) {
+  const flicker = 0.85 + Math.random() * 0.15; // varies between 0.94–1.00
+  ctx.globalAlpha = flicker;
 }
