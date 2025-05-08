@@ -75,13 +75,16 @@ export function drawFromBuffer() {
   ctx.fillStyle = config.bgColor;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  drawGlowLayer(lines, viewportStart);
-  ctx.globalCompositeOperation = 'lighter';
-  ctx.drawImage(glowCanvas, 0, 0);
-  ctx.globalCompositeOperation = 'source-over';
-
+  // Step 1: Draw Main Text with Glow (Integrated)
   ctx.save();
-  flickerFX.apply(ctx); // Apply flicker only to main glyph layer
+  ctx.shadowBlur = 24;        // Glow size
+  ctx.shadowColor = '#00FF66'; // Neon green glow
+  ctx.fillStyle = '#00FF66';  // Text matches glow color
+  ctx.globalAlpha = 0.8;      // Glow intensity
+
+  ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
 
   for (let screenRow = 0; screenRow < maxRows; screenRow++) {
     const bufferRow = lines[viewportStart + screenRow];
@@ -89,8 +92,6 @@ export function drawFromBuffer() {
 
     const baseY = screenRow * charHeight;
     const xOffset = rowJitterFX.getRowOffset(screenRow);
-
-    ctx.clearRect(0, baseY, ctx.canvas.width, charHeight);
 
     for (let col = 0; col < bufferRow.length; col++) {
       const originalChar = bufferRow[col];
@@ -100,16 +101,18 @@ export function drawFromBuffer() {
       const px = col * charWidth + xOffset;
       const py = baseY;
 
-      ctx.font = `${config.fontWeight} ${config.fontSize}px ${config.fontFamily}`;
-      ctx.fillStyle = config.fgColor || 'rgb(220,255,220)';
-      ctx.shadowBlur = 0;
       ctx.fillText(glitchedChar, px, py);
     }
   }
-
   ctx.restore();
 
+  // Step 2: Apply FX (Flicker, Burn, Ghost)
+  ctx.save();
+  flickerFX.apply(ctx);
   burnFX.draw(ctx);
-  drawCursor();
   ghostFX.draw(ctx);
+  ctx.restore();
+
+  // Step 3: Draw Cursor Last (Always on Top)
+  drawCursor();
 }
