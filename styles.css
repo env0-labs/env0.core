@@ -194,6 +194,21 @@ iframe {
   -webkit-backdrop-filter: blur(0.5px) brightness(1.03) contrast(1.2);
 }
 
+/* New Scanlines Overlay */
+#scanlinesLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 8999; /* Just below the mask layer */
+  pointer-events: none;
+
+  background: url('/assets/scanlines.png') repeat;
+  background-size: 1920px 1080px;
+  opacity: 0.4; /* Adjust this for stronger/weaker scanlines */
+}
+
 #glassFXLayer::before {
   content: "";
   position: absolute;
