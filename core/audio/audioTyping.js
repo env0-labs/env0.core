@@ -5,17 +5,22 @@ import { getAudioOutputNode } from './audioManager.js';
 let sampler;
 let audioInitialized = false;
 
+
+// Detect environment: local or deployed on GitHub Pages
+const basePath = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '' : '/env0.core';
+
+
 // List of available samples for key presses
 const sampleUrls = [
-    "/../../assets/audio/key_press_clack_1.wav",
-    "/../../assets/audio/key_press_clack_2.wav",
-    "/../../assets/audio/key_press_clack_3.wav",
+    `${basePath}/assets/audio/key_press_clack_1.wav`,
+    `${basePath}/assets/audio/key_press_clack_2.wav`,
+    `${basePath}/assets/audio/key_press_clack_3.wav`,
 ];
 
 // Dedicated samples for special keys
-const enterKeySample = "/../../assets/audio/key_press_clack_return.wav";
-const spaceKeySample = "/../../assets/audio/key_press_clack_space.wav";
-const deleteKeySample = "/../../assets/audio/key_press_clack_delete.wav";
+const enterKeySample = `${basePath}/assets/audio/key_press_clack_return.wav`;
+const spaceKeySample = `${basePath}/assets/audio/key_press_clack_space.wav`;
+const deleteKeySample = `${basePath}/assets/audio/key_press_clack_delete.wav`;
 
 // ✅ Complete Keyboard Map with Note Mappings (Letters, Numbers, Symbols, Special Keys)
 const keyToNoteMap = {

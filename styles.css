@@ -2,6 +2,10 @@
    env0.core Terminal Stylesheet (cleaned + canvas-ready)
    ================================================== */
 
+   :root {
+    --base-path: '';  /* Default for local */
+   }
+
 /* --- Base Layout --- */
 
 html, body {
