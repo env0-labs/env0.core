@@ -7,15 +7,15 @@ let audioInitialized = false;
 
 // List of available samples for key presses
 const sampleUrls = [
-    "/assets/audio/key_press_clack_1.wav",
-    "/assets/audio/key_press_clack_2.wav",
-    "/assets/audio/key_press_clack_3.wav",
+    "/../../assets/audio/key_press_clack_1.wav",
+    "/../../assets/audio/key_press_clack_2.wav",
+    "/../../assets/audio/key_press_clack_3.wav",
 ];
 
 // Dedicated samples for special keys
-const enterKeySample = "/assets/audio/key_press_clack_return.wav";
-const spaceKeySample = "/assets/audio/key_press_clack_space.wav";
-const deleteKeySample = "/assets/audio/key_press_clack_delete.wav";
+const enterKeySample = "/../../assets/audio/key_press_clack_return.wav";
+const spaceKeySample = "/../../assets/audio/key_press_clack_space.wav";
+const deleteKeySample = "/../../assets/audio/key_press_clack_delete.wav";
 
 // ✅ Complete Keyboard Map with Note Mappings (Letters, Numbers, Symbols, Special Keys)
 const keyToNoteMap = {

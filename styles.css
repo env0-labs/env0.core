@@ -181,12 +181,12 @@ iframe:focus {
   pointer-events: none;
 
   /* Matte mask applied directly to clip FX */
-  -webkit-mask-image: url('/assets/70sterminalmasksolid.png');
+  -webkit-mask-image: url('./assets/70sterminalmasksolid.png');
   -webkit-mask-mode: alpha;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 1920px 1080px;
 
-  mask-image: url('/assets/70sterminalmasksolid.png');
+  mask-image: url('./assets/70sterminalmasksolid.png');
   mask-mode: alpha;
   mask-repeat: no-repeat;
   mask-size: 1920px 1080px;
@@ -208,7 +208,7 @@ iframe:focus {
   z-index: 8999; /* Just below the mask layer */
   pointer-events: none;
 
-  background: url('/assets/scanlines.png') repeat;
+  background: url('/env0.core/assets/scanlines.png') repeat;
   background-size: 1920px 1080px;
   opacity: 0.4; /* Adjust this for stronger/weaker scanlines */
 }
