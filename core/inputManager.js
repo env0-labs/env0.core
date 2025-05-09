@@ -22,6 +22,8 @@ import { exitCommand } from '../cmds/exit.js';
 
 import { println, scrollToBottom } from './xtermWrapper.js';
 
+// 🔊 Audio Module (Mirrored Key Handling)
+import { receiveKeyInput as sendKeyToAudio } from './audio/audioTyping.js'; // Modular audio handling
 
 // 🚪 Entry point: unified key handler for all terminal input
 export function handleKeyInput(e) {
@@ -31,45 +33,42 @@ export function handleKeyInput(e) {
   domEvent.preventDefault(); // Block browser shortcuts and defaults
 
   const currentMode = getMode();
+  
+  // ✅ Mirror Key to Audio (Audio is 100% independent)
+  sendKeyToAudio(key);
 
   if (key === 'Enter') {
-    // 🟡 ENTER pressed
     if (currentMode === 'login') {
-      processLoginInput(); // Login flow will decide next state
+      processLoginInput();
     } else if (currentMode === 'shell') {
       const input = state.commandBuffer.trim();
       state.commandBuffer = '';
       state.cursorPosition = 0;
 
-      // println(input); // Uncomment to echo command before execution
-      processShellCommand(input); // Route to command logic
-
-      scrollToBottom(); // Scroll after output
+      processShellCommand(input);
+      scrollToBottom();
 
       setTimeout(() => {
         println(''); // Always newline before prompt
         drawShellPrompt(''); // Empty buffer after command
-        scrollToBottom(); // Minor correction scroll if needed
+        scrollToBottom();
       }, 0);
     }
     return;
   }
 
   if (key === 'Backspace') {
-    // ⌫ BACKSPACE logic
     if (state.cursorPosition > 0) {
       state.commandBuffer =
         state.commandBuffer.slice(0, state.cursorPosition - 1) +
         state.commandBuffer.slice(state.cursorPosition);
       state.cursorPosition--;
     }
-
     redrawPrompt(currentMode);
     return;
   }
 
   if (printable && key.length === 1) {
-    // 🔤 Printable character typed
     state.commandBuffer =
       state.commandBuffer.slice(0, state.cursorPosition) +
       key +
@@ -105,22 +104,14 @@ export function handleKeyInput(e) {
   }
 }
 
-
 // 🔁 Mode-aware prompt re-rendering after input updates
 function redrawPrompt(mode) {
   if (mode === 'shell') {
     drawShellPrompt(state.commandBuffer);
   } else if (mode === 'login') {
-    drawLoginPrompt(); // Determines username/password state internally
+    drawLoginPrompt();
   }
 }
-
-
-// 📖 Placeholder: will handle key input in reader mode later
-function handleReaderInput(key, printable) {
-  // Not yet active — readerManager will handle session switch
-}
-
 
 // 🔧 Command dispatcher — routes validated shell input to appropriate handler
 function processShellCommand(input) {

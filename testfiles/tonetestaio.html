@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tone.js Test</title>
+</head>
+<body>
+  <h1>Tone.js Test</h1>
+  <button id="playSound">Play Sound</button>
+
+  <!-- Import Tone.js as an ESM module -->
+  <script type="module">
+
+    import "https://unpkg.com/tone@14.8.20/build/Tone.js";
+
+
+    // Function to initialize and play sound
+    document.getElementById('playSound').addEventListener('click', async () => {
+      try {
+        // Initialize the audio context and wait for the user interaction
+        await Tone.start();
+        console.log("Tone.js initialized");
+
+        // Create a synth and play a note
+        const synth = new Tone.Synth().toDestination();
+        const now = Tone.now();  // Get the current time in Tone.js context
+        synth.triggerAttack("C4", now); // Start the note
+        synth.triggerRelease(now + 0.5); // Release the note after 0.5 seconds
+
+        console.log("Note played: C4");
+
+      } catch (err) {
+        console.error("Failed to initialize Tone.js:", err);
+      }
+    });
+  </script>
+</body>
+</html>
