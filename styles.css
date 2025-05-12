@@ -177,12 +177,12 @@ iframe {
   pointer-events: none;
 
   /* Matte mask applied directly to clip FX */
-  -webkit-mask-image: url('/assets/70sterminalmasksolid.png');
+  -webkit-mask-image: url('https://env0-labs.github.io/env0.core/assets/70sterminalmasksolid.png');
   -webkit-mask-mode: alpha;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 1920px 1080px;
 
-  mask-image: url('/assets/70sterminalmasksolid.png');
+  mask-image: url('https://env0-labs.github.io/env0.core/assets/70sterminalmasksolid.png');
   mask-mode: alpha;
   mask-repeat: no-repeat;
   mask-size: 1920px 1080px;
